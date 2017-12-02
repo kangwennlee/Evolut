@@ -37,6 +37,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
         ButterKnife.bind(this);
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
         FirebaseAuth auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() != null) {
             Intent i = new Intent(this,HomeActivity.class);
@@ -60,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(
                 AuthUI.getInstance().createSignInIntentBuilder()
                         .setTheme(AuthUI.getDefaultTheme())
-                        .setLogo(AuthUI.NO_LOGO)
+                        .setLogo(R.drawable.icon)
                         .setAvailableProviders(
                                 Arrays.asList(
                                 new AuthUI.IdpConfig.Builder(AuthUI.PHONE_VERIFICATION_PROVIDER).build(),
@@ -104,7 +109,6 @@ public class MainActivity extends AppCompatActivity {
                     showToast(R.string.unknown_error);
                     return;
                 }
-                signIn();
             }
 
             showToast(R.string.unknown_sign_in_response);
