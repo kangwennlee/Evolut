@@ -1,6 +1,5 @@
 package com.example.kangw.evolut;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.MainThread;
 import android.support.annotation.StringRes;
@@ -8,14 +7,12 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
+import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
-import com.firebase.ui.auth.AuthUI.IdpConfig;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.common.Scopes;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
@@ -38,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.login);
+        ButterKnife.bind(this);
         FirebaseAuth auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() != null) {
             Intent i = new Intent(this,HomeActivity.class);
@@ -48,6 +47,14 @@ public class MainActivity extends AppCompatActivity {
             signIn();
         }
     }
+
+    @OnClick(R.id.sign_in)
+    public void signInBtn() {
+        signIn();
+        finish();
+        return;
+    }
+
 
     public void signIn() {
         startActivityForResult(
@@ -73,10 +80,46 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
-            Intent i = new Intent(this,HomeActivity.class);
-            startActivity(i);
-            return;
+            IdpResponse response = IdpResponse.fromResultIntent(data);
+            // Successfully signed in
+            if (resultCode == RESULT_OK) {
+                Intent i = new Intent(this,HomeActivity.class);
+                startActivity(i);
+                finish();
+                return;
+            } else {
+                // Sign in failed
+                if (response == null) {
+                    // User pressed back button
+                    showToast(R.string.sign_in_cancelled);
+                    return;
+                }
+
+                if (response.getErrorCode() == ErrorCodes.NO_NETWORK) {
+                    showToast(R.string.no_internet_connection);
+                    return;
+                }
+
+                if (response.getErrorCode() == ErrorCodes.UNKNOWN_ERROR) {
+                    showToast(R.string.unknown_error);
+                    return;
+                }
+                signIn();
+            }
+
+            showToast(R.string.unknown_sign_in_response);
         }
+    }
+
+    @MainThread
+    private void showSnackbar(@StringRes int errorMessageRes) {
+        Snackbar.make(mRootView, errorMessageRes, Snackbar.LENGTH_LONG).show();
+    }
+
+    @MainThread
+    private void showToast(@StringRes int errorMessageRes) {
+        Toast.makeText(MainActivity.this, errorMessageRes, Toast.LENGTH_LONG).show();
+        //Snackbar.make(mRootView, errorMessageRes, Snackbar.LENGTH_LONG).show();
     }
 
     @MainThread
