@@ -37,11 +37,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
         ButterKnife.bind(this);
-    }
-
-    @Override
-    protected void onResume(){
-        super.onResume();
         FirebaseAuth auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() != null) {
             Intent i = new Intent(this,HomeActivity.class);
@@ -51,6 +46,11 @@ public class MainActivity extends AppCompatActivity {
         } else {
             signIn();
         }
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
     }
 
     @OnClick(R.id.sign_in)
@@ -109,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
                     showToast(R.string.unknown_error);
                     return;
                 }
+                onDestroy();
             }
 
             showToast(R.string.unknown_sign_in_response);
