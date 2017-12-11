@@ -21,7 +21,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity {
     @BindView(R.id.root)
@@ -40,11 +39,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
+    @Override
     protected void onResume(){
         super.onResume();
         FirebaseAuth auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() != null) {
-            Intent i = new Intent(this,HomeActivity.class);
+            Intent i = new Intent(this,Homepage.class);
             startActivity(i);
             finish();
             return;
@@ -52,14 +56,6 @@ public class MainActivity extends AppCompatActivity {
             signIn();
         }
     }
-
-    @OnClick(R.id.sign_in)
-    public void signInBtn() {
-        signIn();
-        finish();
-        return;
-    }
-
 
     public void signIn() {
         startActivityForResult(
@@ -88,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
             IdpResponse response = IdpResponse.fromResultIntent(data);
             // Successfully signed in
             if (resultCode == RESULT_OK) {
-                Intent i = new Intent(this,HomeActivity.class);
+                Intent i = new Intent(this,Homepage.class);
                 startActivity(i);
                 finish();
                 return;
@@ -97,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
                 if (response == null) {
                     // User pressed back button
                     showToast(R.string.sign_in_cancelled);
+                    super.onBackPressed();
                     return;
                 }
 
