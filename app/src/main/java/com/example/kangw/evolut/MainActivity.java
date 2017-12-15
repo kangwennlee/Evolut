@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         FirebaseAuth auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() != null) {
-            Intent i = new Intent(this,Homepage.class);
+            Intent i = new Intent(getApplicationContext(),Homepage.class);
             startActivity(i);
             finish();
             return;
@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
             IdpResponse response = IdpResponse.fromResultIntent(data);
             // Successfully signed in
             if (resultCode == RESULT_OK) {
-                Intent i = new Intent(this,Homepage.class);
+                Intent i = new Intent(getApplicationContext(),Homepage.class);
                 startActivity(i);
                 finish();
                 return;
@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
 
     @MainThread
     private void showToast(@StringRes int errorMessageRes) {
-        Toast.makeText(MainActivity.this, errorMessageRes, Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), errorMessageRes, Toast.LENGTH_LONG).show();
         //Snackbar.make(mRootView, errorMessageRes, Snackbar.LENGTH_LONG).show();
     }
 
