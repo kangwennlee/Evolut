@@ -1,16 +1,33 @@
 package com.example.kangw.evolut;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.ref.WeakReference;
+import java.net.URL;
+import java.net.URLConnection;
+
+import static android.content.ContentValues.TAG;
 
 
 /**
@@ -34,6 +51,7 @@ public class HomepageFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     TextView mUserName;
+    ImageView mProfilePic;
 
     public HomepageFragment() {
         // Required empty public constructor
@@ -72,8 +90,20 @@ public class HomepageFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_homepage, container, false);
         mUserName = (TextView) v.findViewById(R.id.textViewName);
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        mUserName.setText(user.getDisplayName());
+        try {
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            mUserName.setText(user.getDisplayName());
+            String profilePic = user.getPhotoUrl().toString();
+            mProfilePic = (ImageView) v.findViewById(R.id.imageViewProfile);
+            BitmapDownloaderTask task = new BitmapDownloaderTask(mProfilePic);
+            task.execute(profilePic);
+        } catch (NullPointerException e) {
+            Log.e(TAG, "Error retrieving user's detail", e);
+        }
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("Amount");
+        myRef.setValue("Hello, World!");
         return v;
     }
 
@@ -114,5 +144,53 @@ public class HomepageFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+}
+
+class BitmapDownloaderTask extends AsyncTask<String, Void, Bitmap> {
+    private String url;
+    private final WeakReference<ImageView> imageViewReference;
+
+    public BitmapDownloaderTask(ImageView imageView) {
+        imageViewReference = new WeakReference<ImageView>(imageView);
+    }
+
+    @Override
+    // Actual download method, run in the task thread
+    protected Bitmap doInBackground(String... params) {
+        // params comes from the execute() call: params[0] is the url.
+        return getImageBitmap(params[0]);
+    }
+
+    @Override
+    // Once the image is downloaded, associates it to the imageView
+    protected void onPostExecute(Bitmap bitmap) {
+        if (isCancelled()) {
+            bitmap = null;
+        }
+
+        if (imageViewReference != null) {
+            ImageView imageView = imageViewReference.get();
+            if (imageView != null) {
+                imageView.setImageBitmap(bitmap);
+            }
+        }
+    }
+
+    private Bitmap getImageBitmap(String url) {
+        Bitmap bm = null;
+        try {
+            URL aURL = new URL(url);
+            URLConnection conn = aURL.openConnection();
+            conn.connect();
+            InputStream is = conn.getInputStream();
+            BufferedInputStream bis = new BufferedInputStream(is);
+            bm = BitmapFactory.decodeStream(bis);
+            bis.close();
+            is.close();
+        } catch (IOException e) {
+            Log.e(TAG, "Error getting bitmap", e);
+        }
+        return bm;
     }
 }
