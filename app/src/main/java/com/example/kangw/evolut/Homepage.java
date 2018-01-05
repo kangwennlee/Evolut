@@ -82,7 +82,7 @@ public class Homepage extends AppCompatActivity
             mUserEmail = (TextView) findViewById(R.id.textViewProfileEmail);
             mUserEmail.setText(user.getEmail());
             String profilePic = user.getPhotoUrl().toString();
-            mProfilePic = (ImageView) findViewById(R.id.imageViewProfilePic);
+            mProfilePic = (ImageView) findViewById(R.id.imageViewProfilePicture);
             BitmapDownloaderTask task = new BitmapDownloaderTask(mProfilePic);
             task.execute(profilePic);
         }catch(NullPointerException e){
