@@ -17,14 +17,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import org.w3c.dom.Text;
 
 public class Homepage extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
+    ImageView mProfilePic;
+    TextView mUserName;
+    TextView mUserEmail;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +75,19 @@ public class Homepage extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main2, menu);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        try{
+            mUserName = (TextView) findViewById(R.id.textViewProfileName);
+            mUserName.setText(user.getDisplayName());
+            mUserEmail = (TextView) findViewById(R.id.textViewProfileEmail);
+            mUserEmail.setText(user.getEmail());
+            String profilePic = user.getPhotoUrl().toString();
+            mProfilePic = (ImageView) findViewById(R.id.imageViewProfilePic);
+            BitmapDownloaderTask task = new BitmapDownloaderTask(mProfilePic);
+            task.execute(profilePic);
+        }catch(NullPointerException e){
+
+        }
         return true;
     }
 
