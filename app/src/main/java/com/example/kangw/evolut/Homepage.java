@@ -26,8 +26,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import org.w3c.dom.Text;
-
 public class Homepage extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     ImageView mProfilePic;
@@ -129,7 +127,7 @@ public class Homepage extends AppCompatActivity
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
-                                Intent i = new Intent(Homepage.this,MainActivity.class);
+                                Intent i = new Intent(Homepage.this,LoginActivity.class);
                                 startActivity(i);
                                 finish();
                             } else {

@@ -22,7 +22,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.root)
     View mRootView;
 
@@ -120,7 +120,6 @@ public class MainActivity extends AppCompatActivity {
     @MainThread
     private void showToast(@StringRes int errorMessageRes) {
         Toast.makeText(getApplicationContext(), errorMessageRes, Toast.LENGTH_LONG).show();
-        //Snackbar.make(mRootView, errorMessageRes, Snackbar.LENGTH_LONG).show();
     }
 
     @MainThread

@@ -8,12 +8,16 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -52,6 +56,8 @@ public class HomepageFragment extends Fragment {
 
     TextView mUserName;
     ImageView mProfilePic;
+    RecyclerView mRecycler;
+    LinearLayoutManager mManager;
 
     public HomepageFragment() {
         // Required empty public constructor
@@ -104,6 +110,9 @@ public class HomepageFragment extends Fragment {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("Amount");
         myRef.setValue("Hello, World!");
+        mRecycler = v.findViewById(R.id.transactionHistoryRecycler);
+        mRecycler.setHasFixedSize(true);
+        mRecycler.setLayoutManager(mManager);
         return v;
     }
 
@@ -112,6 +121,18 @@ public class HomepageFragment extends Fragment {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        //Set up Layout Manager, reverse layout
+        mManager = new LinearLayoutManager(getActivity());
+        mManager.setReverseLayout(true);
+        mManager.setStackFromEnd(true);
+        mRecycler.setLayoutManager(mManager);
+        //FirebaseRecyclerOptions options = new FirebaseRecyclerOptions.Builder<>()
+
     }
 
 /*    @Override
