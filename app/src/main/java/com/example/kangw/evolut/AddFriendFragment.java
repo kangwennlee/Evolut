@@ -4,7 +4,10 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +15,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.text.TextWatcher;
 import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 
 /**
@@ -33,10 +44,15 @@ public class AddFriendFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    private View mView;
 
     private static EditText friend_email;
     private static TextView addFriend_feedback;
     private static Button addFriend_button, cancel_button;
+    private static DatabaseReference mDatabase;
+    private static FirebaseAuth mAuth;
+    private static String friendUserId;
+
 
     public AddFriendFragment() {
         // Required empty public constructor
@@ -67,19 +83,32 @@ public class AddFriendFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
+        mAuth = FirebaseAuth.getInstance();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_add_friend, container, false);
-        friend_email = (EditText) view.findViewById(R.id.txtFriendEmail);
-        addFriend_feedback = (TextView)view.findViewById(R.id.txtAddFriendFeedBack);
-        addFriend_button = (Button)view.findViewById(R.id.btnAddFriend);
-        cancel_button = (Button)view.findViewById(R.id.btnCancel);
-        return view;
+        mView =  inflater.inflate(R.layout.fragment_add_friend, container, false);
+        friend_email = (EditText) mView.findViewById(R.id.txtFriendEmail);
+        addFriend_feedback = (TextView)mView.findViewById(R.id.txtAddFriendFeedBack);
+        addFriend_button = (Button)mView.findViewById(R.id.btnAddFriend);
+        cancel_button = (Button)mView.findViewById(R.id.btnCancel);
+        addFriend_button.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    btnAddFriendClicked();
+                                                }
+                                            });
+                cancel_button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        btnCancelClicked();
+                    }
+                });
+        return mView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -113,8 +142,49 @@ public class AddFriendFragment extends Fragment {
     }
 
     private void checkFriendEmail(String email){
-        addFriend_feedback.setText(email);
+        Query query = mDatabase.orderByChild("Email").equalTo(email);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String userInfo = "";
+                for(DataSnapshot userSnapshot : dataSnapshot.getChildren()){
+                    userInfo += "Name: " + userSnapshot.child("Name").getValue() + "\nEmail :" + userSnapshot.child("Email").getValue();
+                    friendUserId = userSnapshot.getKey();
+                }
+                addFriend_feedback.setText(userInfo);
+            }
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+
+    public void btnAddFriendClicked(){
+        final String user_id = mAuth.getCurrentUser().getUid();
+        final DatabaseReference friend_reference = FirebaseDatabase.getInstance().getReference().child("Friends").child(user_id);
+        friend_reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(!dataSnapshot.hasChild(friendUserId)){
+                    friend_reference.child("UID").setValue(friendUserId);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void btnCancelClicked(){
+        Fragment fragment = new HomepageFragment();
+        FragmentManager fm = getFragmentManager();
+        fm.beginTransaction().replace(R.id.frame_container, fragment).commit();
     }
 
     @Override

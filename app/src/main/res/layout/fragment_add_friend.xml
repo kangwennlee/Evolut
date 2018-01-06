@@ -22,18 +22,18 @@
         android:layout_height="wrap_content" />
 
     <Button
-    android:id="@+id/btnCancel"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="20dp"
-    android:text="Cancel" />
+        android:id="@+id/btnCancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="Cancel"/>
 
     <Button
         android:id="@+id/btnAddFriend"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:text="Add Friend" />
+        android:text="Add Friend"/>
 
 
 </LinearLayout>
