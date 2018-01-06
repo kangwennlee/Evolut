@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity
     ImageView mProfilePic;
     TextView mUserName;
     TextView mUserEmail;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +59,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         Fragment fragment = new HomepageFragment();
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,fragment,"homepage").commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, fragment, "homepage").commit();
     }
 
     @Override
@@ -76,7 +77,7 @@ public class MainActivity extends AppCompatActivity
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main2, menu);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        try{
+        try {
             //Initialize name,email and profile picture at navigation header
             mUserName = (TextView) findViewById(R.id.textViewProfileName);
             mUserName.setText(user.getDisplayName());
@@ -86,7 +87,7 @@ public class MainActivity extends AppCompatActivity
             mProfilePic = (ImageView) findViewById(R.id.imageViewProfilePicture);
             BitmapDownloaderTask task = new BitmapDownloaderTask(mProfilePic);
             task.execute(profilePic);
-        }catch(NullPointerException e){
+        } catch (NullPointerException e) {
 
         }
         return true;
@@ -115,13 +116,13 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_home) {
             Fragment fragment = new HomepageFragment();
-            getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,fragment,"homepage").commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, fragment, "homepage").commit();
         } else if (id == R.id.nav_topUp) {
 
         } else if (id == R.id.nav_friends) {
             AddFriendFragment fragment = new AddFriendFragment();
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.frame_container, fragment,"addFriend").commit();
+            ft.replace(R.id.frame_container, fragment, "addFriend").commit();
         } else if (id == R.id.nav_setting) {
 
         } else if (id == R.id.nav_transaction) {
@@ -133,7 +134,7 @@ public class MainActivity extends AppCompatActivity
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
-                                Intent i = new Intent(MainActivity.this,LoginActivity.class);
+                                Intent i = new Intent(MainActivity.this, LoginActivity.class);
                                 startActivity(i);
                                 finish();
                             } else {

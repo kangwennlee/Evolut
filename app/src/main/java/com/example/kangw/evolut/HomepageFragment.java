@@ -105,28 +105,32 @@ public class HomepageFragment extends Fragment {
         try {
             //Initialize name, email and profile picture and homepage fragment
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            mUserName.setText(user.getDisplayName());
+            String userName = user.getDisplayName();
+            if (userName == null) {
+                userName = user.getPhoneNumber();
+            }
+            mUserName.setText(userName);
             String profilePic = user.getPhotoUrl().toString();
             mProfilePic = (ImageView) v.findViewById(R.id.imageViewProfile);
             BitmapDownloaderTask task = new BitmapDownloaderTask(mProfilePic);
             task.execute(profilePic);
-            //Insert your get Amount code here!!
-            mBalance = (TextView)v.findViewById(R.id.textViewAmount);
-            DatabaseReference balanceRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getUid());
-            balanceRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    mBalance.setText("RM "+ dataSnapshot.child("Balance").getValue());
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
         } catch (NullPointerException e) {
             Log.e(TAG, "Error retrieving user's detail", e);
         }
+        //Insert your get Amount code here!!
+        mBalance = (TextView) v.findViewById(R.id.textViewAmount);
+        DatabaseReference balanceRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getUid());
+        balanceRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                mBalance.setText("RM " + dataSnapshot.child("Balance").getValue());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
         mRecycler = v.findViewById(R.id.transactionHistoryRecycler);
         mManager = new LinearLayoutManager(getActivity());
         initRecycler();
@@ -140,7 +144,7 @@ public class HomepageFragment extends Fragment {
         }
     }
 
-    public void initRecycler(){
+    public void initRecycler() {
         //BEGIN initialize Recycler View
         mRecycler.setHasFixedSize(true);
         //Set up Layout Manager, reverse layout

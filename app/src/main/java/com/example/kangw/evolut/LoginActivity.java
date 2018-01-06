@@ -53,12 +53,12 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
         FirebaseAuth auth = FirebaseAuth.getInstance();
         //if the user is signed in, launch homepage, else launch the sign in (AuthUI) Activity
         if (auth.getCurrentUser() != null) {
-            Intent i = new Intent(getApplicationContext(),MainActivity.class);
+            Intent i = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(i);
             finish();
             return;
@@ -74,14 +74,16 @@ public class LoginActivity extends AppCompatActivity {
                         .setLogo(R.drawable.icon)
                         .setAvailableProviders(
                                 Arrays.asList(
-                                new AuthUI.IdpConfig.Builder(AuthUI.PHONE_VERIFICATION_PROVIDER).build(),
-                                new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
-                                new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build(),
-                                new AuthUI.IdpConfig.Builder(AuthUI.FACEBOOK_PROVIDER).build(),
-                                new AuthUI.IdpConfig.Builder(AuthUI.TWITTER_PROVIDER).build()))
+                                        new AuthUI.IdpConfig.Builder(AuthUI.PHONE_VERIFICATION_PROVIDER).build(),
+                                        new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
+                                        new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build(),
+                                        new AuthUI.IdpConfig.Builder(AuthUI.FACEBOOK_PROVIDER).build(),
+                                        new AuthUI.IdpConfig.Builder(AuthUI.TWITTER_PROVIDER).build()
+                                )
+                        )
                         .setTosUrl(GOOGLE_TOS_URL)
                         .setPrivacyPolicyUrl(GOOGLE_PRIVACY_POLICY_URL)
-                        .setIsSmartLockEnabled(false,true)
+                        .setIsSmartLockEnabled(false, true)
                         .setAllowNewEmailAccounts(true)
                         .build(),
                 RC_SIGN_IN);
@@ -95,7 +97,7 @@ public class LoginActivity extends AppCompatActivity {
             // Successfully signed in
             if (resultCode == RESULT_OK) {
                 createUserAccount();
-                Intent i = new Intent(getApplicationContext(),MainActivity.class);
+                Intent i = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(i);
                 finish();
                 return;
@@ -124,12 +126,12 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     //store user's information into the database, if the user is a new user
-    private void createUserAccount(){
+    private void createUserAccount() {
         final String user_id = mAuth.getCurrentUser().getUid();
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(!dataSnapshot.hasChild(user_id)){
+                if (!dataSnapshot.hasChild(user_id)) {
                     DatabaseReference current_user = mDatabase.child(user_id);
                     current_user.child("Name").setValue(mAuth.getCurrentUser().getDisplayName());
                     current_user.child("Email").setValue(mAuth.getCurrentUser().getEmail());
@@ -159,8 +161,8 @@ public class LoginActivity extends AppCompatActivity {
     @MainThread
     private List<String> getGooglePermissions() {
         List<String> result = new ArrayList<>();
-            result.add("https://www.googleapis.com/auth/youtube.readonly");
-            result.add(Scopes.DRIVE_FILE);
+        result.add("https://www.googleapis.com/auth/youtube.readonly");
+        result.add(Scopes.DRIVE_FILE);
         return result;
     }
 }
