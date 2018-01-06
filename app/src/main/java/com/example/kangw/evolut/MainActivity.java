@@ -1,7 +1,10 @@
 package com.example.kangw.evolut;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
@@ -31,6 +34,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -68,6 +75,24 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         Fragment fragment = new HomepageFragment();
         getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, fragment, "homepage").commit();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        String token = FirebaseInstanceId.getInstance().getToken();
+        DatabaseReference dref = FirebaseDatabase.getInstance().getReference().child("FCM");
+        dref.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(token);
+        FirebaseMessaging.getInstance().subscribeToTopic("news");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // Create channel to show notifications.
+            String channelId  = getString(R.string.default_notification_channel_id);
+            String channelName = getString(R.string.default_notification_channel_name);
+            NotificationManager notificationManager =
+                    getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(new NotificationChannel(channelId,
+                    channelName, NotificationManager.IMPORTANCE_LOW));
+        }
     }
 
     @Override
