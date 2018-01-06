@@ -1,0 +1,39 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.kangw.evolut.AddFriend"
+    android:orientation="vertical">
+
+
+    <!-- TODO: Update blank fragment layout -->
+    <EditText
+        android:id="@+id/txtFriendEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:ems="10"
+        android:inputType="textEmailAddress"
+        android:hint="email address"/>
+
+    <TextView
+        android:id="@+id/txtAddFriendFeedBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <Button
+    android:id="@+id/btnCancel"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="20dp"
+    android:text="Cancel" />
+
+    <Button
+        android:id="@+id/btnAddFriend"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="Add Friend" />
+
+
+</LinearLayout>

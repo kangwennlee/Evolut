@@ -30,7 +30,7 @@ public class Homepage extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     ImageView mProfilePic;
     TextView mUserName;
-    TextView mUserEmail;
+    TextView mUserAmount;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,12 +75,12 @@ public class Homepage extends AppCompatActivity
         getMenuInflater().inflate(R.menu.main2, menu);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         try{
-            mUserName = (TextView) findViewById(R.id.textViewProfileName);
+            mUserName = (TextView) findViewById(R.id.textViewName);
             mUserName.setText(user.getDisplayName());
-            mUserEmail = (TextView) findViewById(R.id.textViewProfileEmail);
-            mUserEmail.setText(user.getEmail());
+            mUserAmount = (TextView) findViewById(R.id.textViewAmount);
+            mUserAmount.setText(user.getEmail());
             String profilePic = user.getPhotoUrl().toString();
-            mProfilePic = (ImageView) findViewById(R.id.imageViewProfilePicture);
+            mProfilePic = (ImageView) findViewById(R.id.imageViewProfile);
             BitmapDownloaderTask task = new BitmapDownloaderTask(mProfilePic);
             task.execute(profilePic);
         }catch(NullPointerException e){

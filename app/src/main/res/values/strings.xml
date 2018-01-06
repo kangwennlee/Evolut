@@ -32,4 +32,11 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="payment_amount">Payment Amount</string>
+    <string name="comments">Comments</string>
+    <string name="tag_your_friends_here">Tag your friends here :</string>
+    <string name="request">Request</string>
+    <string name="pay">Pay</string>
+
 </resources>

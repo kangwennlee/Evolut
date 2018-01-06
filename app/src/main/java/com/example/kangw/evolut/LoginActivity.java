@@ -14,6 +14,11 @@ import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.common.Scopes;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,6 +34,8 @@ public class LoginActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 100;
     private static final String GOOGLE_TOS_URL = "https://www.google.com/policies/terms/";
     private static final String GOOGLE_PRIVACY_POLICY_URL = "https://www.google.com/policies/privacy/";
+    private DatabaseReference mDatabase;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +43,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
         ButterKnife.bind(this);
+        mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
     }
 
     @Override
@@ -84,6 +93,7 @@ public class LoginActivity extends AppCompatActivity {
             IdpResponse response = IdpResponse.fromResultIntent(data);
             // Successfully signed in
             if (resultCode == RESULT_OK) {
+                createUserAccount();
                 Intent i = new Intent(getApplicationContext(),Homepage.class);
                 startActivity(i);
                 finish();
@@ -111,6 +121,29 @@ public class LoginActivity extends AppCompatActivity {
             showToast(R.string.unknown_sign_in_response);
         }
     }
+
+    //store user's information into the database, if the user is a new user
+    private void createUserAccount(){
+        final String user_id = mAuth.getCurrentUser().getUid();
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(!dataSnapshot.hasChild(user_id)){
+                    DatabaseReference current_user = mDatabase.child(user_id);
+                    current_user.child("Name").setValue(mAuth.getCurrentUser().getDisplayName());
+                    current_user.child("Email").setValue(mAuth.getCurrentUser().getEmail());
+                    current_user.child("Balance").setValue(0);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
 
     @MainThread
     private void showSnackbar(@StringRes int errorMessageRes) {
