@@ -1,13 +1,16 @@
 package com.example.kangw.evolut.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
+import com.example.kangw.evolut.NewTransactionActivity;
 import com.example.kangw.evolut.R;
 
 
@@ -28,6 +31,8 @@ public class TransactionHistoryFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private View mView;
+    public Button mNewTransactionButton;
 
     private OnFragmentInteractionListener mListener;
 
@@ -66,7 +71,16 @@ public class TransactionHistoryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_history_transaction, container, false);
+        mView = inflater.inflate(R.layout.fragment_history_transaction, container, false);
+        mNewTransactionButton = (Button)mView.findViewById(R.id.newTransactionButton);
+        mNewTransactionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getContext(), NewTransactionActivity.class);
+                startActivity(i);
+            }
+        });
+        return mView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
