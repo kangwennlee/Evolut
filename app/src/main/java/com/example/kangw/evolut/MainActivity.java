@@ -9,6 +9,7 @@ import android.support.annotation.StringRes;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -22,8 +23,9 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.kangw.evolut.fragment.AddFriendFragment;
+import com.example.kangw.evolut.fragment.FriendListFragment;
 import com.example.kangw.evolut.fragment.HomepageFragment;
+import com.example.kangw.evolut.fragment.TransactionHistoryFragment;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -31,7 +33,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, AddFriendFragment.OnFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener,
+        FriendListFragment.OnFragmentInteractionListener,
+        HomepageFragment.OnFragmentInteractionListener,
+        TransactionHistoryFragment.OnFragmentInteractionListener {
+
     ImageView mProfilePic;
     TextView mUserName;
     TextView mUserEmail;
@@ -115,20 +121,26 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        for(int i=0;i<fm.getBackStackEntryCount();i++){
+            fm.popBackStack();
+        }
         if (id == R.id.nav_home) {
             Fragment fragment = new HomepageFragment();
-            getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, fragment, "homepage").commit();
+            ft.replace(R.id.frame_container, fragment, "homepage").commit();
         } else if (id == R.id.nav_topUp) {
 
         } else if (id == R.id.nav_friends) {
-            AddFriendFragment fragment = new AddFriendFragment();
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            FriendListFragment fragment = new FriendListFragment();
             ft.replace(R.id.frame_container, fragment, "addFriend").commit();
+            ft.addToBackStack(null);
         } else if (id == R.id.nav_setting) {
-
+            Intent i = new Intent(getApplicationContext(), SettingsActivity.class);
+            startActivity(i);
         } else if (id == R.id.nav_transaction) {
-
+            TransactionHistoryFragment fragment = new TransactionHistoryFragment();
+            ft.replace(R.id.frame_container,fragment,"new Transaction").commit();
         } else if (id == R.id.nav_logout) {
             AuthUI.getInstance()
                     .signOut(this)
@@ -145,7 +157,6 @@ public class MainActivity extends AppCompatActivity
                         }
                     });
         }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

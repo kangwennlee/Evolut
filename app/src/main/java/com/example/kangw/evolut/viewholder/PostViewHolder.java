@@ -1,9 +1,10 @@
-package com.example.kangw.evolut;
+package com.example.kangw.evolut.viewholder;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.kangw.evolut.R;
 import com.example.kangw.evolut.models.Post;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;

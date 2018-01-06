@@ -11,7 +11,7 @@
         <item
             android:id="@+id/nav_transaction"
             android:icon="@drawable/ic_local_atm_black_24dp"
-            android:title="New Transaction" />
+            android:title="Transaction" />
         <item
             android:id="@+id/nav_topUp"
             android:icon="@drawable/ic_credit_card_black_24dp"
