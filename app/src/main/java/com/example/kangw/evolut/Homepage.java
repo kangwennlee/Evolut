@@ -29,10 +29,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class Homepage extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, AddFriend.OnFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener, AddFriendFragment.OnFragmentInteractionListener {
     ImageView mProfilePic;
     TextView mUserName;
-    TextView mUserAmount;
+    TextView mUserEmail;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,8 +79,8 @@ public class Homepage extends AppCompatActivity
         try{
             mUserName = (TextView) findViewById(R.id.textViewProfileName);
             mUserName.setText(user.getDisplayName());
-            mUserAmount = (TextView) findViewById(R.id.textViewProfileEmail);
-            mUserAmount.setText(user.getEmail());
+            mUserEmail = (TextView) findViewById(R.id.textViewProfileEmail);
+            mUserEmail.setText(user.getEmail());
             String profilePic = user.getPhotoUrl().toString();
             mProfilePic = (ImageView) findViewById(R.id.imageViewProfilePicture);
             BitmapDownloaderTask task = new BitmapDownloaderTask(mProfilePic);
@@ -112,17 +112,18 @@ public class Homepage extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
+        if (id == R.id.nav_home) {
+            Fragment fragment = new HomepageFragment();
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,fragment,"homepage").commit();
         } else if (id == R.id.nav_topUp) {
 
         } else if (id == R.id.nav_friends) {
-            AddFriend addFriend = new AddFriend();
+            AddFriendFragment fragment = new AddFriendFragment();
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.frame_container, addFriend).commit();
+            ft.replace(R.id.frame_container, fragment).commit();
         } else if (id == R.id.nav_setting) {
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.nav_transaction) {
 
         } else if (id == R.id.nav_logout) {
             AuthUI.getInstance()

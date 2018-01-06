@@ -8,7 +8,6 @@ import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.text.TextWatcher;
@@ -18,12 +17,12 @@ import android.widget.TextView;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link AddFriend.OnFragmentInteractionListener} interface
+ * {@link AddFriendFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link AddFriend#newInstance} factory method to
+ * Use the {@link AddFriendFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AddFriend extends Fragment {
+public class AddFriendFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -39,7 +38,7 @@ public class AddFriend extends Fragment {
     private static TextView addFriend_feedback;
     private static Button addFriend_button, cancel_button;
 
-    public AddFriend() {
+    public AddFriendFragment() {
         // Required empty public constructor
     }
 
@@ -49,11 +48,11 @@ public class AddFriend extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment AddFriend.
+     * @return A new instance of fragment AddFriendFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static AddFriend newInstance(String param1, String param2) {
-        AddFriend fragment = new AddFriend();
+    public static AddFriendFragment newInstance(String param1, String param2) {
+        AddFriendFragment fragment = new AddFriendFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
