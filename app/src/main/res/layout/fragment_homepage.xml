@@ -100,11 +100,18 @@
         android:layout_below="@+id/functionLayout"
         android:id="@+id/transactionHistoryRecycler"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_alignParentBottom="true"
+        android:layout_height="100dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+    </android.support.v7.widget.RecyclerView>
+
+    <ListView
+        android:id="@+id/transactionList"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        tools:listitem="@layout/text_row_item"
+        android:layout_below="@+id/transactionHistoryRecycler"
         />
 
 

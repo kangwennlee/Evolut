@@ -10,7 +10,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.kangw.evolut.BitmapDownloaderTask;
@@ -19,16 +21,22 @@ import com.example.kangw.evolut.R;
 import com.example.kangw.evolut.RecyclerAdapter;
 
 import com.example.kangw.evolut.models.Post;
+import com.firebase.ui.database.FirebaseListAdapter;
+import com.firebase.ui.database.FirebaseListOptions;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static android.content.ContentValues.TAG;
 
@@ -61,6 +69,7 @@ public class HomepageFragment extends Fragment {
     RecyclerAdapter mAdapter;
     DatabaseReference mDatabase;
     FirebaseUser user;
+    ListView mListView;
 
     public HomepageFragment() {
         // Required empty public constructor
@@ -105,6 +114,7 @@ public class HomepageFragment extends Fragment {
         user = FirebaseAuth.getInstance().getCurrentUser();
         mRecycler = v.findViewById(R.id.transactionHistoryRecycler);
         mRecycler.setHasFixedSize(true);
+        mListView = v.findViewById(R.id.transactionList);
         //Initialize name, email and profile picture and homepage fragment
         try {
             String userName = user.getDisplayName();
@@ -157,7 +167,38 @@ public class HomepageFragment extends Fragment {
         mAdapter = new RecyclerAdapter(mDataset);
         mRecycler.setAdapter(mAdapter);
         //FirebaseRecyclerOptions options = new FirebaseRecyclerOptions.Builder<Post>().setQuery(postQuery,Post.class).build();
+        final ArrayList<String> list=new ArrayList<>();
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),android.R.layout.simple_dropdown_item_1line,list);
+        mListView.setAdapter(adapter);
+        DatabaseReference dref = mDatabase.child("Friends").getRef();
+        dref.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                list.add(dataSnapshot.toString());
+                adapter.notifyDataSetChanged();
+            }
 
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                list.remove(dataSnapshot.toString());
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private Query getQuery(DatabaseReference databaseReference) {
