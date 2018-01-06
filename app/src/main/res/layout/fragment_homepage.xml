@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.kangw.evolut.HomepageFragment"
+    tools:context="com.example.kangw.evolut.fragment.HomepageFragment"
     android:orientation="horizontal">
 
     <!-- TODO: Update blank fragment layout -->
@@ -97,14 +97,15 @@
 </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
-        android:layout_marginTop="10dp"
         android:layout_below="@+id/functionLayout"
         android:id="@+id/transactionHistoryRecycler"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        tools:listitem="@layout/text_row_item"
+        />
 
 
 </RelativeLayout>

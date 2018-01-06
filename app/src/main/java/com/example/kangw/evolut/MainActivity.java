@@ -22,6 +22,8 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.kangw.evolut.fragment.AddFriendFragment;
+import com.example.kangw.evolut.fragment.HomepageFragment;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
