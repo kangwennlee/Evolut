@@ -86,6 +86,8 @@ public class AddFriendFragment extends Fragment {
         }
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
         mAuth = FirebaseAuth.getInstance();
+        friendUserId = "";
+        friendName = "";
     }
 
     @Override
@@ -110,6 +112,7 @@ public class AddFriendFragment extends Fragment {
                         btnCancelClicked();
                     }
                 });
+        addFriend_button.setEnabled(false);
         return mView;
     }
 
@@ -137,6 +140,8 @@ public class AddFriendFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
+                friendUserId = "";
+                friendName = "";
                 String email = s.toString();
                 checkFriendEmail(email);
             }
@@ -155,6 +160,15 @@ public class AddFriendFragment extends Fragment {
                     friendName = userSnapshot.child("Name").getValue().toString();
                 }
                 friend_info.setText(userInfo);
+                if(friendUserId.toString().compareTo(mAuth.getCurrentUser().getUid().toString()) == 0){
+                    friend_info.setText("This is your email address, you cannot add yourself as friend");
+                }
+                else if(friendUserId != ""){
+                    addFriend_button.setEnabled(true);
+            }
+                else{
+                    addFriend_button.setEnabled(false);
+                }
             }
 
             @Override
