@@ -98,6 +98,7 @@ public class HomepageFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_homepage, container, false);
         mUserName = (TextView) v.findViewById(R.id.textViewName);
         try {
+            //Initialize name, email and profile picture and homepage fragment
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             mUserName.setText(user.getDisplayName());
             String profilePic = user.getPhotoUrl().toString();

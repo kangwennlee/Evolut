@@ -58,7 +58,7 @@ public class LoginActivity extends AppCompatActivity {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         //if the user is signed in, launch homepage, else launch the sign in (AuthUI) Activity
         if (auth.getCurrentUser() != null) {
-            Intent i = new Intent(getApplicationContext(),Homepage.class);
+            Intent i = new Intent(getApplicationContext(),MainActivity.class);
             startActivity(i);
             finish();
             return;
@@ -95,7 +95,7 @@ public class LoginActivity extends AppCompatActivity {
             // Successfully signed in
             if (resultCode == RESULT_OK) {
                 createUserAccount();
-                Intent i = new Intent(getApplicationContext(),Homepage.class);
+                Intent i = new Intent(getApplicationContext(),MainActivity.class);
                 startActivity(i);
                 finish();
                 return;

@@ -28,7 +28,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class Homepage extends AppCompatActivity
+public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, AddFriendFragment.OnFragmentInteractionListener {
     ImageView mProfilePic;
     TextView mUserName;
@@ -77,6 +77,7 @@ public class Homepage extends AppCompatActivity
         getMenuInflater().inflate(R.menu.main2, menu);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         try{
+            //Initialize name,email and profile picture at navigation header
             mUserName = (TextView) findViewById(R.id.textViewProfileName);
             mUserName.setText(user.getDisplayName());
             mUserEmail = (TextView) findViewById(R.id.textViewProfileEmail);
@@ -132,7 +133,7 @@ public class Homepage extends AppCompatActivity
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
-                                Intent i = new Intent(Homepage.this,LoginActivity.class);
+                                Intent i = new Intent(MainActivity.this,LoginActivity.class);
                                 startActivity(i);
                                 finish();
                             } else {
