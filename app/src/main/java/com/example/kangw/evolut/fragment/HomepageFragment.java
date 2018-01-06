@@ -1,6 +1,8 @@
 package com.example.kangw.evolut.fragment;
 
 import android.content.Context;
+import android.content.Intent;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,10 +12,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.kangw.evolut.BitmapDownloaderTask;
+import com.example.kangw.evolut.NewTransactionActivity;
 import com.example.kangw.evolut.R;
 import com.example.kangw.evolut.RecyclerAdapter;
 
@@ -57,6 +62,8 @@ public class HomepageFragment extends Fragment {
     RecyclerAdapter mAdapter;
     DatabaseReference mDatabase;
     FirebaseUser user;
+    ImageButton mNewTransactionButton;
+    ImageButton mTopUpButton;
 
     public HomepageFragment() {
         // Required empty public constructor
@@ -101,6 +108,9 @@ public class HomepageFragment extends Fragment {
         user = FirebaseAuth.getInstance().getCurrentUser();
         mRecycler = v.findViewById(R.id.transactionHistoryRecycler);
         mRecycler.setHasFixedSize(true);
+        mNewTransactionButton = (ImageButton)v.findViewById(R.id.imageButtonNewTransaction);
+        mTopUpButton = (ImageButton)v.findViewById(R.id.imageButtonTopUp);
+
         //Initialize name, email and profile picture and homepage fragment
         try {
             String userName = user.getDisplayName();
@@ -128,6 +138,13 @@ public class HomepageFragment extends Fragment {
             }
         });
         initRecycler();
+        mNewTransactionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getContext(), NewTransactionActivity.class);
+                startActivity(i);
+            }
+        });
         return v;
     }
 
