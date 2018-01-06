@@ -56,6 +56,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onResume(){
         super.onResume();
         FirebaseAuth auth = FirebaseAuth.getInstance();
+        //if the user is signed in, launch homepage, else launch the sign in (AuthUI) Activity
         if (auth.getCurrentUser() != null) {
             Intent i = new Intent(getApplicationContext(),Homepage.class);
             startActivity(i);

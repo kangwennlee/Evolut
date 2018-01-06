@@ -58,6 +58,7 @@ public class HomepageFragment extends Fragment {
     ImageView mProfilePic;
     RecyclerView mRecycler;
     LinearLayoutManager mManager;
+    RecyclerAdapter mAdapter;
 
     public HomepageFragment() {
         // Required empty public constructor
@@ -106,13 +107,10 @@ public class HomepageFragment extends Fragment {
         } catch (NullPointerException e) {
             Log.e(TAG, "Error retrieving user's detail", e);
         }
-
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("Amount");
-        myRef.setValue("Hello, World!");
         mRecycler = v.findViewById(R.id.transactionHistoryRecycler);
-        mRecycler.setHasFixedSize(true);
-        mRecycler.setLayoutManager(mManager);
+        mManager = new LinearLayoutManager(getActivity());
+        //Insert your get Amount code here!!
+        initRecycler();
         return v;
     }
 
@@ -123,16 +121,28 @@ public class HomepageFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void initRecycler(){
+        //BEGIN initialize Recycler View
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("Amount");
+        myRef.setValue("Hello, World!");
+        mRecycler.setHasFixedSize(true);
         //Set up Layout Manager, reverse layout
-        mManager = new LinearLayoutManager(getActivity());
         mManager.setReverseLayout(true);
         mManager.setStackFromEnd(true);
         mRecycler.setLayoutManager(mManager);
+        String[] mDataset = new String[10];
+        for (int i = 0; i < 10; i++) {
+            mDataset[i] = "This is element #" + i;
+        }
+        mAdapter = new RecyclerAdapter(mDataset);
+        mRecycler.setAdapter(mAdapter);
         //FirebaseRecyclerOptions options = new FirebaseRecyclerOptions.Builder<>()
+    }
 
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
     }
 
 /*    @Override

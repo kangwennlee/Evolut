@@ -77,12 +77,12 @@ public class Homepage extends AppCompatActivity
         getMenuInflater().inflate(R.menu.main2, menu);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         try{
-            mUserName = (TextView) findViewById(R.id.textViewName);
+            mUserName = (TextView) findViewById(R.id.textViewProfileName);
             mUserName.setText(user.getDisplayName());
-            mUserAmount = (TextView) findViewById(R.id.textViewAmount);
+            mUserAmount = (TextView) findViewById(R.id.textViewProfileEmail);
             mUserAmount.setText(user.getEmail());
             String profilePic = user.getPhotoUrl().toString();
-            mProfilePic = (ImageView) findViewById(R.id.imageViewProfile);
+            mProfilePic = (ImageView) findViewById(R.id.imageViewProfilePicture);
             BitmapDownloaderTask task = new BitmapDownloaderTask(mProfilePic);
             task.execute(profilePic);
         }catch(NullPointerException e){
