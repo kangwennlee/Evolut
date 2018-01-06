@@ -120,7 +120,7 @@ public class Homepage extends AppCompatActivity
         } else if (id == R.id.nav_friends) {
             AddFriendFragment fragment = new AddFriendFragment();
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.frame_container, fragment).commit();
+            ft.replace(R.id.frame_container, fragment,"addFriend").commit();
         } else if (id == R.id.nav_setting) {
 
         } else if (id == R.id.nav_transaction) {
