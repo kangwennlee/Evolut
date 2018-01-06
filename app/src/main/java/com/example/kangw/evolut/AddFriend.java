@@ -12,6 +12,7 @@ import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.text.TextWatcher;
+import android.widget.TextView;
 
 
 /**
@@ -34,7 +35,8 @@ public class AddFriend extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    private static EditText friend_email, addFriend_feedback;
+    private static EditText friend_email;
+    private static TextView addFriend_feedback;
     private static Button addFriend_button, cancel_button;
 
     public AddFriend() {
@@ -75,7 +77,7 @@ public class AddFriend extends Fragment {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_add_friend, container, false);
         friend_email = (EditText) view.findViewById(R.id.txtFriendEmail);
-        addFriend_feedback = (EditText)view.findViewById(R.id.txtAddFriendFeedBack);
+        addFriend_feedback = (TextView)view.findViewById(R.id.txtAddFriendFeedBack);
         addFriend_button = (Button)view.findViewById(R.id.btnAddFriend);
         cancel_button = (Button)view.findViewById(R.id.btnCancel);
         return view;

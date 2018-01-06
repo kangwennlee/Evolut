@@ -1,6 +1,7 @@
 package com.example.kangw.evolut;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
@@ -8,6 +9,7 @@ import android.support.annotation.StringRes;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -27,7 +29,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class Homepage extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, AddFriend.OnFragmentInteractionListener {
     ImageView mProfilePic;
     TextView mUserName;
     TextView mUserAmount;
@@ -115,7 +117,9 @@ public class Homepage extends AppCompatActivity
         } else if (id == R.id.nav_topUp) {
 
         } else if (id == R.id.nav_friends) {
-
+            AddFriend addFriend = new AddFriend();
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.frame_container, addFriend).commit();
         } else if (id == R.id.nav_setting) {
 
         } else if (id == R.id.nav_share) {
@@ -145,5 +149,10 @@ public class Homepage extends AppCompatActivity
     @MainThread
     private void showSnackbar(@StringRes int errorMessageRes) {
         Snackbar.make(findViewById(R.id.frame_container), errorMessageRes, Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }
