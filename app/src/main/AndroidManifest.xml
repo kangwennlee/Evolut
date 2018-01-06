@@ -30,7 +30,8 @@
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings" />
         <activity android:name=".AddFriendActivity" />
-        <activity android:name=".NewTransactionActivity"></activity>
+        <activity android:name=".NewTransactionActivity" />
+        <activity android:name=".TopUpActivity"></activity>
     </application>
 
 </manifest>

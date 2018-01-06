@@ -53,8 +53,8 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent i = new Intent(getApplicationContext(),NewTransactionActivity.class);
+                startActivity(i);
             }
         });
 
@@ -130,7 +130,8 @@ public class MainActivity extends AppCompatActivity
             Fragment fragment = new HomepageFragment();
             ft.replace(R.id.frame_container, fragment, "homepage").commit();
         } else if (id == R.id.nav_topUp) {
-
+            Intent i = new Intent(getApplicationContext(), TopUpActivity.class);
+            startActivity(i);
         } else if (id == R.id.nav_friends) {
             FriendListFragment fragment = new FriendListFragment();
             ft.replace(R.id.frame_container, fragment, "addFriend").commit();
@@ -141,6 +142,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_transaction) {
             TransactionHistoryFragment fragment = new TransactionHistoryFragment();
             ft.replace(R.id.frame_container, fragment, "newTransaction").commit();
+            ft.addToBackStack(null);
         } else if (id == R.id.nav_logout) {
             AuthUI.getInstance()
                     .signOut(this)
