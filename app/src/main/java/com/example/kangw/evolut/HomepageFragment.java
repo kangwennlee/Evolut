@@ -21,8 +21,12 @@ import com.firebase.ui.database.FirebaseRecyclerOptions;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -55,6 +59,7 @@ public class HomepageFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     TextView mUserName;
+    TextView mBalance;
     ImageView mProfilePic;
     RecyclerView mRecycler;
     LinearLayoutManager mManager;
@@ -105,12 +110,25 @@ public class HomepageFragment extends Fragment {
             mProfilePic = (ImageView) v.findViewById(R.id.imageViewProfile);
             BitmapDownloaderTask task = new BitmapDownloaderTask(mProfilePic);
             task.execute(profilePic);
+            //Insert your get Amount code here!!
+            mBalance = (TextView)v.findViewById(R.id.textViewAmount);
+            DatabaseReference balanceRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getUid());
+            balanceRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    mBalance.setText("RM "+ dataSnapshot.child("Balance").getValue());
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
         } catch (NullPointerException e) {
             Log.e(TAG, "Error retrieving user's detail", e);
         }
         mRecycler = v.findViewById(R.id.transactionHistoryRecycler);
         mManager = new LinearLayoutManager(getActivity());
-        //Insert your get Amount code here!!
         initRecycler();
         return v;
     }
@@ -124,9 +142,6 @@ public class HomepageFragment extends Fragment {
 
     public void initRecycler(){
         //BEGIN initialize Recycler View
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("Amount");
-        myRef.setValue("Hello, World!");
         mRecycler.setHasFixedSize(true);
         //Set up Layout Manager, reverse layout
         mManager.setReverseLayout(true);

@@ -91,23 +91,23 @@ public class AddFriendFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        mView =  inflater.inflate(R.layout.fragment_add_friend, container, false);
+        mView = inflater.inflate(R.layout.fragment_add_friend, container, false);
         friend_email = (EditText) mView.findViewById(R.id.txtFriendEmail);
-        addFriend_feedback = (TextView)mView.findViewById(R.id.txtAddFriendFeedBack);
-        addFriend_button = (Button)mView.findViewById(R.id.btnAddFriend);
-        cancel_button = (Button)mView.findViewById(R.id.btnCancel);
+        addFriend_feedback = (TextView) mView.findViewById(R.id.txtAddFriendFeedBack);
+        addFriend_button = (Button) mView.findViewById(R.id.btnAddFriend);
+        cancel_button = (Button) mView.findViewById(R.id.btnCancel);
         addFriend_button.setOnClickListener(new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View v) {
-                                                    btnAddFriendClicked();
-                                                }
-                                            });
-                cancel_button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        btnCancelClicked();
-                    }
-                });
+            @Override
+            public void onClick(View v) {
+                btnAddFriendClicked();
+            }
+        });
+        cancel_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btnCancelClicked();
+            }
+        });
         return mView;
     }
 
@@ -141,13 +141,13 @@ public class AddFriendFragment extends Fragment {
         });
     }
 
-    private void checkFriendEmail(String email){
+    private void checkFriendEmail(String email) {
         Query query = mDatabase.orderByChild("Email").equalTo(email);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String userInfo = "";
-                for(DataSnapshot userSnapshot : dataSnapshot.getChildren()){
+                for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                     userInfo += "Name: " + userSnapshot.child("Name").getValue() + "\nEmail :" + userSnapshot.child("Email").getValue();
                     friendUserId = userSnapshot.getKey();
                 }
@@ -163,13 +163,13 @@ public class AddFriendFragment extends Fragment {
     }
 
 
-    public void btnAddFriendClicked(){
+    public void btnAddFriendClicked() {
         final String user_id = mAuth.getCurrentUser().getUid();
         final DatabaseReference friend_reference = FirebaseDatabase.getInstance().getReference().child("Friends").child(user_id);
         friend_reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(!dataSnapshot.hasChild(friendUserId)){
+                if (!dataSnapshot.hasChild(friendUserId)) {
                     friend_reference.child("UID").setValue(friendUserId);
                 }
             }
@@ -181,7 +181,7 @@ public class AddFriendFragment extends Fragment {
         });
     }
 
-    public void btnCancelClicked(){
+    public void btnCancelClicked() {
         Fragment fragment = new HomepageFragment();
         FragmentManager fm = getFragmentManager();
         fm.beginTransaction().replace(R.id.frame_container, fragment).commit();
