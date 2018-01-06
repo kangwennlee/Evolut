@@ -17,6 +17,7 @@ import android.text.TextWatcher;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -47,11 +48,11 @@ public class AddFriendFragment extends Fragment {
     private View mView;
 
     private static EditText friend_email;
-    private static TextView addFriend_feedback;
+    private static TextView addFriend_feedback, friend_info;
     private static Button addFriend_button, cancel_button;
     private static DatabaseReference mDatabase;
     private static FirebaseAuth mAuth;
-    private static String friendUserId;
+    private static String friendUserId, friendName;
 
 
     public AddFriendFragment() {
@@ -91,23 +92,24 @@ public class AddFriendFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        mView = inflater.inflate(R.layout.fragment_add_friend, container, false);
+        mView =  inflater.inflate(R.layout.fragment_add_friend, container, false);
         friend_email = (EditText) mView.findViewById(R.id.txtFriendEmail);
-        addFriend_feedback = (TextView) mView.findViewById(R.id.txtAddFriendFeedBack);
-        addFriend_button = (Button) mView.findViewById(R.id.btnAddFriend);
-        cancel_button = (Button) mView.findViewById(R.id.btnCancel);
+        addFriend_feedback = (TextView)mView.findViewById(R.id.txtAddFriendFeedBack);
+        friend_info = (TextView)mView.findViewById(R.id.txtFriendInfo);
+        addFriend_button = (Button)mView.findViewById(R.id.btnAddFriend);
+        cancel_button = (Button)mView.findViewById(R.id.btnCancel);
         addFriend_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                btnAddFriendClicked();
-            }
-        });
-        cancel_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                btnCancelClicked();
-            }
-        });
+                                                @Override
+                                                public void onClick(View v) {
+                                                    btnAddFriendClicked();
+                                                }
+                                            });
+                cancel_button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        btnCancelClicked();
+                    }
+                });
         return mView;
     }
 
@@ -141,17 +143,18 @@ public class AddFriendFragment extends Fragment {
         });
     }
 
-    private void checkFriendEmail(String email) {
+    private void checkFriendEmail(String email){
         Query query = mDatabase.orderByChild("Email").equalTo(email);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String userInfo = "";
-                for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                for(DataSnapshot userSnapshot : dataSnapshot.getChildren()){
                     userInfo += "Name: " + userSnapshot.child("Name").getValue() + "\nEmail :" + userSnapshot.child("Email").getValue();
                     friendUserId = userSnapshot.getKey();
+                    friendName = userSnapshot.child("Name").getValue().toString();
                 }
-                addFriend_feedback.setText(userInfo);
+                friend_info.setText(userInfo);
             }
 
             @Override
@@ -163,15 +166,24 @@ public class AddFriendFragment extends Fragment {
     }
 
 
-    public void btnAddFriendClicked() {
+    public void btnAddFriendClicked(){
+
         final String user_id = mAuth.getCurrentUser().getUid();
-        final DatabaseReference friend_reference = FirebaseDatabase.getInstance().getReference().child("Friends").child(user_id);
+        final DatabaseReference friend_reference = FirebaseDatabase.getInstance().getReference().child("Friends").child(user_id).child("UID");
+
         friend_reference.addValueEventListener(new ValueEventListener() {
+            int counter = 0;
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (!dataSnapshot.hasChild(friendUserId)) {
-                    friend_reference.child("UID").setValue(friendUserId);
+                counter++;
+                if(dataSnapshot.hasChild(friendUserId) && counter==1){
+                    addFriend_feedback.setText("Action cannot be done, " + friendName + " is already your friend");
                 }
+                if(!dataSnapshot.hasChild(friendUserId) && counter==1){
+                    friend_reference.child(friendUserId).child("Name").setValue(friendName);
+                    addFriend_feedback.setText("Successfully added " + friendName + " in your friend list");
+                }
+
             }
 
             @Override
@@ -181,7 +193,9 @@ public class AddFriendFragment extends Fragment {
         });
     }
 
-    public void btnCancelClicked() {
+
+
+    public void btnCancelClicked(){
         Fragment fragment = new HomepageFragment();
         FragmentManager fm = getFragmentManager();
         fm.beginTransaction().replace(R.id.frame_container, fragment).commit();
