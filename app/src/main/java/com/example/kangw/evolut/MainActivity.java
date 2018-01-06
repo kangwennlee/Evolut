@@ -139,8 +139,9 @@ public class MainActivity extends AppCompatActivity
             Intent i = new Intent(getApplicationContext(), SettingsActivity.class);
             startActivity(i);
         } else if (id == R.id.nav_transaction) {
-            TransactionHistoryFragment fragment = new TransactionHistoryFragment();
-            ft.replace(R.id.frame_container,fragment,"new Transaction").commit();
+            NewTransactionFragment fragment = new NewTransactionFragment();
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.frame_container, fragment, "newTransaction").commit();
         } else if (id == R.id.nav_logout) {
             AuthUI.getInstance()
                     .signOut(this)
@@ -157,6 +158,7 @@ public class MainActivity extends AppCompatActivity
                         }
                     });
         }
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
