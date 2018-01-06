@@ -139,8 +139,8 @@ public class MainActivity extends AppCompatActivity
             Intent i = new Intent(getApplicationContext(), SettingsActivity.class);
             startActivity(i);
         } else if (id == R.id.nav_transaction) {
-            Intent i = new Intent(getApplicationContext(), NewTransactionActivity.class);
-            startActivity(i);
+            TransactionHistoryFragment fragment = new TransactionHistoryFragment();
+            ft.replace(R.id.frame_container, fragment, "newTransaction").commit();
         } else if (id == R.id.nav_logout) {
             AuthUI.getInstance()
                     .signOut(this)

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.kangw.evolut.models.User;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
@@ -44,7 +45,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.login);
         ButterKnife.bind(this);
         mAuth = FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("User");
     }
 
     @Override
@@ -135,7 +136,7 @@ public class LoginActivity extends AppCompatActivity {
                     DatabaseReference current_user = mDatabase.child(user_id);
                     String name = mAuth.getCurrentUser().getDisplayName().toString();
                     String email = mAuth.getCurrentUser().getEmail().toLowerCase().toString();
-                    Users user = new Users(name, email);
+                    User user = new User(name, email);
                     current_user.child("Name").setValue(name);
                     current_user.child("Email").setValue(email);
                     current_user.child("Balance").setValue(0);

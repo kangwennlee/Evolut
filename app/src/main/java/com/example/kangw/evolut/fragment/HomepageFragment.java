@@ -125,7 +125,7 @@ public class HomepageFragment extends Fragment {
             Log.e(TAG, "Error retrieving user's detail", e);
         }
         //Insert your get Amount code here
-        DatabaseReference balanceRef = mDatabase.child("Users").child(user.getUid());
+        DatabaseReference balanceRef = mDatabase.child("User").child(user.getUid());
         balanceRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
