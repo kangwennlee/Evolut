@@ -76,7 +76,7 @@ public class AddFriendActivity extends AppCompatActivity {
                 friendUserId = "";
                 friendName = "";
                 String email = s.toString();
-                checkFriendEmail(email);
+                checkFriendEmail(email.toLowerCase());
             }
         });
     }

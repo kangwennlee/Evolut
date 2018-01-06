@@ -133,8 +133,11 @@ public class LoginActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (!dataSnapshot.hasChild(user_id)) {
                     DatabaseReference current_user = mDatabase.child(user_id);
-                    current_user.child("Name").setValue(mAuth.getCurrentUser().getDisplayName());
-                    current_user.child("Email").setValue(mAuth.getCurrentUser().getEmail());
+                    String name = mAuth.getCurrentUser().getDisplayName().toString();
+                    String email = mAuth.getCurrentUser().getEmail().toLowerCase().toString();
+                    Users user = new Users(name, email);
+                    current_user.child("Name").setValue(name);
+                    current_user.child("Email").setValue(email);
                     current_user.child("Balance").setValue(0);
                 }
             }
