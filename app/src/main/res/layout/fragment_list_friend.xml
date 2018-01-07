@@ -11,11 +11,21 @@
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="200dp" />
+        android:layout_height="200dp"
+        android:id="@+id/friendListRecycler"/>
 
     <Button
-        android:id="@+id/addFriendButton"
+        android:id="@+id/btnAddFriend"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Add Friend" />
+
+    <Button
+        android:id="@+id/btnViewFriend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Friend List" />
+
+
+
 </LinearLayout>

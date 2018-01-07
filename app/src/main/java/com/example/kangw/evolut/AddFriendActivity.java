@@ -73,6 +73,7 @@ public class AddFriendActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
+                addFriend_feedback.setText("");
                 friendUserId = "";
                 friendName = "";
                 String email = s.toString();
@@ -101,6 +102,7 @@ public class AddFriendActivity extends AppCompatActivity {
                 }
                 else{
                     addFriend_button.setEnabled(false);
+
                 }
             }
 

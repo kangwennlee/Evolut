@@ -39,7 +39,7 @@ public class NewTransactionActivity extends AppCompatActivity {
     private ArrayList<String> tagList;
     private TagView tagGroup;
     private Boolean includeMyself = false;
-    private ArrayList<Tag> selectedTags = new ArrayList<>();;
+    private ArrayList<Tag> selectedTags;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +56,8 @@ public class NewTransactionActivity extends AppCompatActivity {
         checkBox = findViewById(R.id.ckIncludeMe);
         confirm_button = (Button)findViewById(R.id.btnConfirm);
         tagGroup = (TagView)findViewById(R.id.tag_group);
+
+        selectedTags = new ArrayList<>();;
 
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -114,6 +116,7 @@ public class NewTransactionActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         tagView.remove(i);
                         selectedTags.remove(i);
+                        updateSubtotal();
                         Toast.makeText(NewTransactionActivity.this, "\"" + tag.text + "\" deleted", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -124,13 +127,15 @@ public class NewTransactionActivity extends AppCompatActivity {
         tagGroup.setOnTagClickListener(new TagView.OnTagClickListener() {
             @Override
             public void onTagClick(Tag tag, int i) {
-                txt_tagName.setText("");
-                txt_tagName.setSelection(0);
-                tag.layoutColor = Color.parseColor("#85C1E9");
-                tag.isDeletable = true;
-                selectedTags.add(tag);
-                tagGroup.addTags(selectedTags);
-                updateSubtotal();
+                if(!tagSelected(tag)){
+                    txt_tagName.setText("");
+                    txt_tagName.setSelection(0);
+                    tag.layoutColor = Color.parseColor("#85C1E9");
+                    tag.isDeletable = true;
+                    selectedTags.add(tag);
+                    tagGroup.addTags(selectedTags);
+                    updateSubtotal();
+                }
             }
         });
 
@@ -141,7 +146,7 @@ public class NewTransactionActivity extends AppCompatActivity {
         if(includeMyself){
             totalShared++;
         }
-        if(txt_PaymentAmt.getText().toString().compareTo("") != 0){
+        if(txt_PaymentAmt.getText().toString().compareTo("") != 0 && selectedTags.size()!=0){
             double totalAmount = Double.parseDouble(txt_PaymentAmt.getText().toString());
             double sharedAmt = ((double)Math.round(totalAmount/totalShared*100))/100;
             txt_friendAmt.setText("Tag your friends here:\n(RM " + sharedAmt + " for each person)");

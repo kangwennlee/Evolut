@@ -6,6 +6,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,12 +19,20 @@ import android.widget.TextView;
 
 import com.example.kangw.evolut.AddFriendActivity;
 import com.example.kangw.evolut.R;
+import com.example.kangw.evolut.RecyclerAdapter;
+import com.example.kangw.evolut.models.Post;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 
 /**
@@ -45,7 +55,14 @@ public class FriendListFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     private View mView;
-    Button mButton;
+    Button addFriendButton, viewFriendButton;
+    private FirebaseAuth mAuth;
+    RecyclerView mRecycler;
+    LinearLayoutManager mManager;
+    RecyclerAdapter mAdapter;
+    DatabaseReference mDatabase;
+    ArrayList<String> friendList;
+    TextView txtView;
 
     public FriendListFragment() {
         // Required empty public constructor
@@ -76,6 +93,10 @@ public class FriendListFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        mAuth = FirebaseAuth.getInstance();
+        String user_id = mAuth.getCurrentUser().getUid();
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("Friends").child(user_id).child("UID");
+        prepareDataset();
     }
 
     @Override
@@ -83,9 +104,54 @@ public class FriendListFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mView =  inflater.inflate(R.layout.fragment_list_friend, container, false);
-        mButton = (Button)mView.findViewById(R.id.addFriendButton);
+        addFriendButton = (Button)mView.findViewById(R.id.btnAddFriend);
+        viewFriendButton = mView.findViewById(R.id.btnViewFriend);
+        mRecycler = mView.findViewById(R.id.friendListRecycler);
+        mRecycler.setHasFixedSize(true);
         return mView;
     }
+
+
+
+    public void prepareDataset() {
+        friendList = new ArrayList<>();
+        Query query = mDatabase.orderByValue();
+        query.addValueEventListener(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot userSnapshot: dataSnapshot.getChildren()){
+                    friendList.add(userSnapshot.child("Name").getValue().toString());
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+
+
+    public void initRecycler() {
+        //BEGIN initialize Recycler View
+        //Set up Layout Manager, reverse layout
+
+        mManager = new LinearLayoutManager(getActivity());
+        mManager.setStackFromEnd(true);
+        mRecycler.setLayoutManager(mManager);
+        String[] mDataset = new String[friendList.size()];
+        for(int i =0; i<friendList.size();i++){
+            mDataset[i] = friendList.get(i);
+        }
+        mAdapter = new RecyclerAdapter(mDataset);
+        mRecycler.setAdapter(mAdapter);
+        //FirebaseRecyclerOptions options = new FirebaseRecyclerOptions.Builder<Post>().setQuery(query,Post.class).build();
+
+    }
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -98,15 +164,21 @@ public class FriendListFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        mButton.setOnClickListener(new View.OnClickListener() {
+        addFriendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getContext(),AddFriendActivity.class);
                 startActivity(i);
+
+            }
+        });
+        viewFriendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initRecycler();
             }
         });
     }
-
 
 
     @Override
@@ -118,7 +190,6 @@ public class FriendListFragment extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
-
     }
 
     @Override
