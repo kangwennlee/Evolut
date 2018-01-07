@@ -7,6 +7,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.kangw.evolut.models.User;
@@ -137,10 +138,16 @@ public class LauncherActivity extends AppCompatActivity {
                     DatabaseReference current_user = mDatabase.child(user_id);
                     String name = mAuth.getCurrentUser().getDisplayName().toString();
                     String email = mAuth.getCurrentUser().getEmail().toLowerCase().toString();
+
                     User user = new User(name, email);
                     current_user.child("Name").setValue(name);
                     current_user.child("Email").setValue(email);
                     current_user.child("Balance").setValue(0);
+                    if(mAuth.getCurrentUser().getPhotoUrl()!= null) {
+                        String profilePic = mAuth.getCurrentUser().getPhotoUrl().toString();
+                        current_user.child("ProfilePic").setValue(profilePic);
+                        user.setProfilePic(profilePic);
+                    }
                 }
             }
 

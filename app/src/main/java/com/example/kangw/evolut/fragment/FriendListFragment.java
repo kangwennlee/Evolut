@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -15,12 +16,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.text.TextWatcher;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.kangw.evolut.AddFriendActivity;
+import com.example.kangw.evolut.BitmapDownloaderTask;
 import com.example.kangw.evolut.R;
 import com.example.kangw.evolut.RecyclerAdapter;
 import com.example.kangw.evolut.models.Post;
+import com.firebase.ui.auth.data.model.User;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -33,6 +37,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 
 /**
@@ -96,7 +101,7 @@ public class FriendListFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         String user_id = mAuth.getCurrentUser().getUid();
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Friends").child(user_id).child("UID");
-        prepareDataset();
+
     }
 
     @Override
@@ -113,7 +118,7 @@ public class FriendListFragment extends Fragment {
 
 
 
-    public void prepareDataset() {
+    /*public void prepareDataset() {
         friendList = new ArrayList<>();
         Query query = mDatabase.orderByValue();
         query.addValueEventListener(new ValueEventListener() {
@@ -131,11 +136,11 @@ public class FriendListFragment extends Fragment {
             }
         });
 
-    }
+    }*/
 
 
 
-    public void initRecycler() {
+   /* public void initRecycler() {
         //BEGIN initialize Recycler View
         //Set up Layout Manager, reverse layout
 
@@ -150,7 +155,7 @@ public class FriendListFragment extends Fragment {
         mRecycler.setAdapter(mAdapter);
         //FirebaseRecyclerOptions options = new FirebaseRecyclerOptions.Builder<Post>().setQuery(query,Post.class).build();
 
-    }
+    }*/
 
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -175,7 +180,7 @@ public class FriendListFragment extends Fragment {
         viewFriendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                initRecycler();
+                //initRecycler();
             }
         });
     }
@@ -212,6 +217,53 @@ public class FriendListFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+public class RVAdapter extends RecyclerView.Adapter<RVAdapter.FriendViewHolder>{
+
+        public class FriendViewHolder extends RecyclerView.ViewHolder{
+            CardView cardView;
+            TextView friendName;
+            TextView friendEmail;
+            ImageView friendProfilePic;
+
+
+            FriendViewHolder(View itemView){
+                super(itemView);
+                cardView = (CardView)itemView.findViewById(R.id.cv);
+                friendName = (TextView)itemView.findViewById(R.id.person_name);
+                friendEmail = (TextView)itemView.findViewById(R.id.person_email);
+                friendProfilePic = (ImageView) itemView.findViewById(R.id.person_photo);
+
+            }
+        }
+
+    List<User> friends;
+
+    RVAdapter(List<User> friends){
+        this.friends = friends;
+    }
+
+    @Override
+    public int getItemCount() {
+        return friends.size();
+    }
+
+    @Override
+    public FriendViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.single_friend_view, viewGroup, false);
+        FriendViewHolder friendViewHolder = new FriendViewHolder(v);
+        return friendViewHolder;
+    }
+
+    @Override
+    public void onBindViewHolder(FriendViewHolder friendViewHolder, int i) {
+        //friendViewHolder.friendName.setText(friends.get(i).getName());
+        //friendViewHolder.friendEmail.setText(friends.get(i).getEmail());
+        //String profilePic = friends.get(i).getPhotoUri().toString();
+        //BitmapDownloaderTask task = new BitmapDownloaderTask(friendViewHolder.friendProfilePic);
+        //task.execute(profilePic);
+    }
+}
 
 
 }
