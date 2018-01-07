@@ -59,7 +59,5 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
      */
     private void sendRegistrationToServer(String token) {
         // TODO: Implement this method to send token to your app server.
-        DatabaseReference dref = FirebaseDatabase.getInstance().getReference().child("FCM");
-        dref.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(token);
     }
 }
