@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
-                                Intent i = new Intent(MainActivity.this, LoginActivity.class);
+                                Intent i = new Intent(MainActivity.this, LauncherActivity.class);
                                 startActivity(i);
                                 finish();
                             } else {

@@ -29,7 +29,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class LoginActivity extends AppCompatActivity {
+public class LauncherActivity extends AppCompatActivity {
     @BindView(R.id.root)
     View mRootView;
 
