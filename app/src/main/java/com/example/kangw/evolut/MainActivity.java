@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        //Need to handle resume previous fragment, else it will always return to homepage fragment by default
         Fragment fragment = new HomepageFragment();
         getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, fragment, "homepage").commit();
     }
@@ -103,6 +104,7 @@ public class MainActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
+        //Need to handle resume previous fragment, else it will always return to homepage fragment by default
     }
 
     @Override
@@ -148,9 +150,6 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        for(int i=0;i<fm.getBackStackEntryCount();i++){
-            fm.popBackStack();
-        }
         if (id == R.id.nav_home) {
             Fragment fragment = new HomepageFragment();
             ft.replace(R.id.frame_container, fragment, "homepage").commit();
@@ -160,14 +159,12 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_friends) {
             FriendListFragment fragment = new FriendListFragment();
             ft.replace(R.id.frame_container, fragment, "addFriend").commit();
-            ft.addToBackStack(null);
         } else if (id == R.id.nav_setting) {
             Intent i = new Intent(getApplicationContext(), SettingsActivity.class);
             startActivity(i);
         } else if (id == R.id.nav_transaction) {
             TransactionHistoryFragment fragment = new TransactionHistoryFragment();
             ft.replace(R.id.frame_container, fragment, "newTransaction").commit();
-            ft.addToBackStack(null);
         } else if (id == R.id.nav_logout) {
             AuthUI.getInstance()
                     .signOut(this)
