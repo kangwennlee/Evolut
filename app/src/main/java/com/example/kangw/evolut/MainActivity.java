@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(),NewTransactionActivity.class);
+                Intent i = new Intent(getApplicationContext(), NewTransactionActivity.class);
                 startActivity(i);
             }
         });
@@ -84,15 +84,13 @@ public class MainActivity extends AppCompatActivity
         String token = FirebaseInstanceId.getInstance().getToken();
         DatabaseReference dref = FirebaseDatabase.getInstance().getReference().child("FCM");
         dref.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(token);
-        FirebaseMessaging.getInstance().subscribeToTopic("news");
+        FirebaseMessaging.getInstance().subscribeToTopic(getString(R.string.default_notification_channel_name));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             // Create channel to show notifications.
-            String channelId  = getString(R.string.default_notification_channel_id);
+            String channelId = getString(R.string.default_notification_channel_id);
             String channelName = getString(R.string.default_notification_channel_name);
-            NotificationManager notificationManager =
-                    getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(new NotificationChannel(channelId,
-                    channelName, NotificationManager.IMPORTANCE_LOW));
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_LOW));
         }
     }
 
