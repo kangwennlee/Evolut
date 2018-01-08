@@ -1,5 +1,6 @@
 package com.example.kangw.evolut.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -7,23 +8,30 @@ import java.util.List;
  */
 
 public class User {
+    String uid;
     String name;
     String email;
     double balance;
     String profilePic;
+    static List<User> users = new ArrayList<>();
 
-    public User(String name, String email) {
+    public User(String uid, String name, String email, String profilePic) {
+        this.uid = uid;
         this.name = name;
         this.email = email;
         this.balance = 0;
-        this.profilePic = null;
+        this.profilePic = profilePic;
+        this.users.add(new User(uid, name, email, profilePic));
     }
 
+    public void getUserByUId(){
 
-    protected List<User> friends;
+
+    }
 
     public void setProfilePic(String profilePic){
         this.profilePic  = profilePic;
+
     }
     public void setName(String name){
         this.name = name;
