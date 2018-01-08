@@ -136,15 +136,21 @@ public class LauncherActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (!dataSnapshot.hasChild(user_id)) {
                     DatabaseReference current_user = mDatabase.child(user_id);
-                    String name = mAuth.getCurrentUser().getDisplayName().toString();
-                    String email = mAuth.getCurrentUser().getEmail().toLowerCase().toString();
+                    //String uid = mAuth.getCurrentUser().getUid();
+                    String name = mAuth.getCurrentUser().getDisplayName();
+                    String email = mAuth.getCurrentUser().getEmail().toLowerCase();
+
+                    String profilePic = "";
+                    if(mAuth.getCurrentUser().getPhotoUrl()!= null) {
+                        profilePic = mAuth.getCurrentUser().getPhotoUrl().toString();
+                    }
+                    else{
+                        profilePic = "@drawable/com_facebook_profile_picture_blank_square";
+                    }
                     current_user.child("Name").setValue(name);
                     current_user.child("Email").setValue(email);
                     current_user.child("Balance").setValue(0);
-                    if(mAuth.getCurrentUser().getPhotoUrl()!= null) {
-                        String profilePic = mAuth.getCurrentUser().getPhotoUrl().toString();
-                        current_user.child("ProfilePic").setValue(profilePic);
-                    }
+                    current_user.child("ProfilePic").setValue(profilePic);
                 }
             }
 
