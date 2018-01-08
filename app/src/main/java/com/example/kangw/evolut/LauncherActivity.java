@@ -131,28 +131,20 @@ public class LauncherActivity extends AppCompatActivity {
     //store user's information into the database, if the user is a new user
     private void createUserAccount() {
         final String user_id = mAuth.getCurrentUser().getUid();
-        mDatabase.addValueEventListener(new ValueEventListener() {
+        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (!dataSnapshot.hasChild(user_id)) {
                     DatabaseReference current_user = mDatabase.child(user_id);
-                    String uid = mAuth.getCurrentUser().getUid();
                     String name = mAuth.getCurrentUser().getDisplayName().toString();
                     String email = mAuth.getCurrentUser().getEmail().toLowerCase().toString();
-
-                    String profilePic = "";
-                    if(mAuth.getCurrentUser().getPhotoUrl()!= null) {
-                        profilePic = mAuth.getCurrentUser().getPhotoUrl().toString();
-                    }
-                    else{
-                        profilePic = "@drawable/com_facebook_profile_picture_blank_square";
-                    }
-                    User user = new User(uid, name, email, profilePic);
                     current_user.child("Name").setValue(name);
                     current_user.child("Email").setValue(email);
                     current_user.child("Balance").setValue(0);
-                    current_user.child("ProfilePic").setValue(profilePic);
-
+                    if(mAuth.getCurrentUser().getPhotoUrl()!= null) {
+                        String profilePic = mAuth.getCurrentUser().getPhotoUrl().toString();
+                        current_user.child("ProfilePic").setValue(profilePic);
+                    }
                 }
             }
 
