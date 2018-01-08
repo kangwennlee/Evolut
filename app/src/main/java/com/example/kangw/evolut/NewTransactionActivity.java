@@ -2,11 +2,13 @@ package com.example.kangw.evolut;
 
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -15,6 +17,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.cunoraz.tagview.Tag;
 import com.cunoraz.tagview.TagView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -25,10 +32,21 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import okhttp3.*;
 
 public class NewTransactionActivity extends AppCompatActivity {
 
+    private static final String TAG = "NewTransactionActivity";
+    String user_token;
     private Button confirm_button;
     private EditText txt_comments, txt_PaymentAmt, txt_tagName;
     private TextView txt_friendAmt;
@@ -44,6 +62,7 @@ public class NewTransactionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_transaction);
+        user_token = new String();
         mAuth = FirebaseAuth.getInstance();
         String user_id = mAuth.getCurrentUser().getUid();
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Friends").child(user_id).child("UID");
@@ -70,7 +89,11 @@ public class NewTransactionActivity extends AppCompatActivity {
         confirm_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //btnConfirmClicked();
+                try {
+                    btnConfirmClicked();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
         txt_PaymentAmt.addTextChangedListener(new TextWatcher() {
@@ -194,10 +217,58 @@ public class NewTransactionActivity extends AppCompatActivity {
         return selected;
     }
 
-    public void btnConfirmClicked(){
+    public void btnConfirmClicked() throws JSONException {
         //check if included me
         //deduct money from friend's account
+        sendNotification("New Transaction","user requested a new transaction","xTrQbGB4BdebP1HvJjKQHVapBrX2");
+    }
 
+    public void sendNotification(final String title, final String body, String user_uid){
+
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("FCM").child(user_uid);
+        Query query = databaseReference;
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                user_token = dataSnapshot.getValue().toString();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        JSONObject root = new JSONObject();
+        try {
+                    JSONObject notification = new JSONObject();
+                    notification.put("body", body);
+                    notification.put("title", title);
+                    root.put("notification",notification);
+                    root.put("to", user_token);
+                } catch (Exception ex) {
+                   ex.printStackTrace();
+                }
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(com.android.volley.Request.Method.POST,"https://fcm.googleapis.com/fcm/send", root, new com.android.volley.Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Toast.makeText(getApplicationContext(), "Message Success" , Toast.LENGTH_LONG).show();
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(), "Message Failed" , Toast.LENGTH_LONG).show();
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Authorization", "key=AIzaSyBfnbpacwG0MD8nVHB84I60DuomRSx4DbY");
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+        };
+        requestQueue.add(jsonObjectRequest);
     }
 
     private void prepareTags() {
