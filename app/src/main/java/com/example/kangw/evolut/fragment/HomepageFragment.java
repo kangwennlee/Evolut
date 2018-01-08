@@ -2,6 +2,7 @@ package com.example.kangw.evolut.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,7 +17,14 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.kangw.evolut.BitmapDownloaderTask;
 import com.example.kangw.evolut.NewTransactionActivity;
 import com.example.kangw.evolut.R;
@@ -31,6 +39,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+
+import okhttp3.Response;
 
 import static android.content.ContentValues.TAG;
 
@@ -120,8 +130,34 @@ public class HomepageFragment extends Fragment {
             }
             mUserName.setText(userName);
             String profilePic = user.getPhotoUrl().toString();
-            BitmapDownloaderTask task = new BitmapDownloaderTask(mProfilePic);
-            task.execute(profilePic);
+            //Use volley to retrieve bitmap
+            RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+//            StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
+//                @Override
+//                public void onResponse(String response) {
+//
+//                }
+//            }, new com.android.volley.Response.ErrorListener() {
+//                @Override
+//                public void onErrorResponse(VolleyError error) {
+//
+//                }
+//            });
+            ImageRequest imageRequest = new ImageRequest(profilePic, new com.android.volley.Response.Listener<Bitmap>() {
+                @Override
+                public void onResponse(Bitmap response) {
+                    mProfilePic.setImageBitmap(response);
+                }
+            }, 0, 0, ImageView.ScaleType.CENTER_CROP, null, new com.android.volley.Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(getContext(),"Error retrieving user's profile picture",Toast.LENGTH_LONG).show();
+                }
+            });
+            //requestQueue.add(stringRequest);
+            requestQueue.add(imageRequest);
+            //BitmapDownloaderTask task = new BitmapDownloaderTask(mProfilePic);
+            //task.execute(profilePic);
         } catch (NullPointerException e) {
             Log.e(TAG, "Error retrieving user's detail", e);
         }
@@ -178,7 +214,6 @@ public class HomepageFragment extends Fragment {
         mAdapter = new RecyclerAdapter(mDataset);
         mRecycler.setAdapter(mAdapter);
         //FirebaseRecyclerOptions options = new FirebaseRecyclerOptions.Builder<Post>().setQuery(postQuery,Post.class).build();
-
     }
 
     private Query getQuery(DatabaseReference databaseReference) {
