@@ -147,7 +147,7 @@ public class LauncherActivity extends AppCompatActivity {
                     else{
                         profilePic = "@drawable/com_facebook_profile_picture_blank_square";
                     }
-                    User user = new User(uid, name, email, profilePic);
+                    //User user = new User(uid, name, email, profilePic);
                     current_user.child("Name").setValue(name);
                     current_user.child("Email").setValue(email);
                     current_user.child("Balance").setValue(0);

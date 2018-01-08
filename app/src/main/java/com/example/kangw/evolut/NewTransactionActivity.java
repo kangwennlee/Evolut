@@ -220,7 +220,10 @@ public class NewTransactionActivity extends AppCompatActivity {
     public void btnConfirmClicked() throws JSONException {
         //check if included me
         //deduct money from friend's account
-        sendNotification("New Transaction","user requested a new transaction","xTrQbGB4BdebP1HvJjKQHVapBrX2");
+        for(int i=0; i<5; i++){
+            sendNotification("New Transaction","user requested a new transaction","xTrQbGB4BdebP1HvJjKQHVapBrX2");
+
+        }
     }
 
     public void sendNotification(final String title, final String body, String user_uid){

@@ -26,6 +26,11 @@
         android:layout_height="wrap_content"
         android:text="Friend List" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView100"/>
+
 
 
 </LinearLayout>
