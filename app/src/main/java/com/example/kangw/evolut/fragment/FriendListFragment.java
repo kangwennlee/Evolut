@@ -24,7 +24,7 @@ import com.example.kangw.evolut.BitmapDownloaderTask;
 import com.example.kangw.evolut.R;
 import com.example.kangw.evolut.RecyclerAdapter;
 import com.example.kangw.evolut.models.Post;
-import com.firebase.ui.auth.data.model.User;
+import com.example.kangw.evolut.models.User;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -257,11 +257,11 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.FriendViewHolder>{
 
     @Override
     public void onBindViewHolder(FriendViewHolder friendViewHolder, int i) {
-        //friendViewHolder.friendName.setText(friends.get(i).getName());
-        //friendViewHolder.friendEmail.setText(friends.get(i).getEmail());
-        //String profilePic = friends.get(i).getPhotoUri().toString();
-        //BitmapDownloaderTask task = new BitmapDownloaderTask(friendViewHolder.friendProfilePic);
-        //task.execute(profilePic);
+        friendViewHolder.friendName.setText(friends.get(i).getName());
+        friendViewHolder.friendEmail.setText(friends.get(i).getEmail());
+        String profilePic = friends.get(i).getProfilePic().toString();
+        BitmapDownloaderTask task = new BitmapDownloaderTask(friendViewHolder.friendProfilePic);
+        task.execute(profilePic);
     }
 }
 
