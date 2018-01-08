@@ -62,6 +62,9 @@ public class User {
         this.profilePic  = profilePic;
 
     }
+    public void setUid(String uid){
+        this.uid = uid;
+    }
     public void setName(String name){
         this.name = name;
     }
@@ -72,7 +75,9 @@ public class User {
         this.balance = balance;
     }
 
-    public String getProfilePic(){
+    public String getUid(){return  this.uid;}
+
+        public String getProfilePic(){
         return this.profilePic;
     }
     public String getName(){

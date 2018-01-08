@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,6 +19,7 @@ import android.widget.EditText;
 import android.text.TextWatcher;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.kangw.evolut.AddFriendActivity;
 import com.example.kangw.evolut.BitmapDownloaderTask;
@@ -68,7 +70,9 @@ public class FriendListFragment extends Fragment {
     RecyclerAdapter mAdapter;
     DatabaseReference mDatabase;
     ArrayList<User> friendList;
-    TextView txtView;
+    TextView textView;
+    User user;
+    String MYUSERNAME;
 
     public FriendListFragment() {
         // Required empty public constructor
@@ -112,6 +116,7 @@ public class FriendListFragment extends Fragment {
         mView =  inflater.inflate(R.layout.fragment_list_friend, container, false);
         addFriendButton = (Button)mView.findViewById(R.id.btnAddFriend);
         viewFriendButton = mView.findViewById(R.id.btnViewFriend);
+        textView = mView.findViewById(R.id.textView100);
         mRecycler = mView.findViewById(R.id.friendListRecycler);
         mRecycler.setHasFixedSize(true);
         prepareDataset();
@@ -127,12 +132,12 @@ public class FriendListFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                User user = new User();
                 for(DataSnapshot userSnapshot: dataSnapshot.getChildren()) {
-                    TextView textView = mView.findViewById(R.id.textView100);
                     String userUID = userSnapshot.getKey().toString();
-                    friendList.add(user.getUserByUId(userUID));
-                    textView.setText(textView.getText().toString() + userSnapshot.getKey().toString() + " ");
+                    getUserByUId(userUID);
+                    friendList.add(user);
+
+                    //textView.setText(textView.getText().toString() + userSnapshot.getKey().toString() + " ");
                 }
             }
 
@@ -164,6 +169,43 @@ public class FriendListFragment extends Fragment {
     }*/
 
 
+    public void getUserByUId(final String uid){
+        try {
+            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("User");
+            Query query = mDatabase.child(uid).orderByValue();
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    String userName = dataSnapshot.child("Name").getValue().toString();
+                    String userEmail = dataSnapshot.child("Email").getValue().toString();
+                    String userProfilePic = dataSnapshot.child("ProfilePic").getValue().toString();
+                    textView.setText(textView.getText()  + "000"+ uid + " " + userName + " " + userEmail + " " + userProfilePic);
+                    MYUSERNAME = userEmail;
+                    //user = new User(uid, userName, userEmail, userProfilePic);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+        }
+        catch (NullPointerException e){
+            Toast.makeText(getActivity(), "Friend List cannot be retrieved" , Toast.LENGTH_LONG).show();
+            HomepageFragment fragment = new HomepageFragment();
+            FragmentManager fragmentManager = getFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(android.R.id.content, fragment);
+            fragmentTransaction.commit();
+        }
+        textView.setText(MYUSERNAME);
+
+        //textView.setText(textView.getText()  + "000"+ user.getUid() + user.getName() + user.getEmail());
+
+    }
+
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
@@ -188,9 +230,9 @@ public class FriendListFragment extends Fragment {
             public void onClick(View v) {
                 //initRecycler();
                 //initializeRVAdapter();
-                TextView textView = mView.findViewById(R.id.textView100);
-                for(int i =0; i<friendList.size();i++){
-                    textView.setText(textView.getText().toString() + friendList.get(i).getName());
+
+               for(int i =0; i<friendList.size();i++){
+                    textView.setText(MYUSERNAME);
                 }
             }
         });
