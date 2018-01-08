@@ -220,7 +220,7 @@ public class NewTransactionActivity extends AppCompatActivity {
     public void btnConfirmClicked() throws JSONException {
         //check if included me
         //deduct money from friend's account
-        sendNotification("New Transaction","user requested a new transaction","xTrQbGB4BdebP1HvJjKQHVapBrX2");
+        sendNotification("New Transaction","user requested a new transaction","SrmsCzJXjJOmqVukmSTLCvJgGDa2");
     }
 
     public void sendNotification(final String title, final String body, String user_uid){
@@ -252,12 +252,12 @@ public class NewTransactionActivity extends AppCompatActivity {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(com.android.volley.Request.Method.POST,"https://fcm.googleapis.com/fcm/send", root, new com.android.volley.Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                Toast.makeText(getApplicationContext(), "Message Success" , Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Message Success" , Toast.LENGTH_SHORT).show();
             }
         }, new com.android.volley.Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), "Message Failed" , Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Message Failed" , Toast.LENGTH_SHORT).show();
             }
         }){
             @Override
