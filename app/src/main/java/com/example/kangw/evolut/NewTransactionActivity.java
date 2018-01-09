@@ -255,12 +255,12 @@ public class NewTransactionActivity extends AppCompatActivity {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(com.android.volley.Request.Method.POST,"https://fcm.googleapis.com/fcm/send", root, new com.android.volley.Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                Toast.makeText(getApplicationContext(), "Message Success" , Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Message Success" , Toast.LENGTH_SHORT).show();
             }
         }, new com.android.volley.Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), "Message Failed" , Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Message Failed" , Toast.LENGTH_SHORT).show();
             }
         }){
             @Override

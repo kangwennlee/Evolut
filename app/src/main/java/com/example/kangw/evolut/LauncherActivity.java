@@ -131,14 +131,14 @@ public class LauncherActivity extends AppCompatActivity {
     //store user's information into the database, if the user is a new user
     private void createUserAccount() {
         final String user_id = mAuth.getCurrentUser().getUid();
-        mDatabase.addValueEventListener(new ValueEventListener() {
+        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (!dataSnapshot.hasChild(user_id)) {
                     DatabaseReference current_user = mDatabase.child(user_id);
-                    String uid = mAuth.getCurrentUser().getUid();
-                    String name = mAuth.getCurrentUser().getDisplayName().toString();
-                    String email = mAuth.getCurrentUser().getEmail().toLowerCase().toString();
+                    //String uid = mAuth.getCurrentUser().getUid();
+                    String name = mAuth.getCurrentUser().getDisplayName();
+                    String email = mAuth.getCurrentUser().getEmail().toLowerCase();
 
                     String profilePic = "";
                     if(mAuth.getCurrentUser().getPhotoUrl()!= null) {
@@ -152,7 +152,6 @@ public class LauncherActivity extends AppCompatActivity {
                     current_user.child("Email").setValue(email);
                     current_user.child("Balance").setValue(0);
                     current_user.child("ProfilePic").setValue(profilePic);
-
                 }
             }
 

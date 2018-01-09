@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.kangw.evolut.ConfirmTransactionActivity"
+    android:orientation="vertical"
+    android:gravity="center">
+
+    <TextView
+        android:id="@+id/textViewTransactionFrom"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="New transaction, accept?" />
+
+    <Button
+        android:id="@+id/buttonAcceptTransaction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Yes" />
+
+    <Button
+        android:id="@+id/buttonRejectTransaction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="No" />
+</LinearLayout>
