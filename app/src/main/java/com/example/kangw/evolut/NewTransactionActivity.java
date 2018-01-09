@@ -276,9 +276,8 @@ public class NewTransactionActivity extends AppCompatActivity {
                 for(int i=0; i<selectedUID.size();i++){
                     String currDateTime = getCurrentDataTime();
                     if(!dataSnapshot.hasChild(currDateTime)){
-                        txt_comments.setText(txt_comments.getText() + "1");
-                        transactionDatabaseReference.child(currDateTime).child("From").setValue(selectedUID.get(i));
-                        transactionDatabaseReference.child(currDateTime).child("Amount").setValue(sharedAmt);
+                        transactionDatabaseReference.child(currDateTime).child("To").child(selectedUID.get(i)).setValue(sharedAmt);
+                        transactionDatabaseReference.child(currDateTime).child("Amount").setValue(Double.parseDouble(txt_PaymentAmt.getText().toString()));
                         transactionDatabaseReference.child(currDateTime).child("Comments").setValue(comments);
                     }
                 }
