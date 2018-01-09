@@ -1,0 +1,33 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.kangw.evolut.fragment.TransactionDetails"
+    android:orientation="vertical">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:id="@+id/txtTDTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="time"/>
+
+    <TextView
+        android:id="@+id/txtTDAmount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="amount" />
+
+    <TextView
+        android:id="@+id/txtTDComment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="comment"/>
+
+    <TextView
+        android:id="@+id/txtTDTo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="to" />
+
+</LinearLayout>
