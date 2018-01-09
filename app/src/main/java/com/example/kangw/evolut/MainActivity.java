@@ -27,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.kangw.evolut.fragment.FriendListFragment;
+import com.example.kangw.evolut.fragment.FriendProfile;
 import com.example.kangw.evolut.fragment.HomepageFragment;
 import com.example.kangw.evolut.fragment.TransactionHistoryFragment;
 import com.firebase.ui.auth.AuthUI;
@@ -43,7 +44,8 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         FriendListFragment.OnFragmentInteractionListener,
         HomepageFragment.OnFragmentInteractionListener,
-        TransactionHistoryFragment.OnFragmentInteractionListener {
+        TransactionHistoryFragment.OnFragmentInteractionListener,
+        FriendProfile.OnFragmentInteractionListener {
 
     ImageView mProfilePic;
     TextView mUserName;
@@ -156,13 +158,15 @@ public class MainActivity extends AppCompatActivity
             startActivity(i);
         } else if (id == R.id.nav_friends) {
             FriendListFragment fragment = new FriendListFragment();
-            ft.replace(R.id.frame_container, fragment, "addFriend").commit();
+            ft.replace(R.id.frame_container, fragment, "FriendList").commit();
+            ft.addToBackStack("FriendList");
         } else if (id == R.id.nav_setting) {
             Intent i = new Intent(getApplicationContext(), SettingsActivity.class);
             startActivity(i);
         } else if (id == R.id.nav_transaction) {
             TransactionHistoryFragment fragment = new TransactionHistoryFragment();
-            ft.replace(R.id.frame_container, fragment, "newTransaction").commit();
+            ft.replace(R.id.frame_container, fragment, "TransactionHistory").commit();
+            ft.addToBackStack("TransactionHistory");
         } else if (id == R.id.nav_logout) {
             AuthUI.getInstance()
                     .signOut(this)

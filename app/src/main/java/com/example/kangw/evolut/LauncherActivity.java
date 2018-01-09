@@ -142,18 +142,17 @@ public class LauncherActivity extends AppCompatActivity {
                     String name = mAuth.getCurrentUser().getDisplayName();
                     String email = mAuth.getCurrentUser().getEmail().toLowerCase();
 
-                    String profilePic = "";
                     if(mAuth.getCurrentUser().getPhotoUrl()!= null) {
-                        profilePic = mAuth.getCurrentUser().getPhotoUrl().toString();
+                        String profilePic = mAuth.getCurrentUser().getPhotoUrl().toString();
+                        current_user.child("ProfilePic").setValue(profilePic);
                     }
-                    else{
-                        profilePic = "@drawable/com_facebook_profile_picture_blank_square";
+                    if(mAuth.getCurrentUser().getPhoneNumber()!= null) {
+                        String phoneNo = mAuth.getCurrentUser().getPhoneNumber().toString();
+                        current_user.child("PhoneNo").setValue(phoneNo);
                     }
-
                     current_user.child("Name").setValue(name);
                     current_user.child("Email").setValue(email);
                     current_user.child("Balance").setValue(0);
-                    current_user.child("ProfilePic").setValue(profilePic);
 /*
                     Map<String, String> map = new HashMap<String, String>();
                     map.put("Name", name);

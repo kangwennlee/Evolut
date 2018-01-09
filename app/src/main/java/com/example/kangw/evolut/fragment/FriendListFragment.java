@@ -11,6 +11,7 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -77,6 +78,7 @@ public class FriendListFragment extends Fragment {
     String userName;
     String userEmail;
     String userProfilePic;
+    String userPhoneNo;
 
     public FriendListFragment() {
         // Required empty public constructor
@@ -159,9 +161,16 @@ public class FriendListFragment extends Fragment {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     userName = dataSnapshot.child("Name").getValue().toString();
                     userEmail = dataSnapshot.child("Email").getValue().toString();
-                    userProfilePic = dataSnapshot.child("ProfilePic").getValue().toString();
-                    user = new User(uid, userName, userEmail, userProfilePic);
 
+                    user = new User(uid, userName, userEmail);
+                    if(dataSnapshot.hasChild("ProfilePic")){
+                        userProfilePic = dataSnapshot.child("ProfilePic").getValue().toString();
+                        user.setProfilePic(userProfilePic);
+                    }
+                    if(dataSnapshot.hasChild("PhoneNo")){
+                        userPhoneNo = dataSnapshot.child("PhoneNo").getValue().toString();
+                        user.setPhoneNo(userPhoneNo);
+                    }
                     friendList.add(user);
                     initializeRVAdapter();
                 }
@@ -178,7 +187,7 @@ public class FriendListFragment extends Fragment {
             HomepageFragment fragment = new HomepageFragment();
             FragmentManager fragmentManager = getFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(android.R.id.content, fragment);
+            fragmentTransaction.replace(R.id.frame_container, fragment);
             fragmentTransaction.commit();
         }
 
@@ -284,6 +293,24 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.FriendViewHolder>{
                 friendEmail = (TextView)itemView.findViewById(R.id.person_email);
                 friendProfilePic = (ImageView) itemView.findViewById(R.id.person_photo);
 
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int position = mRecycler.indexOfChild(v);
+                        Bundle bundle=new Bundle();
+                        bundle.putString("UID", friends.get(position).getUid());
+                        bundle.putString("ProfilePic", friends.get(position).getProfilePic());
+                        bundle.putString("Name", friends.get(position).getName());
+                        bundle.putString("Email", friends.get(position).getEmail());
+                        bundle.putString("PhoneNo", friends.get(position).getPhoneNo());
+                        //set Fragmentclass Arguments
+                        Fragment fragment = new FriendProfile();
+                        fragment.setArguments(bundle);
+                        FragmentManager fragmentManager = getFragmentManager();
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        fragmentTransaction.replace(R.id.frame_container, fragment, "homepage").commit();
+                    }
+                });
             }
         }
 
@@ -310,11 +337,12 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.FriendViewHolder>{
     public void onBindViewHolder(FriendViewHolder friendViewHolder, int i) {
             friendViewHolder.friendName.setText(friends.get(i).getName());
             friendViewHolder.friendEmail.setText(friends.get(i).getEmail());
-            String profilePic = friends.get(i).getProfilePic().toString();
-            if (profilePic.compareTo("@drawable/com_facebook_profile_picture_blank_square") != 0) {
+            if (friends.get(i).getProfilePic() != "") {
+                String profilePic = friends.get(i).getProfilePic().toString();
                 BitmapDownloaderTask task = new BitmapDownloaderTask(friendViewHolder.friendProfilePic);
                 task.execute(profilePic);
             }
+
 
     }
 
@@ -324,8 +352,10 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.FriendViewHolder>{
 
     }
 
-
-
+    @Override
+    public void onBindViewHolder(FriendViewHolder holder, int position, List<Object> payloads) {
+        super.onBindViewHolder(holder, position, payloads);
+    }
 }
 
 
