@@ -11,7 +11,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.example.kangw.evolut.viewholder.AddCard;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -20,7 +19,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Objects;
 
 public class TopUpActivity extends AppCompatActivity {
@@ -68,9 +69,6 @@ public class TopUpActivity extends AppCompatActivity {
                     Intent intent = new Intent(getApplicationContext(), AddCard.class);
                     startActivity(intent);
                 }
-                if (Objects.equals(str, "--Select a card--")){
-                    Toast.makeText(getApplicationContext(), "Please select a card.", Toast.LENGTH_SHORT).show();
-                }
             }
 
             @Override
@@ -83,7 +81,17 @@ public class TopUpActivity extends AppCompatActivity {
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                btnTopUpClicked();
+                String str = spinBankType.getSelectedItem().toString();
+                String amt = txtAmount.getText().toString();
+                if(!Objects.equals(str,"--Select a card--")&&!amt.equals("")){
+                    btnTopUpClicked();
+                }else{
+                    if(amt.equals("")){
+                        Toast.makeText(getApplicationContext(), "Please enter top up amount", Toast.LENGTH_SHORT).show();
+                    }else{
+                        Toast.makeText(getApplicationContext(), "Please select a card.", Toast.LENGTH_SHORT).show();
+                    }
+                }
             }
         });
     }
@@ -102,7 +110,12 @@ public class TopUpActivity extends AppCompatActivity {
                     balance = Double.parseDouble(dataSnapshot.child("Balance").getValue().toString());
                     double amt = Double.parseDouble(txtAmount.getText().toString());
                     newBalance = balance + amt;
-                FirebaseDatabase.getInstance().getReference().child("User").child(FirebaseAuth.getInstance().getUid()).child("Balance").setValue(newBalance);
+                    FirebaseDatabase.getInstance().getReference().child("User").child(FirebaseAuth.getInstance().getUid()).child("Balance").setValue(newBalance);
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+                    String currentDateandTime = sdf.format(new Date());
+                    FirebaseDatabase.getInstance().getReference().child("TopUp").child(FirebaseAuth.getInstance().getUid()).child(currentDateandTime).child("TopUpAmount").setValue(amt);
+                    FirebaseDatabase.getInstance().getReference().child("TopUp").child(FirebaseAuth.getInstance().getUid()).child(currentDateandTime).child("AmountBefore").setValue(balance);
+                    FirebaseDatabase.getInstance().getReference().child("TopUp").child(FirebaseAuth.getInstance().getUid()).child(currentDateandTime).child("AmountAfter").setValue(newBalance);
             }
 
             @Override
