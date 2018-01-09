@@ -25,6 +25,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.kangw.evolut.AddFriendActivity;
 import com.example.kangw.evolut.BitmapDownloaderTask;
 import com.example.kangw.evolut.NewTransactionActivity;
 import com.example.kangw.evolut.R;
@@ -75,6 +76,8 @@ public class HomepageFragment extends Fragment {
     FirebaseUser user;
     ImageButton mNewTransactionButton;
     ImageButton mTopUpButton;
+    ImageButton mNewFriend;
+    ImageButton mCurrency;
 
     public HomepageFragment() {
         // Required empty public constructor
@@ -112,15 +115,17 @@ public class HomepageFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_homepage, container, false);
-        mUserName = (TextView) v.findViewById(R.id.textViewName);
-        mProfilePic = (ImageView) v.findViewById(R.id.imageViewProfile);
-        mBalance = (TextView) v.findViewById(R.id.textViewAmount);
+        mUserName = v.findViewById(R.id.textViewName);
+        mProfilePic = v.findViewById(R.id.imageViewProfile);
+        mBalance = v.findViewById(R.id.textViewAmount);
         mDatabase = FirebaseDatabase.getInstance().getReference();
         user = FirebaseAuth.getInstance().getCurrentUser();
         mRecycler = v.findViewById(R.id.transactionHistoryRecycler);
         mRecycler.setHasFixedSize(true);
-        mNewTransactionButton = (ImageButton)v.findViewById(R.id.imageButtonNewTransaction);
-        mTopUpButton = (ImageButton)v.findViewById(R.id.imageButtonTopUp);
+        mNewTransactionButton = v.findViewById(R.id.imageButtonNewTransaction);
+        mTopUpButton = v.findViewById(R.id.imageButtonTopUp);
+        mNewFriend = v.findViewById(R.id.imageButtonNewFriend);
+        mCurrency = v.findViewById(R.id.imageButtonCurrency);
 
         //Initialize name, email and profile picture and homepage fragment
         try {
@@ -186,6 +191,13 @@ public class HomepageFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getContext(), TopUpActivity.class);
+                startActivity(i);
+            }
+        });
+        mNewFriend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getContext(), AddFriendActivity.class);
                 startActivity(i);
             }
         });

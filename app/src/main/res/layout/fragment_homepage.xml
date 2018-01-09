@@ -96,10 +96,76 @@
             tools:layout_editor_absoluteX="55dp" />
     </LinearLayout>
 
+
+
 </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
+    <LinearLayout
+        android:id="@+id/functionLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
         android:layout_below="@+id/functionLayout"
+        android:orientation="horizontal"
+        android:baselineAligned="false" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/imageButtonNewFriend"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/ic_supervisor_account_black_24dp"
+                    android:contentDescription="Friends"/>
+
+                <TextView
+                    android:id="@+id/textView6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="19dp"
+                    android:text="New Friend"
+                    tools:layout_editor_absoluteX="55dp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/imageButtonCurrency"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/ic_info_black_24dp"
+                android:contentDescription="Currency"/>
+
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="wrap_content"
+                android:layout_height="19dp"
+                android:text="Currency"
+                tools:layout_editor_absoluteX="55dp" />
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_below="@+id/functionLayout2"
         android:id="@+id/transactionHistoryRecycler"
         android:layout_width="match_parent"
         android:layout_height="100dp"
