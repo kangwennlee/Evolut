@@ -50,6 +50,7 @@ public class NewTransactionActivity extends AppCompatActivity {
 
     private static final String TAG = "NewTransactionActivity";
     String user_token;
+    String strName;
     private Button confirm_button, cancel_button;
     private EditText txt_comments, txt_PaymentAmt, txt_tagName;
     private TextView txt_friendAmt;
@@ -276,7 +277,8 @@ public class NewTransactionActivity extends AppCompatActivity {
                 for(int i=0; i<selectedUID.size();i++){
                     String currDateTime = getCurrentDataTime();
                     if(!dataSnapshot.hasChild(currDateTime)){
-                        transactionDatabaseReference.child(currDateTime).child("To").child(selectedUID.get(i)).setValue(sharedAmt);
+                        transactionDatabaseReference.child(currDateTime).child("To").child(selectedUID.get(i)).child("Amount").setValue(sharedAmt);
+                        getUsernameByUID(currDateTime,selectedUID.get(i));
                         transactionDatabaseReference.child(currDateTime).child("Amount").setValue(Double.parseDouble(txt_PaymentAmt.getText().toString()));
                         transactionDatabaseReference.child(currDateTime).child("Comments").setValue(comments);
                     }
@@ -289,6 +291,22 @@ public class NewTransactionActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void getUsernameByUID(final String currDateTime, final String uid){
+        Query query = FirebaseDatabase.getInstance().getReference().child("User").child(uid).child("Name");
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                strName = dataSnapshot.getValue().toString();
+                transactionDatabaseReference.child(currDateTime).child("To").child(uid).child("Name").setValue(strName);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public void sendNotification(final String userName, final String body, String user_uid,Double amount){
