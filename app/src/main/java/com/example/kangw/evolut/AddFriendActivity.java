@@ -11,6 +11,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.kangw.evolut.fragment.FriendListFragment;
@@ -27,7 +28,8 @@ public class AddFriendActivity extends AppCompatActivity {
 
     private static EditText friend_email;
     private static TextView addFriend_feedback, friend_info;
-    private static Button addFriend_button, cancel_button;
+    private static Button addFriend_button, back_button;
+    private static ImageButton imgButton;
     private static DatabaseReference mDatabase;
     private static FirebaseAuth mAuth;
     private static String friendUserId, friendName;
@@ -44,17 +46,24 @@ public class AddFriendActivity extends AppCompatActivity {
         addFriend_feedback = (TextView)findViewById(R.id.txtAddFriendFeedBack);
         friend_info = (TextView)findViewById(R.id.txtFriendInfo);
         addFriend_button = (Button)findViewById(R.id.btnAddFriend);
-        cancel_button = (Button)findViewById(R.id.btnCancel);
+        back_button = (Button)findViewById(R.id.btnAddFriendBack);
+        imgButton = findViewById(R.id.cancelImgButton);
         addFriend_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 btnAddFriendClicked();
             }
         });
-        cancel_button.setOnClickListener(new View.OnClickListener() {
+        back_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btnCancelClicked();
+                btnBackClicked();
+            }
+        });
+        imgButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                friend_email.setText("");
             }
         });
         addFriend_button.setEnabled(false);
@@ -75,7 +84,6 @@ public class AddFriendActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                friend_info.setText("Typing...");
                 addFriend_feedback.setText("");
                 friendUserId = "";
                 friendName = "";
@@ -118,7 +126,6 @@ public class AddFriendActivity extends AppCompatActivity {
         }
         else {
             addFriend_button.setEnabled(false);
-            friend_info.setText("");
         }
     }
 
@@ -163,7 +170,7 @@ public class AddFriendActivity extends AppCompatActivity {
         finish();
     }
 
-    public void btnCancelClicked(){
+    public void btnBackClicked(){
         finish();
     }
 }

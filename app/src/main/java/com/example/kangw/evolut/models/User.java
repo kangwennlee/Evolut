@@ -20,17 +20,24 @@ public class User {
     String email;
     double balance;
     String profilePic;
+    String phoneNo;
     //User user;
-    public User(String uid, String name, String email, String profilePic) {
+    public User(String uid, String name, String email) {
         this.uid = uid;
         this.name = name;
         this.email = email;
         this.balance = 0;
-        this.profilePic = profilePic;
+        this.profilePic = "";
+        this.phoneNo = "";
     }
 
     public User() {
+        this.uid = "";
+        this.name = "";
+        this.email = "";
         this.balance = 0;
+        this.profilePic = "";
+        this.phoneNo = "";
     }
 /*
     public User getUserByUId(final String uid){
@@ -56,7 +63,13 @@ public class User {
         return user;
     }*/
 
+    public String getPhoneNo() {
+        return phoneNo;
+    }
 
+    public void setPhoneNo(String phoneNo) {
+        this.phoneNo = phoneNo;
+    }
 
     public void setProfilePic(String profilePic){
         this.profilePic  = profilePic;

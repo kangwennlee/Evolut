@@ -27,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.kangw.evolut.fragment.FriendListFragment;
+import com.example.kangw.evolut.fragment.FriendProfile;
 import com.example.kangw.evolut.fragment.HomepageFragment;
 import com.example.kangw.evolut.fragment.TransactionHistoryFragment;
 import com.firebase.ui.auth.AuthUI;
@@ -43,7 +44,8 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         FriendListFragment.OnFragmentInteractionListener,
         HomepageFragment.OnFragmentInteractionListener,
-        TransactionHistoryFragment.OnFragmentInteractionListener {
+        TransactionHistoryFragment.OnFragmentInteractionListener,
+        FriendProfile.OnFragmentInteractionListener {
 
     ImageView mProfilePic;
     TextView mUserName;

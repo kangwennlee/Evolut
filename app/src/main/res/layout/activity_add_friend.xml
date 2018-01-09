@@ -9,38 +9,65 @@
 
 
     <!-- TODO: Update blank fragment layout -->
-    <EditText
-        android:id="@+id/txtFriendEmail"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:ems="10"
-        android:inputType="textEmailAddress"
-        android:hint="email address"/>
+        android:layout_height="300dp">
 
-    <TextView
-        android:id="@+id/txtFriendInfo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <EditText
+            android:id="@+id/txtFriendEmail"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginHorizontal="20dp"
+            android:ems="10"
+            android:inputType="textEmailAddress"
+            android:hint="email address"/>
 
+        <ImageButton
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginVertical="50dp"
+            android:src="@drawable/com_facebook_profile_picture_blank_square"
+            android:layout_toRightOf="@+id/txtFriendEmail"
+            android:id="@+id/cancelImgButton"
+            />
+
+        <TextView
+            android:id="@+id/txtFriendInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txtFriendEmail"
+            android:layout_marginLeft="30dp"/>
+
+
+    </RelativeLayout>
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:layout_alignParentBottom="true">
     <Button
-        android:id="@+id/btnCancel"
-        android:layout_width="match_parent"
+        android:id="@+id/btnAddFriendBack"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:text="Cancel"/>
+        android:layout_marginHorizontal="50dp"
+        android:layout_marginVertical="20dp"
+        android:text="Back"/>
 
     <Button
         android:id="@+id/btnAddFriend"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
+        android:layout_toRightOf="@+id/btnAddFriendBack"
         android:text="Add Friend"/>
 
+</RelativeLayout>
     <TextView
         android:id="@+id/txtAddFriendFeedBack"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"/>
 
 </LinearLayout>
