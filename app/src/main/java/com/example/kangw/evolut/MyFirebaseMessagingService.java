@@ -120,12 +120,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this, channelId)
-                //.setSmallIcon(R.drawable.ic_launcher_web)
+                .setSmallIcon(R.drawable.ic_launcher_web)
                 .setContentTitle(title)
                 .setContentText(notificationBody)
                 .setAutoCancel(false)
                 .setSound(defaultSoundUri)
-                .setVibrate(new long[]{2000, 2000})
+                .setVibrate(new long[]{1000, 1000})
                 .setLights(Color.RED,3000,3000)
                 .setContentIntent(pendingIntent);
 
