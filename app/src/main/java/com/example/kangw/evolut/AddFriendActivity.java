@@ -1,6 +1,8 @@
 package com.example.kangw.evolut;
 
+import android.content.Intent;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.kangw.evolut.fragment.FriendListFragment;
 import com.example.kangw.evolut.fragment.HomepageFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -68,11 +71,11 @@ public class AddFriendActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
             }
 
             @Override
             public void afterTextChanged(Editable s) {
+                friend_info.setText("Typing...");
                 addFriend_feedback.setText("");
                 friendUserId = "";
                 friendName = "";
@@ -82,37 +85,50 @@ public class AddFriendActivity extends AppCompatActivity {
         });
     }
 
-    private void checkFriendEmail(String email){
-        Query query = mDatabase.orderByChild("Email").equalTo(email);
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String userInfo = "";
-                for(DataSnapshot userSnapshot : dataSnapshot.getChildren()){
-                    userInfo += "Name: " + userSnapshot.child("Name").getValue() + "\nEmail :" + userSnapshot.child("Email").getValue();
-                    friendUserId = userSnapshot.getKey();
-                    friendName = userSnapshot.child("Name").getValue().toString();
+    private void checkFriendEmail(final String email){
+
+        if(isValidEmailAddress(email)) {
+            Query query = mDatabase.orderByChild("Email").equalTo(email);
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    String userInfo = "";
+                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                        userInfo += "Name: " + userSnapshot.child("Name").getValue() + "\nEmail :" + userSnapshot.child("Email").getValue();
+                        friendUserId = userSnapshot.getKey();
+                        friendName = userSnapshot.child("Name").getValue().toString();
+                    }
+                    friend_info.setText(userInfo);
+                    if (friendUserId.toString().compareTo(mAuth.getCurrentUser().getUid().toString()) == 0) {
+                        friend_info.setText("This is your email address, you cannot add yourself as friend");
+                    } else if (friendUserId != "") {
+                        addFriend_button.setEnabled(true);
+                    } else {
+                        friend_info.setText("Invalid User");
+                        addFriend_button.setEnabled(false);
+
+                    }
                 }
-                friend_info.setText(userInfo);
-                if(friendUserId.toString().compareTo(mAuth.getCurrentUser().getUid().toString()) == 0){
-                    friend_info.setText("This is your email address, you cannot add yourself as friend");
-                }
-                else if(friendUserId != ""){
-                    addFriend_button.setEnabled(true);
-                }
-                else{
-                    addFriend_button.setEnabled(false);
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
                 }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
+            });
+        }
+        else {
+            addFriend_button.setEnabled(false);
+            friend_info.setText("");
+        }
     }
+
+    public boolean isValidEmailAddress(String email) {
+        String ePattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
+        java.util.regex.Pattern p = java.util.regex.Pattern.compile(ePattern);
+        java.util.regex.Matcher m = p.matcher(email);
+        return m.matches();
+    }
+
 
     public void btnAddFriendClicked(){
 

@@ -25,7 +25,9 @@ import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -136,7 +138,7 @@ public class LauncherActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (!dataSnapshot.hasChild(user_id)) {
                     DatabaseReference current_user = mDatabase.child(user_id);
-                    //String uid = mAuth.getCurrentUser().getUid();
+
                     String name = mAuth.getCurrentUser().getDisplayName();
                     String email = mAuth.getCurrentUser().getEmail().toLowerCase();
 
@@ -147,11 +149,19 @@ public class LauncherActivity extends AppCompatActivity {
                     else{
                         profilePic = "@drawable/com_facebook_profile_picture_blank_square";
                     }
-                    //User user = new User(uid, name, email, profilePic);
+
                     current_user.child("Name").setValue(name);
                     current_user.child("Email").setValue(email);
                     current_user.child("Balance").setValue(0);
                     current_user.child("ProfilePic").setValue(profilePic);
+/*
+                    Map<String, String> map = new HashMap<String, String>();
+                    map.put("Name", name);
+                    map.put("Email", email);
+                    map.put("Balance", "0");
+                    map.put("ProfilePic", profilePic);
+                    current_user.setValue(map);*/
+
                 }
             }
 

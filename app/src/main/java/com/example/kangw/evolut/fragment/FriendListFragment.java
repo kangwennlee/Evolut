@@ -11,6 +11,7 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,7 +64,7 @@ public class FriendListFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     private View mView;
-    Button addFriendButton, viewFriendButton;
+    Button addFriendButton, backButton;
     private FirebaseAuth mAuth;
     RecyclerView mRecycler;
     LinearLayoutManager mManager;
@@ -71,8 +72,11 @@ public class FriendListFragment extends Fragment {
     DatabaseReference mDatabase;
     ArrayList<User> friendList;
     TextView textView;
+    //User
     User user;
-    String MYUSERNAME;
+    String userName;
+    String userEmail;
+    String userProfilePic;
 
     public FriendListFragment() {
         // Required empty public constructor
@@ -115,11 +119,11 @@ public class FriendListFragment extends Fragment {
         // Inflate the layout for this fragment
         mView =  inflater.inflate(R.layout.fragment_list_friend, container, false);
         addFriendButton = (Button)mView.findViewById(R.id.btnAddFriend);
-        viewFriendButton = mView.findViewById(R.id.btnViewFriend);
+        backButton = mView.findViewById(R.id.btnBack);
         textView = mView.findViewById(R.id.textView100);
         mRecycler = mView.findViewById(R.id.friendListRecycler);
         mRecycler.setHasFixedSize(true);
-        prepareDataset();
+
         return mView;
     }
 
@@ -135,9 +139,6 @@ public class FriendListFragment extends Fragment {
                 for(DataSnapshot userSnapshot: dataSnapshot.getChildren()) {
                     String userUID = userSnapshot.getKey().toString();
                     getUserByUId(userUID);
-                    friendList.add(user);
-
-                    //textView.setText(textView.getText().toString() + userSnapshot.getKey().toString() + " ");
                 }
             }
 
@@ -150,25 +151,6 @@ public class FriendListFragment extends Fragment {
     }
 
 
-
-   /* public void initRecycler() {
-        //BEGIN initialize Recycler View
-        //Set up Layout Manager, reverse layout
-
-        mManager = new LinearLayoutManager(getActivity());
-        mManager.setStackFromEnd(true);
-        mRecycler.setLayoutManager(mManager);
-        String[] mDataset = new String[friendList.size()];
-        for(int i =0; i<friendList.size();i++){
-            mDataset[i] = friendList.get(i);
-        }
-        mAdapter = new RecyclerAdapter(mDataset);
-        mRecycler.setAdapter(mAdapter);
-        //FirebaseRecyclerOptions options = new FirebaseRecyclerOptions.Builder<Post>().setQuery(query,Post.class).build();
-
-    }*/
-
-
     public void getUserByUId(final String uid){
         try {
             DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("User");
@@ -176,13 +158,13 @@ public class FriendListFragment extends Fragment {
             query.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
+                    userName = dataSnapshot.child("Name").getValue().toString();
+                    userEmail = dataSnapshot.child("Email").getValue().toString();
+                    userProfilePic = dataSnapshot.child("ProfilePic").getValue().toString();
+                    user = new User(uid, userName, userEmail, userProfilePic);
 
-                    String userName = dataSnapshot.child("Name").getValue().toString();
-                    String userEmail = dataSnapshot.child("Email").getValue().toString();
-                    String userProfilePic = dataSnapshot.child("ProfilePic").getValue().toString();
-                    textView.setText(textView.getText()  + "000"+ uid + " " + userName + " " + userEmail + " " + userProfilePic);
-                    MYUSERNAME = userEmail;
-                    //user = new User(uid, userName, userEmail, userProfilePic);
+                    friendList.add(user);
+                    initializeRVAdapter();
                 }
 
                 @Override
@@ -200,9 +182,6 @@ public class FriendListFragment extends Fragment {
             fragmentTransaction.replace(android.R.id.content, fragment);
             fragmentTransaction.commit();
         }
-        textView.setText(MYUSERNAME);
-
-        //textView.setText(textView.getText()  + "000"+ user.getUid() + user.getName() + user.getEmail());
 
     }
 
@@ -225,15 +204,13 @@ public class FriendListFragment extends Fragment {
 
             }
         });
-        viewFriendButton.setOnClickListener(new View.OnClickListener() {
+        backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //initRecycler();
-                //initializeRVAdapter();
-
-               for(int i =0; i<friendList.size();i++){
-                    textView.setText(MYUSERNAME);
-                }
+               HomepageFragment fragment = new HomepageFragment();
+               FragmentManager fragmentManager = getFragmentManager();
+               FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+               fragmentTransaction.replace(R.id.frame_container, fragment, "homepage").commit();
             }
         });
     }
@@ -254,6 +231,13 @@ public class FriendListFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        prepareDataset();
     }
 
     /**
@@ -272,10 +256,16 @@ public class FriendListFragment extends Fragment {
     }
 
     public void initializeRVAdapter(){
+        mRecycler.setRecyclerListener(new RecyclerView.RecyclerListener() {
+            @Override
+            public void onViewRecycled(RecyclerView.ViewHolder holder) {
+                holder.setIsRecyclable(false);
+            }
+        });
         mManager = new LinearLayoutManager(getActivity());
         mRecycler.setLayoutManager(mManager);
-        //RVAdapter adapter = new RVAdapter(friendList);
-        //mRecycler.setAdapter(adapter);
+        RVAdapter adapter = new RVAdapter(friendList);
+        mRecycler.setAdapter(adapter);
     }
 
 
@@ -311,6 +301,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.FriendViewHolder>{
 
     @Override
     public FriendViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.single_friend_view, viewGroup, false);
         FriendViewHolder friendViewHolder = new FriendViewHolder(v);
         return friendViewHolder;
@@ -318,17 +309,24 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.FriendViewHolder>{
 
     @Override
     public void onBindViewHolder(FriendViewHolder friendViewHolder, int i) {
-        friendViewHolder.friendName.setText(friends.get(i).getName());
-        friendViewHolder.friendEmail.setText(friends.get(i).getEmail());
-        String profilePic = friends.get(i).getProfilePic().toString();
-        BitmapDownloaderTask task = new BitmapDownloaderTask(friendViewHolder.friendProfilePic);
-        task.execute(profilePic);
+            friendViewHolder.friendName.setText(friends.get(i).getName());
+            friendViewHolder.friendEmail.setText(friends.get(i).getEmail());
+            String profilePic = friends.get(i).getProfilePic().toString();
+            if (profilePic.compareTo("@drawable/com_facebook_profile_picture_blank_square") != 0) {
+                BitmapDownloaderTask task = new BitmapDownloaderTask(friendViewHolder.friendProfilePic);
+                task.execute(profilePic);
+            }
+
     }
 
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
+
     }
+
+
+
 }
 
 

@@ -20,21 +20,19 @@ public class User {
     String email;
     double balance;
     String profilePic;
-    User user;
-
+    //User user;
     public User(String uid, String name, String email, String profilePic) {
         this.uid = uid;
         this.name = name;
         this.email = email;
         this.balance = 0;
         this.profilePic = profilePic;
-        //this.users.add(new User(uid, name, email, profilePic));
     }
 
     public User() {
-
+        this.balance = 0;
     }
-
+/*
     public User getUserByUId(final String uid){
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("User");
         Query query = mDatabase.orderByChild(uid);
@@ -56,7 +54,9 @@ public class User {
             }
         });
         return user;
-    }
+    }*/
+
+
 
     public void setProfilePic(String profilePic){
         this.profilePic  = profilePic;
