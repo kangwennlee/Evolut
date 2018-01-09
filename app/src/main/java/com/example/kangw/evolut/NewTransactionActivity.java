@@ -3,10 +3,12 @@ package com.example.kangw.evolut;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.provider.ContactsContract;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
@@ -37,7 +39,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,17 +51,18 @@ public class NewTransactionActivity extends AppCompatActivity {
 
     private static final String TAG = "NewTransactionActivity";
     String user_token;
-    private Button confirm_button;
+    private Button confirm_button, cancel_button;
     private EditText txt_comments, txt_PaymentAmt, txt_tagName;
     private TextView txt_friendAmt;
-    private CheckBox checkBox;
     //private View mView;
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
+    private DatabaseReference transactionDatabaseReference;
     private ArrayList<String> tagList;
     private TagView tagGroup;
-    private Boolean includeMyself = false;
     private ArrayList<Tag> selectedTags;
+    private ArrayList<String> selectedUID;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,36 +71,20 @@ public class NewTransactionActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         String user_id = mAuth.getCurrentUser().getUid();
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Friends").child(user_id).child("UID");
+        transactionDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Transactions").child(user_id);
         prepareTags();
         txt_comments = (EditText)findViewById(R.id.txtComments);
         txt_tagName = (EditText) findViewById(R.id.txtTagName);
         txt_PaymentAmt = (EditText) findViewById(R.id.txtPaymentAmt);
         txt_PaymentAmt.setText("");
         txt_friendAmt = findViewById(R.id.txtFriendAmt);
-        checkBox = findViewById(R.id.ckIncludeMe);
         confirm_button = (Button)findViewById(R.id.btnConfirm);
+        cancel_button = findViewById(R.id.btnCancel);
         tagGroup = (TagView)findViewById(R.id.tag_group);
 
         selectedTags = new ArrayList<>();;
 
-        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                includeMyself = isChecked;
-                updateSubtotal();
-            }
-        });
 
-        confirm_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    btnConfirmClicked();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
         txt_PaymentAmt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -161,18 +150,43 @@ public class NewTransactionActivity extends AppCompatActivity {
                 }
             }
         });
+        confirm_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    btnConfirmClicked();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
+        cancel_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+    }
+
+    private String getCurrentDataTime(){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+        String currentDateandTime = sdf.format(new Date());
+        return currentDateandTime;
     }
 
     private void updateSubtotal(){
-        int totalShared = selectedTags.size();
-        if(includeMyself){
-            totalShared++;
-        }
+        txt_friendAmt.setText("Tag your friends here:");
         if(txt_PaymentAmt.getText().toString().compareTo("") != 0 && selectedTags.size()!=0){
+            int totalShared = selectedTags.size();
             double totalAmount = Double.parseDouble(txt_PaymentAmt.getText().toString());
             double sharedAmt = ((double)Math.round(totalAmount/totalShared*100))/100;
             txt_friendAmt.setText("Tag your friends here:\n(RM " + sharedAmt + " for each person)");
+        }
+        selectedUID = new ArrayList<>();
+        for(int i=0; i<selectedTags.size();i++){
+           getUIDByName(selectedTags.get(i).text);
+           //txt_comments.setText(txt_comments.getText() + selectedUID.get(i));
         }
     }
 
@@ -217,15 +231,65 @@ public class NewTransactionActivity extends AppCompatActivity {
         return selected;
     }
 
+    public void getUIDByName(final String name){
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("Friends");
+        String user_id = mAuth.getCurrentUser().getUid();
+        Query query = mDatabase.child(user_id).child("UID").orderByValue();
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot userSnapshot : dataSnapshot.getChildren()){
+                    if(userSnapshot.child("Name").getValue().toString().compareTo(name)==0) {
+                        //txt_comments.setText(txt_comments.getText() + userSnapshot.getKey().toString() + " " + userSnapshot.child("Name").getValue());
+                        selectedUID.add(userSnapshot.getKey().toString());
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     public void btnConfirmClicked() throws JSONException {
-        //check if included me
-
-
-        //deduct money from friend's account
-        for(int i=0; i<5; i++){
-            sendNotification("New Transaction","user requested a new transaction","xTrQbGB4BdebP1HvJjKQHVapBrX2");
-
+        final double sharedAmt = ((double)Math.round(Double.parseDouble(txt_PaymentAmt.getText().toString())/selectedUID.size()*100))/100;
+        String user_name = mAuth.getCurrentUser().getDisplayName();
+        String user_comment = "Request Amount : " + sharedAmt;
+        if(!TextUtils.isEmpty(txt_comments.getText())){
+            user_comment += "\n" + txt_comments.getText();
         }
+        //send notifications
+        for(int i=0; i<selectedUID.size();i++){
+           //txt_comments.setText(txt_comments.getText() + selectedUID.get(i));
+            sendNotification("Request Transaction from " + user_name, user_comment, selectedUID.get(i));
+        }
+
+
+       //record the transaction
+        final String comments = user_comment;
+
+        transactionDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(int i=0; i<selectedUID.size();i++){
+                    String currDateTime = getCurrentDataTime();
+                    if(!dataSnapshot.hasChild(currDateTime)){
+                        txt_comments.setText(txt_comments.getText() + "1");
+                        transactionDatabaseReference.child(currDateTime).child("From").setValue(selectedUID.get(i));
+                        transactionDatabaseReference.child(currDateTime).child("Amount").setValue(sharedAmt);
+                        transactionDatabaseReference.child(currDateTime).child("Comments").setValue(comments);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
     public void sendNotification(final String title, final String body, String user_uid){
