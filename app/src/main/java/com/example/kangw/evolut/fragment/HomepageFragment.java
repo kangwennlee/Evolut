@@ -7,6 +7,8 @@ import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -69,15 +71,13 @@ public class HomepageFragment extends Fragment {
     TextView mUserName;
     TextView mBalance;
     ImageView mProfilePic;
-    RecyclerView mRecycler;
-    LinearLayoutManager mManager;
-    RecyclerAdapter mAdapter;
     DatabaseReference mDatabase;
     FirebaseUser user;
     ImageButton mNewTransactionButton;
     ImageButton mTopUpButton;
     ImageButton mNewFriend;
     ImageButton mCurrency;
+    ImageButton mHistory;
 
     public HomepageFragment() {
         // Required empty public constructor
@@ -120,12 +120,11 @@ public class HomepageFragment extends Fragment {
         mBalance = v.findViewById(R.id.textViewAmount);
         mDatabase = FirebaseDatabase.getInstance().getReference();
         user = FirebaseAuth.getInstance().getCurrentUser();
-        mRecycler = v.findViewById(R.id.transactionHistoryRecycler);
-        mRecycler.setHasFixedSize(true);
         mNewTransactionButton = v.findViewById(R.id.imageButtonNewTransaction);
         mTopUpButton = v.findViewById(R.id.imageButtonTopUp);
         mNewFriend = v.findViewById(R.id.imageButtonNewFriend);
         mCurrency = v.findViewById(R.id.imageButtonCurrency);
+        mHistory = v.findViewById(R.id.imageButtonHistory);
 
         //Initialize name, email and profile picture and homepage fragment
         try {
@@ -179,7 +178,6 @@ public class HomepageFragment extends Fragment {
 
             }
         });
-        initRecycler();
         mNewTransactionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -201,6 +199,16 @@ public class HomepageFragment extends Fragment {
                 startActivity(i);
             }
         });
+        mHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = getFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                TransactionHistoryFragment fragment = new TransactionHistoryFragment();
+                ft.replace(R.id.frame_container, fragment, "TransactionHistory").commit();
+                ft.addToBackStack("TransactionHistory");
+            }
+        });
         return v;
     }
 
@@ -209,27 +217,6 @@ public class HomepageFragment extends Fragment {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
-    }
-
-    public void initRecycler() {
-        //BEGIN initialize Recycler View
-        //Set up Layout Manager, reverse layout
-        mManager = new LinearLayoutManager(getActivity());
-        mManager.setReverseLayout(true);
-        mManager.setStackFromEnd(true);
-        mRecycler.setLayoutManager(mManager);
-        Query postQuery = getQuery(mDatabase);
-        String[] mDataset = new String[10];
-        for (int i = 0; i < 10; i++) {
-            mDataset[i] = "This is element #" + i;
-        }
-        mAdapter = new RecyclerAdapter(mDataset);
-        mRecycler.setAdapter(mAdapter);
-        //FirebaseRecyclerOptions options = new FirebaseRecyclerOptions.Builder<Post>().setQuery(postQuery,Post.class).build();
-    }
-
-    private Query getQuery(DatabaseReference databaseReference) {
-        return databaseReference.child("Friends").child(user.getUid());
     }
 
     @Override

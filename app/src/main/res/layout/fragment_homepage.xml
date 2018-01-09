@@ -3,14 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.kangw.evolut.fragment.HomepageFragment"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:gravity="center">
 
     <!-- TODO: Update blank fragment layout -->
     <LinearLayout
         android:id="@+id/userProfile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:gravity="center"
         android:orientation="vertical">
 
@@ -160,18 +160,69 @@
                 tools:layout_editor_absoluteX="55dp" />
         </LinearLayout>
 
-
-
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:layout_below="@+id/functionLayout2"
-        android:id="@+id/transactionHistoryRecycler"
+    <LinearLayout
+        android:id="@+id/functionLayout3"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true">
-    </android.support.v7.widget.RecyclerView>
+        android:layout_below="@+id/functionLayout2"
+        android:orientation="horizontal"
+        android:baselineAligned="false" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/imageButtonHistory"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/ic_menu_gallery"
+                    android:contentDescription="Transaction History"/>
+
+                <TextView
+                    android:id="@+id/textView8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="19dp"
+                    android:text="Transaction History"
+                    tools:layout_editor_absoluteX="55dp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/imageButtonExtra"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/ic_info_black_24dp"
+                android:contentDescription="Extra"/>
+
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="wrap_content"
+                android:layout_height="19dp"
+                android:text="Extra"
+                tools:layout_editor_absoluteX="55dp" />
+        </LinearLayout>
+
+    </LinearLayout>
 
 
 </RelativeLayout>
