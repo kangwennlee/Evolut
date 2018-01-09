@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:text="Enter the amount : "
         android:layout_marginTop="30dp"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:gravity="center"/>
 
     <EditText
@@ -31,15 +31,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Select a card : "
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:layout_marginTop="30dp"
         android:textAlignment="center"/>
 
     <Spinner
         android:id="@+id/spinBankType"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:textSize="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:textSize="20sp"
         android:layout_gravity="center"/>
 
     <Button

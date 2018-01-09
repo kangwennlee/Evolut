@@ -62,7 +62,6 @@ public class FriendListFragment extends Fragment {
     RecyclerAdapter mAdapter;
     DatabaseReference mDatabase;
     ArrayList<User> friendList;
-    TextView textView;
     //User
     User user;
     String userName;
@@ -112,7 +111,6 @@ public class FriendListFragment extends Fragment {
         mView =  inflater.inflate(R.layout.fragment_list_friend, container, false);
         addFriendButton = (Button)mView.findViewById(R.id.btnAddFriend);
         backButton = mView.findViewById(R.id.btnBack);
-        textView = mView.findViewById(R.id.textView100);
         mRecycler = mView.findViewById(R.id.friendListRecycler);
         mRecycler.setHasFixedSize(true);
 

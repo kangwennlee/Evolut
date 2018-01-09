@@ -1,13 +1,9 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.kangw.evolut.fragment.FriendListFragment"
     android:orientation="vertical">
-
-
-    <!-- TODO: Update blank fragment layout -->
-
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
@@ -16,34 +12,24 @@
         android:id="@+id/friendListRecycler"/>
 
 
-<RelativeLayout
+<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="20dp"
-    android:layout_alignParentBottom="true">
+    android:orientation="horizontal"
+    android:gravity="center">
     <Button
         android:id="@+id/btnBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="35dp"
         android:text="Back" />
 
     <Button
         android:id="@+id/btnAddFriend"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/btnBack"
-        android:layout_marginHorizontal="35dp"
+        android:layout_marginStart="20dp"
         android:text="Add Friend" />
 
-</RelativeLayout>
+</LinearLayout>
 
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView100"/>
-
-
-
-</RelativeLayout>
+</LinearLayout>

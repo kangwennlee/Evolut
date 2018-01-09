@@ -94,6 +94,14 @@ public class TopUpActivity extends AppCompatActivity {
                 }
             }
         });
+        btnCancel = findViewById(R.id.btnCancel);
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "Top Up cancelled.", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        });
     }
 
     @Override

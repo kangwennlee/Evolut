@@ -164,7 +164,8 @@ public class NewTransactionActivity extends AppCompatActivity {
         cancel_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Toast.makeText(getApplicationContext(), "New Transaction cancelled.", Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
     }

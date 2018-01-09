@@ -64,6 +64,9 @@ public class AddFriendActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 friend_email.setText("");
+                addFriend_feedback.setText("");
+                friendUserId = "";
+                friendName = "";
             }
         });
         addFriend_button.setEnabled(false);
