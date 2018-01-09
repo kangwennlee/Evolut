@@ -128,4 +128,9 @@
      -->
     <string name="default_notification_channel_name" translatable="true">News</string>
 
+    <string name="topUp">Top Up</string>
+    <string name="valid">Form is valid. Card is successfully added.</string>
+    <string name="invalid">Form is invalid. Card is not added successful.</string>
+    <string name="scan_with_card_io">Acan with card.io</string>
+    <string name="error">Please select a card</string>
 </resources>

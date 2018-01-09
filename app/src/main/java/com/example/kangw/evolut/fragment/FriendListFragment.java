@@ -135,7 +135,6 @@ public class FriendListFragment extends Fragment {
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
                 for(DataSnapshot userSnapshot: dataSnapshot.getChildren()) {
                     String userUID = userSnapshot.getKey().toString();
                     getUserByUId(userUID);
