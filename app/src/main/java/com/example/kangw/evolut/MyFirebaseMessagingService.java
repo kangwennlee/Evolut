@@ -56,7 +56,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // [END_EXCLUDE]
 
         // TODO(developer): Handle FCM messages here.
-        sendNotification(remoteMessage.getNotification().getTitle(),remoteMessage.getNotification().getBody());
+        sendNotification(remoteMessage.getNotification().getTitle(),remoteMessage.getNotification().getBody(),remoteMessage.getData().get("Amount"),remoteMessage.getData().get("Username"));
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
         Log.d(TAG, "From: " + remoteMessage.getFrom());
 
@@ -110,8 +110,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      *
      * @param notificationBody FCM message body received.
      */
-    private void sendNotification(String title, String notificationBody) {
+    private void sendNotification(String title, String notificationBody,String amount,String userName) {
         Intent intent = new Intent(this, ConfirmTransactionActivity.class);
+        intent.putExtra("Amount",amount);
+        intent.putExtra("Username",userName);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);
@@ -123,7 +125,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setSmallIcon(R.drawable.ic_launcher_web)
                 .setContentTitle(title)
                 .setContentText(notificationBody)
-                .setAutoCancel(false)
+                .setAutoCancel(true)
                 .setSound(defaultSoundUri)
                 .setVibrate(new long[]{1000, 1000})
                 .setLights(Color.RED,3000,3000)

@@ -264,7 +264,7 @@ public class NewTransactionActivity extends AppCompatActivity {
         //send notifications
         for(int i=0; i<selectedUID.size();i++){
            //txt_comments.setText(txt_comments.getText() + selectedUID.get(i));
-            sendNotification("Request Transaction from " + user_name, user_comment, selectedUID.get(i));
+            sendNotification(user_name, user_comment, selectedUID.get(i),sharedAmt);
         }
 
 
@@ -292,7 +292,7 @@ public class NewTransactionActivity extends AppCompatActivity {
 
     }
 
-    public void sendNotification(final String title, final String body, String user_uid){
+    public void sendNotification(final String userName, final String body, String user_uid,Double amount){
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("FCM").child(user_uid);
         Query query = databaseReference;
@@ -310,9 +310,13 @@ public class NewTransactionActivity extends AppCompatActivity {
         JSONObject root = new JSONObject();
         try {
                     JSONObject notification = new JSONObject();
+                    JSONObject data = new JSONObject();
                     notification.put("body", body);
-                    notification.put("title", title);
+                    notification.put("title", "Request from "+userName);
+                    data.put("Amount",amount);
+                    data.put("Username",userName);
                     root.put("notification",notification);
+                    root.put("data",data);
                     root.put("to", user_token);
                 } catch (Exception ex) {
                    ex.printStackTrace();
