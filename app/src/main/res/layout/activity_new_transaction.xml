@@ -19,7 +19,8 @@
             android:layout_margin="20dp"
             android:ems="10"
             android:id="@+id/txtPaymentAmt"
-            android:hint="@string/payment_amount" />
+            android:hint="@string/payment_amount"
+            android:inputType="numberDecimal"/>
 
         <TextView
             android:layout_width="match_parent"
