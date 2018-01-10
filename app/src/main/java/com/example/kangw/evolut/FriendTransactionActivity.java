@@ -280,7 +280,7 @@ public class FriendTransactionActivity extends AppCompatActivity {
         String user_id = mAuth.getCurrentUser().getUid();
         String user_name = mAuth.getCurrentUser().getDisplayName();
         String user_comment = "";
-        final double sharedAmt = ((double)Math.round(Double.parseDouble(txt_PaymentAmt.getText().toString())/selectedUID.size()*100))/100;
+        final double sharedAmt = ((double)Math.round(Double.parseDouble(txt_PaymentAmt.getText().toString())/(double)selectedUID.size()*100))/100;
         //final DatabaseReference dfTransaction;
         //REQUEST
         if(paymentType.compareTo("Request")==0){
