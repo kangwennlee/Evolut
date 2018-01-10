@@ -173,8 +173,8 @@ public class NewTransactionActivity extends AppCompatActivity {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                         String currDateTime = getCurrentDataTime();
                         if(!dataSnapshot.hasChild(currDateTime)){
-                            dfTransaction.child(currDateTime).child("To").child(txt_beneficiaryName.getText().toString());
-                            dfTransaction.child(currDateTime).child("BankAccNo").child(txt_bankAcc.getText().toString());
+                            dfTransaction.child(currDateTime).child("To").setValue(txt_beneficiaryName.getText().toString());
+                            dfTransaction.child(currDateTime).child("BankAccNo").setValue(txt_bankAcc.getText().toString());
                             dfTransaction.child(currDateTime).child("Amount").setValue(Double.parseDouble(txt_payAmount.getText().toString()));
                             dfTransaction.child(currDateTime).child("Comments").setValue(finalComments);
                         }
@@ -199,7 +199,6 @@ public class NewTransactionActivity extends AppCompatActivity {
                 else{
                     dfAccount.setValue(current_balance - paymentAmt);
                     Toast.makeText(getApplicationContext(), "Payment successful" , Toast.LENGTH_SHORT).show();
-                    resetView();
                 }
             }
 

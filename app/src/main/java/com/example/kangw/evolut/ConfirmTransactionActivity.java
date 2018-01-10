@@ -65,10 +65,12 @@ public class ConfirmTransactionActivity extends AppCompatActivity {
                             Double newBalance = current_balance - amount;
                             mDatabase.setValue(newBalance);
                             recordPayment();
-                            sendNotification(requestedUserName, "Request Accepted",requestedUserUID ,amount);
+                            Toast.makeText(ConfirmTransactionActivity.this,"Payment Successful",Toast.LENGTH_LONG).show();
+                            //sendNotification(requestedUserName, "Request Accepted",requestedUserUID ,amount);
                         }
                         else{
                             //PROMPT ERROR MESSAGE (BALANCE INSUFFICIENT)
+                            Toast.makeText(ConfirmTransactionActivity.this,"Payment Unsuccessful, balance insufficient",Toast.LENGTH_LONG).show();
                         }
                     }
 
@@ -84,8 +86,9 @@ public class ConfirmTransactionActivity extends AppCompatActivity {
         mRejectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String user_name = mAuth.getCurrentUser().getDisplayName();
-                sendNotification(user_name, "Request Rejected",requestedUserUID ,amount);
+                //String user_name = mAuth.getCurrentUser().getDisplayName();
+                //sendNotification(user_name, "Request Rejected",requestedUserUID ,amount);
+                Toast.makeText(ConfirmTransactionActivity.this,"Payment Unsuccessful, Request Rejected",Toast.LENGTH_LONG).show();
                 finish();
             }
         });
@@ -94,13 +97,13 @@ public class ConfirmTransactionActivity extends AppCompatActivity {
 
     public void recordPayment(){
         String user_id = mAuth.getCurrentUser().getUid();
-        final DatabaseReference dfTransaction = FirebaseDatabase.getInstance().getReference().child("Friend-Transactions").child(user_id);
+        final DatabaseReference dfTransaction = FirebaseDatabase.getInstance().getReference().child("Friend-Transactions").child("Pay").child(user_id);
         dfTransaction.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String currDateTime = getCurrentDataTime();
                 if(!dataSnapshot.hasChild(currDateTime)){
-                    dfTransaction.child(currDateTime).child("To").child("REQUESTED USER UID");
+                    dfTransaction.child(currDateTime).child("To").child(requestedUserUID);
                     dfTransaction.child(currDateTime).child("Amount").setValue(amount);
                     dfTransaction.child(currDateTime).child("Comments").setValue("Trasanction request from " + requestedUserName + " accepted");
                 }
