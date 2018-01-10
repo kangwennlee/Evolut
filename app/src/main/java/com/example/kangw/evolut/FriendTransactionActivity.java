@@ -293,6 +293,7 @@ public class FriendTransactionActivity extends AppCompatActivity {
         //PAY
         else{
             deductAmountFromAccount(Double.parseDouble(txt_PaymentAmt.getText().toString()));
+            addAmountFromAccount(Double.parseDouble(txt_PaymentAmt.getText().toString()));
             user_comment = "Pay Amount : " + sharedAmt;
             if(!TextUtils.isEmpty(txt_comments.getText())){
                 user_comment += "\n" + txt_comments.getText();
@@ -335,7 +336,7 @@ public class FriendTransactionActivity extends AppCompatActivity {
 
     }
 
-    public void deductAmountFromAccount(final double amount) {
+    public void addAmountFromAccount(final double amount) {
         for(int i=0; i < selectedUID.size(); i++){
             final DatabaseReference mAdd = FirebaseDatabase.getInstance().getReference().child("User").child(selectedUID.get(i)).child("Balance");
             mAdd.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -355,7 +356,7 @@ public class FriendTransactionActivity extends AppCompatActivity {
 
     }
 
-    public void AddAmountToAccount(final double amount) {
+    public void deductAmountFromAccount(final double amount) {
         String user_id = mAuth.getCurrentUser().getUid();
 
         final DatabaseReference mDeduct = FirebaseDatabase.getInstance().getReference().child("User").child(user_id).child("Balance");
