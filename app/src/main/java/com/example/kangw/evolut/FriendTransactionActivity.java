@@ -426,7 +426,7 @@ public class FriendTransactionActivity extends AppCompatActivity {
                     root.put("notification", notification);
                     root.put("data", data);
                     root.put("to", user_token);
-                    Toast.makeText(getApplicationContext(), user_token, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), user_token, Toast.LENGTH_SHORT).show();
 
                 } catch (Exception ex) {
                     ex.printStackTrace();
