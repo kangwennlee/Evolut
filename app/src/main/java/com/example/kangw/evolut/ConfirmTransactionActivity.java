@@ -38,6 +38,7 @@ public class ConfirmTransactionActivity extends AppCompatActivity {
     String requestedUserUID;
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
+    private double currentUserBalance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,26 +65,12 @@ public class ConfirmTransactionActivity extends AppCompatActivity {
                     @Override
                     //deduct from amount
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        double current_balance = Double.parseDouble(dataSnapshot.getValue().toString());
-                        if(current_balance > amount){
-                            Double newBalance = current_balance - amount;
+                        currentUserBalance = Double.parseDouble(dataSnapshot.getValue().toString());
+                        if(currentUserBalance > amount){
+                            Double newBalance = currentUserBalance - amount;
                             mDeduct.setValue(newBalance);
-                            //add amount to user
-                            final DatabaseReference mAdd = mDatabase.child(requestedUserUID).child("Balance");
-                            mAdd.addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    double requestedUserCurrentBalance = Double.parseDouble(dataSnapshot.getValue().toString());
-                                    mAdd.setValue(requestedUserCurrentBalance + amount);
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-
-                                }
-                            });
                             recordPayment();
-                            Toast.makeText(ConfirmTransactionActivity.this,"Payment Successful",Toast.LENGTH_LONG).show();
+                            //Toast.makeText(ConfirmTransactionActivity.this,"Payment Successful",Toast.LENGTH_LONG).show();
 
 
                         }
@@ -91,7 +78,23 @@ public class ConfirmTransactionActivity extends AppCompatActivity {
                             //PROMPT ERROR MESSAGE (BALANCE INSUFFICIENT)
                             Toast.makeText(ConfirmTransactionActivity.this,"Payment Unsuccessful, balance insufficient",Toast.LENGTH_LONG).show();
                         }
+                        //add amount to user
+                        final DatabaseReference mAdd = mDatabase.child(requestedUserUID).child("Balance");
+                        mAdd.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                if(currentUserBalance > amount) {
+                                    Toast.makeText(ConfirmTransactionActivity.this, mAdd.getRef().toString(),Toast.LENGTH_LONG).show();
+                                    double requestedUserCurrentBalance = Double.parseDouble(dataSnapshot.getValue().toString());
+                                    mAdd.setValue(requestedUserCurrentBalance + amount);
+                                }
+                            }
 
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
 
                     }
 
@@ -101,7 +104,7 @@ public class ConfirmTransactionActivity extends AppCompatActivity {
                     }
                 });
 
-                finish();
+                //finish();
             }
 
         });

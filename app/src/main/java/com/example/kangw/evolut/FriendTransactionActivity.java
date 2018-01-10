@@ -301,9 +301,11 @@ public class FriendTransactionActivity extends AppCompatActivity {
 
 
         //send notifications
-        for(int i=0; i<selectedUID.size();i++){
-            //txt_comments.setText(txt_comments.getText() + selectedUID.get(i));
-            sendNotification(user_id, user_name, user_comment, selectedUID.get(i),sharedAmt);
+        if(paymentType.compareTo("Request")==0) {
+            for (int i = 0; i < selectedUID.size(); i++) {
+                //txt_comments.setText(txt_comments.getText() + selectedUID.get(i));
+                sendNotification(user_id, user_name, user_comment, selectedUID.get(i), sharedAmt);
+            }
         }
         //record the transaction
         final String comments = user_comment;
