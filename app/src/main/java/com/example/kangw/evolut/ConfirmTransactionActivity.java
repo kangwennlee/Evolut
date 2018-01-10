@@ -103,7 +103,7 @@ public class ConfirmTransactionActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String currDateTime = getCurrentDataTime();
                 if(!dataSnapshot.hasChild(currDateTime)){
-                    dfTransaction.child(currDateTime).child("To").child(requestedUserUID);
+                    dfTransaction.child(currDateTime).child("To").setValue(requestedUserUID);
                     dfTransaction.child(currDateTime).child("Amount").setValue(amount);
                     dfTransaction.child(currDateTime).child("Comments").setValue("Trasanction request from " + requestedUserName + " accepted");
                 }
