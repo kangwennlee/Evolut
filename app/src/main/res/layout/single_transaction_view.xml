@@ -29,6 +29,12 @@
                 android:layout_height="wrap_content"
                 android:hint="amount" />
 
+            <TextView
+                android:id="@+id/txtComment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="comment" />
+
         </LinearLayout>
 
 
