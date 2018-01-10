@@ -1,5 +1,6 @@
 package com.example.kangw.evolut;
 
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -36,6 +37,7 @@ public class ConfirmTransactionActivity extends AppCompatActivity {
     String requestedUserName;
     String requestedUserUID;
     private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,28 +52,47 @@ public class ConfirmTransactionActivity extends AppCompatActivity {
         requestedUserUID = getIntent().getStringExtra("UID");
         mAuth = FirebaseAuth.getInstance();
         mTransactionFrom.setText(requestedUserName + " requested RM"+amount.toString()+" from you. Approve this transaction?");
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("User");
 
         mAcceptButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String user_id = mAuth.getCurrentUser().getUid();
                 //deduct from account
-                final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("User").child(user_id).child("Balance");
-                mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+                final DatabaseReference mDeduct = mDatabase.child(user_id).child("Balance");
+                mDeduct.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
+                    //deduct from amount
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         double current_balance = Double.parseDouble(dataSnapshot.getValue().toString());
                         if(current_balance > amount){
                             Double newBalance = current_balance - amount;
-                            mDatabase.setValue(newBalance);
+                            mDeduct.setValue(newBalance);
+                            //add amount to user
+                            final DatabaseReference mAdd = mDatabase.child(requestedUserUID).child("Balance");
+                            mAdd.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    double requestedUserCurrentBalance = Double.parseDouble(dataSnapshot.getValue().toString());
+                                    mAdd.setValue(requestedUserCurrentBalance + amount);
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
                             recordPayment();
                             Toast.makeText(ConfirmTransactionActivity.this,"Payment Successful",Toast.LENGTH_LONG).show();
-                            //sendNotification(requestedUserName, "Request Accepted",requestedUserUID ,amount);
+
+
                         }
                         else{
                             //PROMPT ERROR MESSAGE (BALANCE INSUFFICIENT)
                             Toast.makeText(ConfirmTransactionActivity.this,"Payment Unsuccessful, balance insufficient",Toast.LENGTH_LONG).show();
                         }
+
+
                     }
 
                     @Override
@@ -79,6 +100,7 @@ public class ConfirmTransactionActivity extends AppCompatActivity {
 
                     }
                 });
+
                 finish();
             }
 
