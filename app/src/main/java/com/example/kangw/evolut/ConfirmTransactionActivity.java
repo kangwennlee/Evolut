@@ -70,7 +70,7 @@ public class ConfirmTransactionActivity extends AppCompatActivity {
                             Double newBalance = currentUserBalance - amount;
                             mDeduct.setValue(newBalance);
                             recordPayment();
-                            //Toast.makeText(ConfirmTransactionActivity.this,"Payment Successful",Toast.LENGTH_LONG).show();
+                            Toast.makeText(ConfirmTransactionActivity.this,"Payment Successful",Toast.LENGTH_LONG).show();
 
 
                         }
@@ -104,7 +104,7 @@ public class ConfirmTransactionActivity extends AppCompatActivity {
                     }
                 });
 
-                //finish();
+                finish();
             }
 
         });
