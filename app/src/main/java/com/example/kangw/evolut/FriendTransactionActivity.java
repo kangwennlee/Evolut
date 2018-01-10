@@ -305,7 +305,7 @@ public class FriendTransactionActivity extends AppCompatActivity {
         //send notifications
         if(paymentType.compareTo("Request")==0) {
             for (int i = 0; i < selectedUID.size(); i++) {
-                txt_comments.setText(txt_comments.getText() + selectedUID.get(i) + " ");
+                //txt_comments.setText(txt_comments.getText() + selectedUID.get(i) + " ");
                 sendNotification(user_id, user_name, user_comment, selectedUID.get(i), sharedAmt);
             }
         }
@@ -395,32 +395,35 @@ public class FriendTransactionActivity extends AppCompatActivity {
     public void sendNotification(String from_uid,  final String userName, final String body, String to_uid,Double amount){
 
 
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("FCM").child(to_uid);
-        Query query = databaseReference;
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                user_token = dataSnapshot.getValue().toString();
-                txt_comments.setText(txt_comments.getText() + dataSnapshot.getValue().toString() + " ");
-            }
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("FCM").child(to_uid);
+            Query query = databaseReference;
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    user_token = dataSnapshot.getValue().toString();
+                    //txt_comments.setText(txt_comments.getText() + dataSnapshot.getValue().toString() + " ");
+                }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
+                }
+            });
+
         JSONObject root = new JSONObject();
         try {
-            JSONObject notification = new JSONObject();
-            JSONObject data = new JSONObject();
-            notification.put("body", body);
-            notification.put("title", "Request from "+userName);
-            data.put("Amount",amount);
-            data.put("Username",userName);
-            data.put("UID", from_uid);
-            root.put("notification",notification);
-            root.put("data",data);
-            root.put("to", user_token);
+                JSONObject notification = new JSONObject();
+                JSONObject data = new JSONObject();
+                notification.put("body", body);
+                notification.put("title", "Request from " + userName);
+                data.put("Amount", amount);
+                data.put("Username", userName);
+                data.put("UID", from_uid);
+                root.put("notification", notification);
+                root.put("data", data);
+                root.put("to", user_token);
+                Toast.makeText(getApplicationContext(), user_token, Toast.LENGTH_SHORT).show();
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -428,7 +431,7 @@ public class FriendTransactionActivity extends AppCompatActivity {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(com.android.volley.Request.Method.POST,"https://fcm.googleapis.com/fcm/send", root, new com.android.volley.Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                Toast.makeText(getApplicationContext(), "Request Success" , Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), response.toString() , Toast.LENGTH_SHORT).show();
             }
         }, new com.android.volley.Response.ErrorListener() {
             @Override
