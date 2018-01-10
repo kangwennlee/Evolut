@@ -71,7 +71,7 @@ public class NewTransactionActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         String user_id = mAuth.getCurrentUser().getUid();
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Friends").child(user_id).child("UID");
-        transactionDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Transactions").child(user_id);
+        transactionDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Transactions").child("Request").child(user_id);
         prepareTags();
         txt_comments = (EditText)findViewById(R.id.txtComments);
         txt_tagName = (EditText) findViewById(R.id.txtTagName);
