@@ -293,7 +293,7 @@ public class FriendTransactionActivity extends AppCompatActivity {
         //PAY
         else{
             deductAmountFromAccount(Double.parseDouble(txt_PaymentAmt.getText().toString()));
-            addAmountFromAccount(Double.parseDouble(txt_PaymentAmt.getText().toString()));
+            addAmountFromAccount(sharedAmt);
             user_comment = "Pay Amount : " + sharedAmt;
             if(!TextUtils.isEmpty(txt_comments.getText())){
                 user_comment += "\n" + txt_comments.getText();
