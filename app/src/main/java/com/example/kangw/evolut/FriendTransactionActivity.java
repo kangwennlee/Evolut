@@ -292,6 +292,7 @@ public class FriendTransactionActivity extends AppCompatActivity {
         }
         //PAY
         else{
+            deductAmountFromAccount(Double.parseDouble(txt_PaymentAmt.getText().toString()));
             user_comment = "Pay Amount : " + sharedAmt;
             if(!TextUtils.isEmpty(txt_comments.getText())){
                 user_comment += "\n" + txt_comments.getText();
@@ -332,6 +333,26 @@ public class FriendTransactionActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void deductAmountFromAccount(final double amount) {
+        String user_id = mAuth.getCurrentUser().getUid();
+
+        final DatabaseReference mDeduct = FirebaseDatabase.getInstance().getReference().child(user_id).child("Balance");
+        mDeduct.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            //deduct from amount
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                double currentUserBalance = Double.parseDouble(dataSnapshot.getValue().toString());
+                    Double newBalance = currentUserBalance - amount;
+                    mDeduct.setValue(newBalance);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public void getUsernameByUID(final String currDateTime, final String uid){
