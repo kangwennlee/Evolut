@@ -120,10 +120,10 @@ public class HomepageFragment extends Fragment {
         mBalance = v.findViewById(R.id.textViewAmount);
         mDatabase = FirebaseDatabase.getInstance().getReference();
         user = FirebaseAuth.getInstance().getCurrentUser();
-        mNewTransactionButton = v.findViewById(R.id.imageButtonNewTransaction);
+        mNewTransactionButton = v.findViewById(R.id.imageButtonPayMerchant);
         mTopUpButton = v.findViewById(R.id.imageButtonTopUp);
         mNewFriend = v.findViewById(R.id.imageButtonNewFriend);
-        mCurrency = v.findViewById(R.id.imageButtonCurrency);
+        mCurrency = v.findViewById(R.id.imageButtonPayFriend);
         mHistory = v.findViewById(R.id.imageButtonHistory);
 
         //Initialize name, email and profile picture and homepage fragment
