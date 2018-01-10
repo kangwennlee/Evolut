@@ -7,79 +7,79 @@
     tools:context="com.example.kangw.evolut.NewTransactionActivity"
     android:orientation="vertical">
 
-    <!-- TODO: Update blank fragment layout -->
-    <LinearLayout
+    <EditText
+        android:id="@+id/txtBeneficiaryName"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:layout_margin="10dp"
+        android:hint="Beneficiary Name" />
+
+    <EditText
+        android:id="@+id/txtBankAccNo"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="10dp"
+        android:ems="10"
+        android:inputType="number"
+        android:hint="Bank Account No" />
+
+    <EditText
+        android:id="@+id/txtSingleTransactPaymentAmt"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="10dp"
+        android:ems="10"
+        android:inputType="numberDecimal"
+        android:hint="Payment Amount"
+        android:maxLength="16" />
+
+    <EditText
+        android:id="@+id/txtSingleTransactComments"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="10dp"
+        android:ems="10"
+        android:hint="Comments"/>
+
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:ems="10"
-            android:id="@+id/txtPaymentAmt"
-            android:hint="@string/payment_amount"
-            android:inputType="numberDecimal"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:text="@string/tag_your_friends_here"
-            android:id="@+id/txtFriendAmt"/>
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:ems="10"
-            android:id="@+id/txtTagName" />
-
-        <com.cunoraz.tagview.TagView
-            xmlns:tagview="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/tag_group"
-            android:layout_width="350dp"
-            android:layout_height="80dp"
-            android:layout_margin="10dp"
-            tagview:lineMargin="5dp"
-            tagview:tagMargin="5dp"
-            tagview:textPaddingLeft="8dp"
-            tagview:textPaddingTop="5dp"
-            tagview:textPaddingRight="8dp"
-            tagview:textPaddingBottom="5dp" />
-
-
-        <EditText
-            android:id="@+id/txtComments"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:ems="10"
-            android:inputType="textMultiLine"
-            android:hint="@string/comments"/>
-    </LinearLayout>
-
+        android:layout_marginHorizontal="30dp"
+        android:id="@+id/txtSingleTransactFeedback"
+        android:textColor="#EF6666"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center">
+        android:gravity="center"
+        android:layout_marginTop="20dp">
 
         <Button
-            android:id="@+id/btnConfirm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Confirm" />
+            android:text="cancel"
+            android:id="@+id/btnSingleTransactCancel" />
 
         <Button
-            android:id="@+id/btnCancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:text="Cancel"/>
+            android:text="Confirm Payment"
+            android:id="@+id/btnSingleTransactConfirm"
+            android:layout_marginStart="20dp"
+            />
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/btnFriendTransaction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="10dp"
+        android:text="Friends Transaction"/>
+
 
 </LinearLayout>

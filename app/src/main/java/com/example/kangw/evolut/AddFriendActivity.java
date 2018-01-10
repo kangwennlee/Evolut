@@ -52,6 +52,8 @@ public class AddFriendActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 btnAddFriendClicked();
+                friend_info.setText("");
+                addFriend_feedback.setText("");
             }
         });
         back_button.setOnClickListener(new View.OnClickListener() {

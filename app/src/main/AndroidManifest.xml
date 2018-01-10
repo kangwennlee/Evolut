@@ -31,7 +31,6 @@
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings" />
         <activity android:name=".AddFriendActivity" />
-        <activity android:name=".NewTransactionActivity" />
         <activity android:name=".TopUpActivity" />
 
         <!-- [START firebase_service] -->
@@ -79,7 +78,9 @@
         <!-- [END fcm_default_channel] -->
 
         <activity android:name=".ConfirmTransactionActivity" />
-        <activity android:name=".AddCard"></activity>
+        <activity android:name=".AddCard" />
+        <activity android:name=".NewTransactionActivity" />
+        <activity android:name=".FriendTransactionActivity"></activity>
     </application>
 
 </manifest>
