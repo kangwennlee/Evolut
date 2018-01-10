@@ -84,7 +84,7 @@ public class ConfirmTransactionActivity extends AppCompatActivity {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 if(currentUserBalance > amount) {
-                                    Toast.makeText(ConfirmTransactionActivity.this, mAdd.getRef().toString(),Toast.LENGTH_LONG).show();
+
                                     double requestedUserCurrentBalance = Double.parseDouble(dataSnapshot.getValue().toString());
                                     mAdd.setValue(requestedUserCurrentBalance + amount);
                                 }

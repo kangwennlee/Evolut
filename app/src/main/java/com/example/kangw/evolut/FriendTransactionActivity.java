@@ -307,6 +307,9 @@ public class FriendTransactionActivity extends AppCompatActivity {
                 sendNotification(user_id, user_name, user_comment, selectedUID.get(i), sharedAmt);
             }
         }
+        else{
+            Toast.makeText(getApplicationContext(), "Payment Successful" , Toast.LENGTH_SHORT).show();
+        }
         //record the transaction
         final String comments = user_comment;
         dfTransaction.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -381,12 +384,12 @@ public class FriendTransactionActivity extends AppCompatActivity {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(com.android.volley.Request.Method.POST,"https://fcm.googleapis.com/fcm/send", root, new com.android.volley.Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                Toast.makeText(getApplicationContext(), "Message Success" , Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Request Success" , Toast.LENGTH_SHORT).show();
             }
         }, new com.android.volley.Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), "Message Failed" , Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Request Failed" , Toast.LENGTH_SHORT).show();
             }
         }){
             @Override
