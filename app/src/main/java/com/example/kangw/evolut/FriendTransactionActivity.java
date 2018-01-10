@@ -127,20 +127,20 @@ public class FriendTransactionActivity extends AppCompatActivity {
         tagGroup.setOnTagDeleteListener(new TagView.OnTagDeleteListener() {
             @Override
             public void onTagDeleted(final TagView tagView, final Tag tag, final int i) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(FriendTransactionActivity.this);
-                builder.setMessage("\"" + tag.text + "\" will be delete. Are you sure?");
-                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                //AlertDialog.Builder builder = new AlertDialog.Builder(FriendTransactionActivity.this);
+                //builder.setMessage("\"" + tag.text + "\" will be delete. Are you sure?");
+                //builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    //@Override
+                    //public void onClick(DialogInterface dialog, int which) {
                         tagView.remove(i);
                         selectedTags.remove(i);
                         updateSubtotal();
                         Toast.makeText(FriendTransactionActivity.this, "\"" + tag.text + "\" deleted", Toast.LENGTH_SHORT).show();
                     }
-                });
-                builder.setNegativeButton("No", null);
-                builder.show();
-            }
+                //});
+                //builder.setNegativeButton("No", null);
+               // builder.show();
+           // }
         });
         tagGroup.setOnTagClickListener(new TagView.OnTagClickListener() {
             @Override
@@ -305,7 +305,7 @@ public class FriendTransactionActivity extends AppCompatActivity {
         //send notifications
         if(paymentType.compareTo("Request")==0) {
             for (int i = 0; i < selectedUID.size(); i++) {
-                //txt_comments.setText(txt_comments.getText() + selectedUID.get(i));
+                txt_comments.setText(txt_comments.getText() + selectedUID.get(i) + " ");
                 sendNotification(user_id, user_name, user_comment, selectedUID.get(i), sharedAmt);
             }
         }
@@ -394,12 +394,14 @@ public class FriendTransactionActivity extends AppCompatActivity {
 
     public void sendNotification(String from_uid,  final String userName, final String body, String to_uid,Double amount){
 
+
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("FCM").child(to_uid);
         Query query = databaseReference;
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 user_token = dataSnapshot.getValue().toString();
+                txt_comments.setText(txt_comments.getText() + dataSnapshot.getValue().toString() + " ");
             }
 
             @Override
