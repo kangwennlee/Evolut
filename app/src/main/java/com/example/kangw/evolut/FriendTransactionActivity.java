@@ -336,16 +336,36 @@ public class FriendTransactionActivity extends AppCompatActivity {
     }
 
     public void deductAmountFromAccount(final double amount) {
+        for(int i=0; i < selectedUID.size(); i++){
+            final DatabaseReference mAdd = FirebaseDatabase.getInstance().getReference().child("User").child(selectedUID.get(i)).child("Balance");
+            mAdd.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    double currentUserBalance = Double.parseDouble(dataSnapshot.getValue().toString());
+                    Double newBalance = currentUserBalance + amount;
+                    mAdd.setValue(newBalance);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+
+    }
+
+    public void AddAmountToAccount(final double amount) {
         String user_id = mAuth.getCurrentUser().getUid();
 
-        final DatabaseReference mDeduct = FirebaseDatabase.getInstance().getReference().child(user_id).child("Balance");
+        final DatabaseReference mDeduct = FirebaseDatabase.getInstance().getReference().child("User").child(user_id).child("Balance");
         mDeduct.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             //deduct from amount
             public void onDataChange(DataSnapshot dataSnapshot) {
                 double currentUserBalance = Double.parseDouble(dataSnapshot.getValue().toString());
-                    Double newBalance = currentUserBalance - amount;
-                    mDeduct.setValue(newBalance);
+                Double newBalance = currentUserBalance - amount;
+                mDeduct.setValue(newBalance);
             }
 
             @Override
