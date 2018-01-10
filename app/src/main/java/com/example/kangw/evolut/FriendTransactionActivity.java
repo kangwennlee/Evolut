@@ -3,6 +3,7 @@ package com.example.kangw.evolut;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.provider.ContactsContract;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -66,6 +67,8 @@ public class FriendTransactionActivity extends AppCompatActivity {
     private ArrayList<String> selectedUID;
     private String paymentType;
     DatabaseReference dfTransaction;
+    DatabaseReference databaseReference;
+    Query query;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,7 +90,7 @@ public class FriendTransactionActivity extends AppCompatActivity {
         paymentType = "Pay";
         confirm_button.setEnabled(false);
         tagGroup = (TagView)findViewById(R.id.tag_group);
-
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("FCM");
         selectedTags = new ArrayList<>();;
 
 
@@ -392,62 +395,65 @@ public class FriendTransactionActivity extends AppCompatActivity {
         });
     }
 
-    public void sendNotification(String from_uid,  final String userName, final String body, String to_uid,Double amount){
+    public void sendNotification(final String from_uid, final String userName, final String body, String to_uid, final Double amount){
+        query = databaseReference.child(to_uid);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                user_token = dataSnapshot.getValue().toString();
+                //txt_comments.setText(txt_comments.getText() + dataSnapshot.getValue().toString() + " ");
+            }
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
-            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("FCM").child(to_uid);
-            Query query = databaseReference;
-            query.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    user_token = dataSnapshot.getValue().toString();
-                    //txt_comments.setText(txt_comments.getText() + dataSnapshot.getValue().toString() + " ");
+            }
+        });
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //Do something after 100ms
+                JSONObject root = new JSONObject();
+                try {
+                    JSONObject notification = new JSONObject();
+                    JSONObject data = new JSONObject();
+                    notification.put("body", body);
+                    notification.put("title", "Request from " + userName);
+                    data.put("Amount", amount);
+                    data.put("Username", userName);
+                    data.put("UID", from_uid);
+                    root.put("notification", notification);
+                    root.put("data", data);
+                    root.put("to", user_token);
+                    Toast.makeText(getApplicationContext(), user_token, Toast.LENGTH_SHORT).show();
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-
-        JSONObject root = new JSONObject();
-        try {
-                JSONObject notification = new JSONObject();
-                JSONObject data = new JSONObject();
-                notification.put("body", body);
-                notification.put("title", "Request from " + userName);
-                data.put("Amount", amount);
-                data.put("Username", userName);
-                data.put("UID", from_uid);
-                root.put("notification", notification);
-                root.put("data", data);
-                root.put("to", user_token);
-                Toast.makeText(getApplicationContext(), user_token, Toast.LENGTH_SHORT).show();
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(com.android.volley.Request.Method.POST,"https://fcm.googleapis.com/fcm/send", root, new com.android.volley.Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                Toast.makeText(getApplicationContext(), response.toString() , Toast.LENGTH_SHORT).show();
+                RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(com.android.volley.Request.Method.POST,"https://fcm.googleapis.com/fcm/send", root, new com.android.volley.Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Toast.makeText(getApplicationContext(), "Request Successful" , Toast.LENGTH_SHORT).show();
+                    }
+                }, new com.android.volley.Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), "Request Failed" , Toast.LENGTH_SHORT).show();
+                    }
+                }){
+                    @Override
+                    public Map<String, String> getHeaders() throws AuthFailureError {
+                        HashMap<String, String> headers = new HashMap<String, String>();
+                        headers.put("Authorization", "key=AIzaSyBfnbpacwG0MD8nVHB84I60DuomRSx4DbY");
+                        headers.put("Content-Type", "application/json");
+                        return headers;
+                    }
+                };
+                requestQueue.add(jsonObjectRequest);
             }
-        }, new com.android.volley.Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), "Request Failed" , Toast.LENGTH_SHORT).show();
-            }
-        }){
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Authorization", "key=AIzaSyBfnbpacwG0MD8nVHB84I60DuomRSx4DbY");
-                headers.put("Content-Type", "application/json");
-                return headers;
-            }
-        };
-        requestQueue.add(jsonObjectRequest);
+        }, 300);
     }
 
     private void prepareTags() {
