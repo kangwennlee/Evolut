@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.kangw.evolut.FriendTransactionActivity;
 import com.example.kangw.evolut.NewTransactionActivity;
 import com.example.kangw.evolut.R;
 import com.example.kangw.evolut.RecyclerAdapter;
@@ -23,12 +24,19 @@ import com.example.kangw.evolut.models.Transactions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 
 /**
@@ -104,14 +112,29 @@ public class TransactionHistoryFragment extends Fragment {
             }
         });
 
-
-        Query query = FirebaseDatabase.getInstance().getReference().child("Transactions").child(FirebaseAuth.getInstance().getUid());
-        query.addValueEventListener(new ValueEventListener() {
+        Query queryPay = FirebaseDatabase.getInstance().getReference().child("Friend-Transactions").child("Pay").child(FirebaseAuth.getInstance().getUid());
+        queryPay.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                     String timeStamp = userSnapshot.getKey().toString();
-                    getTransactionByTimeStamp(timeStamp);
+                    getPayTransactionByTimeStamp(timeStamp);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        Query queryRequest = FirebaseDatabase.getInstance().getReference().child("Friend-Transactions").child("Request").child(FirebaseAuth.getInstance().getUid());
+        queryRequest.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                    String timeStamp = userSnapshot.getKey().toString();
+                    getRequestTransactionByTimeStamp(timeStamp);
                 }
             }
 
@@ -124,8 +147,8 @@ public class TransactionHistoryFragment extends Fragment {
         return mView;
     }
 
-    private void getTransactionByTimeStamp(String timeStamp) {
-        Query query = FirebaseDatabase.getInstance().getReference().child("Transactions").child(FirebaseAuth.getInstance().getUid()).child(timeStamp).orderByValue();
+    private void getPayTransactionByTimeStamp(String timeStamp) {
+        Query query = FirebaseDatabase.getInstance().getReference().child("Friend-Transactions").child("Pay").child(FirebaseAuth.getInstance().getUid()).child(timeStamp).orderByValue();
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -144,6 +167,27 @@ public class TransactionHistoryFragment extends Fragment {
             }
         });
 
+    }
+
+    private void getRequestTransactionByTimeStamp(String timeStamp) {
+        Query query = FirebaseDatabase.getInstance().getReference().child("Friend-Transactions").child("Request").child(FirebaseAuth.getInstance().getUid()).child(timeStamp).orderByValue();
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String to = dataSnapshot.child("To").getValue().toString();
+                String timeStamp = dataSnapshot.getKey().toString();
+                Double amount = Double.parseDouble(dataSnapshot.child("Amount").getValue().toString());
+                String comments = dataSnapshot.child("Comments").getValue().toString();
+                transaction = new Transactions(to, timeStamp, amount, comments);
+                transactionArrayList.add(transaction);
+                initializeRVAdapter();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void initializeRVAdapter() {
@@ -205,13 +249,14 @@ public class TransactionHistoryFragment extends Fragment {
            // TextView name;
             TextView time;
             TextView amount;
-          //  TextView comment;
+            TextView comment;
 
             TransactionViewHolder(View itemView){
                 super(itemView);
                 cardView = itemView.findViewById(R.id.cardView);
                 time = itemView.findViewById(R.id.txtTime);
                 amount = itemView.findViewById(R.id.txtAmt);
+                comment = itemView.findViewById(R.id.txtComment);
 
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -251,7 +296,7 @@ public class TransactionHistoryFragment extends Fragment {
            // holder.name.setText(transaction.get(position).getTo().toString());
             holder.time.setText(transaction.get(position).getTime().toString());
             holder.amount.setText(transaction.get(position).getAmount().toString());
-           // holder.comment.setText(transaction.get(position).getComments());
+            holder.comment.setText(transaction.get(position).getComments());
         }
 
         @Override
