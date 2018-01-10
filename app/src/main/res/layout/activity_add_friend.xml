@@ -46,18 +46,19 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:gravity="center">
-    <Button
-        android:id="@+id/btnAddFriendBack"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Back"/>
 
     <Button
         android:id="@+id/btnAddFriend"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
         android:text="Add Friend"/>
+
+    <Button
+        android:id="@+id/btnAddFriendBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:text="Back"/>
 
 </LinearLayout>
     <TextView

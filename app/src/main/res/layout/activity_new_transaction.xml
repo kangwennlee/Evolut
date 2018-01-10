@@ -60,16 +60,16 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="cancel"
-            android:id="@+id/btnSingleTransactCancel" />
+            android:text="Confirm Payment"
+            android:id="@+id/btnSingleTransactConfirm"
+            />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Confirm Payment"
-            android:id="@+id/btnSingleTransactConfirm"
-            android:layout_marginStart="20dp"
-            />
+            android:text="cancel"
+            android:id="@+id/btnSingleTransactCancel"
+            android:layout_marginStart="20dp"/>
 
     </LinearLayout>
 
@@ -77,9 +77,9 @@
         android:id="@+id/btnFriendTransaction"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="100dp"
+        android:layout_gravity="center"
         android:layout_marginTop="10dp"
-        android:text="Friends Transaction"/>
+        android:text="Request or Pay to friend"/>
 
 
 </LinearLayout>

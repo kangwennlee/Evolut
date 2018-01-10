@@ -29,6 +29,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.kangw.evolut.AddFriendActivity;
 import com.example.kangw.evolut.BitmapDownloaderTask;
+import com.example.kangw.evolut.FriendTransactionActivity;
 import com.example.kangw.evolut.NewTransactionActivity;
 import com.example.kangw.evolut.R;
 import com.example.kangw.evolut.RecyclerAdapter;
@@ -206,7 +207,13 @@ public class HomepageFragment extends Fragment {
                 FragmentTransaction ft = fm.beginTransaction();
                 TransactionHistoryFragment fragment = new TransactionHistoryFragment();
                 ft.replace(R.id.frame_container, fragment, "TransactionHistory").commit();
-                ft.addToBackStack("TransactionHistory");
+            }
+        });
+        mCurrency.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getContext(), FriendTransactionActivity.class);
+                startActivity(i);
             }
         });
         return v;
