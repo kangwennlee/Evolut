@@ -52,7 +52,7 @@ public class NewTransactionActivity extends AppCompatActivity {
         backgroundDefault = txt_beneficiaryName.getBackground();
 
         mAuth = FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("SingleTransaction");
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("Merchant-Transactions");
 
         friendTransactionButton.setOnClickListener(new View.OnClickListener() {
             @Override

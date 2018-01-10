@@ -34,6 +34,7 @@ public class ConfirmTransactionActivity extends AppCompatActivity {
     TextView mTransactionFrom;
     Double amount;
     String requestedUserName;
+    String requestedUserUID;
     private FirebaseAuth mAuth;
 
     @Override
@@ -46,6 +47,7 @@ public class ConfirmTransactionActivity extends AppCompatActivity {
         mTransactionFrom = findViewById(R.id.textViewTransactionFrom);
         amount = Double.parseDouble(getIntent().getStringExtra("Amount"));
         requestedUserName = getIntent().getStringExtra("Username");
+        requestedUserUID = getIntent().getStringExtra("UID");
         mAuth = FirebaseAuth.getInstance();
         mTransactionFrom.setText(requestedUserName + " requested RM"+amount.toString()+" from you. Approve this transaction?");
 
@@ -63,7 +65,7 @@ public class ConfirmTransactionActivity extends AppCompatActivity {
                             Double newBalance = current_balance - amount;
                             mDatabase.setValue(newBalance);
                             recordPayment();
-                            sendNotification(requestedUserName, "Request Accepted","REQUESTED USER UID" ,amount);
+                            sendNotification(requestedUserName, "Request Accepted",requestedUserUID ,amount);
                         }
                         else{
                             //PROMPT ERROR MESSAGE (BALANCE INSUFFICIENT)
@@ -83,7 +85,7 @@ public class ConfirmTransactionActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String user_name = mAuth.getCurrentUser().getDisplayName();
-                sendNotification(user_name, "Request Rejected","REQUESTED USER UID" ,amount);
+                sendNotification(user_name, "Request Rejected",requestedUserUID ,amount);
                 finish();
             }
         });
@@ -92,7 +94,7 @@ public class ConfirmTransactionActivity extends AppCompatActivity {
 
     public void recordPayment(){
         String user_id = mAuth.getCurrentUser().getUid();
-        final DatabaseReference dfTransaction = FirebaseDatabase.getInstance().getReference().child("FriendTransactions").child(user_id);
+        final DatabaseReference dfTransaction = FirebaseDatabase.getInstance().getReference().child("Friend-Transactions").child(user_id);
         dfTransaction.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

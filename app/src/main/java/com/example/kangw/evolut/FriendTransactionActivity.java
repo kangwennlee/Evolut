@@ -65,6 +65,7 @@ public class FriendTransactionActivity extends AppCompatActivity {
     private ArrayList<Tag> selectedTags;
     private ArrayList<String> selectedUID;
     private String paymentType;
+    DatabaseReference dfTransaction;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,7 +74,7 @@ public class FriendTransactionActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         String user_id = mAuth.getCurrentUser().getUid();
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Friends").child(user_id).child("UID");
-        transactionDatabaseReference = FirebaseDatabase.getInstance().getReference().child("FriendTransactions");
+        transactionDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Friend-Transactions");
         prepareTags();
         txt_comments = (EditText)findViewById(R.id.txtComments);
         txt_tagName = (EditText) findViewById(R.id.txtTagName);
@@ -280,7 +281,7 @@ public class FriendTransactionActivity extends AppCompatActivity {
         String user_name = mAuth.getCurrentUser().getDisplayName();
         String user_comment = "";
         final double sharedAmt = ((double)Math.round(Double.parseDouble(txt_PaymentAmt.getText().toString())/selectedUID.size()*100))/100;
-        final DatabaseReference dfTransaction;
+        //final DatabaseReference dfTransaction;
         //REQUEST
         if(paymentType.compareTo("Request")==0){
             user_comment = "Request Amount : " + sharedAmt;
@@ -302,7 +303,7 @@ public class FriendTransactionActivity extends AppCompatActivity {
         //send notifications
         for(int i=0; i<selectedUID.size();i++){
             //txt_comments.setText(txt_comments.getText() + selectedUID.get(i));
-            sendNotification(user_name, user_comment, selectedUID.get(i),sharedAmt);
+            sendNotification(user_id, user_name, user_comment, selectedUID.get(i),sharedAmt);
         }
         //record the transaction
         final String comments = user_comment;
@@ -334,7 +335,7 @@ public class FriendTransactionActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 strName = dataSnapshot.getValue().toString();
-                transactionDatabaseReference.child(currDateTime).child("To").child(uid).child("Name").setValue(strName);
+                dfTransaction.child(currDateTime).child("To").child(uid).child("Name").setValue(strName);
             }
 
             @Override
@@ -344,9 +345,9 @@ public class FriendTransactionActivity extends AppCompatActivity {
         });
     }
 
-    public void sendNotification(final String userName, final String body, String user_uid,Double amount){
+    public void sendNotification(String from_uid,  final String userName, final String body, String to_uid,Double amount){
 
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("FCM").child(user_uid);
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("FCM").child(to_uid);
         Query query = databaseReference;
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -367,6 +368,7 @@ public class FriendTransactionActivity extends AppCompatActivity {
             notification.put("title", "Request from "+userName);
             data.put("Amount",amount);
             data.put("Username",userName);
+            data.put("UID", from_uid);
             root.put("notification",notification);
             root.put("data",data);
             root.put("to", user_token);

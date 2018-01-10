@@ -56,7 +56,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // [END_EXCLUDE]
 
         // TODO(developer): Handle FCM messages here.
-        sendNotification(remoteMessage.getNotification().getTitle(),remoteMessage.getNotification().getBody(),remoteMessage.getData().get("Amount"),remoteMessage.getData().get("Username"));
+        sendNotification(remoteMessage.getNotification().getTitle(),remoteMessage.getNotification().getBody(),remoteMessage.getData().get("Amount"),remoteMessage.getData().get("Username"), remoteMessage.getData().get("UID"));
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
         Log.d(TAG, "From: " + remoteMessage.getFrom());
 
@@ -110,10 +110,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      *
      * @param notificationBody FCM message body received.
      */
-    private void sendNotification(String title, String notificationBody,String amount,String userName) {
+    private void sendNotification(String title, String notificationBody,String amount,String userName, String uid) {
         Intent intent = new Intent(this, ConfirmTransactionActivity.class);
         intent.putExtra("Amount",amount);
         intent.putExtra("Username",userName);
+        intent.putExtra("UID",uid);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);
