@@ -326,7 +326,7 @@ public class FriendTransactionActivity extends AppCompatActivity {
         //PAY
         else{
             double totalPayment = Double.parseDouble(txt_PaymentAmt.getText().toString());
-                if(userCurrentAmount > totalPayment){
+                if(userCurrentAmount >= totalPayment){
                     deductAmountFromAccount(totalPayment);
                     addAmountFromAccount(sharedAmt);
                     user_comment = "Pay Amount : " + sharedAmt;

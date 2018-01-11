@@ -66,7 +66,7 @@ public class ConfirmTransactionActivity extends AppCompatActivity {
                     //deduct from amount
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         currentUserBalance = Double.parseDouble(dataSnapshot.getValue().toString());
-                        if(currentUserBalance > amount){
+                        if(currentUserBalance >= amount){
                             Double newBalance = currentUserBalance - amount;
                             mDeduct.setValue(newBalance);
                             recordPayment();
