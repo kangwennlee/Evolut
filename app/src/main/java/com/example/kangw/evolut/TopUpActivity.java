@@ -131,6 +131,7 @@ public class TopUpActivity extends AppCompatActivity {
 
             }
         });
+        Toast.makeText(getApplicationContext(), "Top Up Successful", Toast.LENGTH_SHORT).show();
         finish();
     }
 

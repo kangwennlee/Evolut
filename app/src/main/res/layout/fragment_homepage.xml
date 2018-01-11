@@ -3,8 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.kangw.evolut.fragment.HomepageFragment"
-    android:orientation="horizontal"
-    android:layout_marginTop="15dp">
+    android:paddingTop="15dp">
 
     <!-- TODO: Update blank fragment layout -->
     <LinearLayout
@@ -16,8 +15,8 @@
 
         <ImageButton
             android:id="@+id/imageViewProfile"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:src="@drawable/com_facebook_profile_picture_blank_square"
             android:contentDescription="Profile Picture"
             android:adjustViewBounds="true"/>
@@ -27,14 +26,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="User Name" />
+            android:text="User Name"
+            android:textStyle="bold"
+            android:textSize="15sp"/>
 
         <TextView
             android:id="@+id/textViewAmount"
             android:layout_width="wrap_content"
-            android:layout_height="16dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="Balance" />
+            android:text="Balance"
+            android:textStyle="bold"
+            android:textSize="13sp"/>
     </LinearLayout>
 
     <LinearLayout
@@ -43,7 +46,8 @@
     android:layout_height="100dp"
     android:layout_below="@+id/userProfile"
     android:orientation="horizontal"
-    android:baselineAligned="false" >
+    android:baselineAligned="false"
+    android:layout_marginTop="5dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -53,24 +57,27 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="200dp"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:background="@drawable/borderblack">
 
             <ImageButton
                 android:id="@+id/imageButtonPayMerchant"
-                android:layout_width="50dp"
+                android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:src="@drawable/ic_shopping_basket_black_24dp"
-                android:contentDescription="New Transaction"/>
+                android:contentDescription="New Transaction"
+                android:background="@color/zxing_transparent"/>
 
             <TextView
                 android:id="@+id/textView4"
                 android:layout_width="wrap_content"
                 android:layout_height="19dp"
                 android:text="Pay to Merchant"
-                tools:layout_editor_absoluteX="55dp" />
+                tools:layout_editor_absoluteX="55dp"
+                android:textStyle="bold"/>
         </LinearLayout>
 
     </LinearLayout>
@@ -81,21 +88,24 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:background="@drawable/borderblack">
 
             <ImageButton
                 android:id="@+id/imageButtonPayFriend"
-                android:layout_width="50dp"
+                android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:src="@drawable/ic_info_black_24dp"
-                android:contentDescription="Currency"/>
+                android:src="@drawable/ic_mail_black_24dp"
+                android:contentDescription="Currency"
+                android:background="@color/zxing_transparent"/>
 
             <TextView
                 android:id="@+id/textView7"
                 android:layout_width="wrap_content"
                 android:layout_height="19dp"
                 android:text="Request From Friend"
-                tools:layout_editor_absoluteX="55dp" />
+                tools:layout_editor_absoluteX="55dp"
+                android:textStyle="bold"/>
         </LinearLayout>
 
 
@@ -120,20 +130,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:background="@drawable/borderblack">
 
                 <ImageButton
                     android:id="@+id/imageButtonNewFriend"
-                    android:layout_width="50dp"
+                    android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:src="@drawable/ic_person_add_black_24dp"
-                    android:contentDescription="Friends"/>
+                    android:contentDescription="Friends"
+                    android:background="@color/zxing_transparent"/>
 
                 <TextView
                     android:id="@+id/textView6"
                     android:layout_width="wrap_content"
                     android:layout_height="19dp"
                     android:text="New Friend"
+                    android:textStyle="bold"
                     tools:layout_editor_absoluteX="55dp" />
             </LinearLayout>
 
@@ -144,20 +157,23 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:background="@drawable/borderblack">
 
             <ImageButton
                 android:id="@+id/imageButtonTopUp"
-                android:layout_width="50dp"
+                android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:src="@drawable/ic_credit_card_black_24dp"
-                android:contentDescription="Top Up"/>
+                android:contentDescription="Top Up"
+                android:background="@color/zxing_transparent"/>
 
             <TextView
                 android:id="@+id/textView5"
                 android:layout_width="wrap_content"
                 android:layout_height="19dp"
                 android:text="Top Up"
+                android:textStyle="bold"
                 tools:layout_editor_absoluteX="55dp" />
         </LinearLayout>
 
@@ -176,7 +192,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:background="@drawable/borderblack">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -186,16 +203,18 @@
 
                 <ImageButton
                     android:id="@+id/imageButtonHistory"
-                    android:layout_width="50dp"
+                    android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:src="@drawable/ic_history_black_24dp"
-                    android:contentDescription="Transaction History"/>
+                    android:contentDescription="Transaction History"
+                    android:background="@color/zxing_transparent"/>
 
                 <TextView
                     android:id="@+id/textView8"
                     android:layout_width="wrap_content"
                     android:layout_height="19dp"
                     android:text="Transaction History"
+                    android:textStyle="bold"
                     tools:layout_editor_absoluteX="55dp" />
             </LinearLayout>
 
@@ -206,20 +225,23 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:background="@drawable/borderblack">
 
             <ImageButton
                 android:id="@+id/imageButtonFriendList"
-                android:layout_width="50dp"
+                android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:src="@drawable/ic_supervisor_account_black_24dp"
-                android:contentDescription="Extra"/>
+                android:contentDescription="Extra"
+                android:background="@color/zxing_transparent"/>
 
             <TextView
                 android:id="@+id/textView9"
                 android:layout_width="wrap_content"
                 android:layout_height="19dp"
                 android:text="Friend List"
+                android:textStyle="bold"
                 tools:layout_editor_absoluteX="55dp" />
         </LinearLayout>
 

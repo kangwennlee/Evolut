@@ -4,9 +4,12 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.kangw.evolut.R;
@@ -33,6 +36,7 @@ public class TransactionDetails extends Fragment {
     View mView;
     String sTime, sAmount, sComment, sTo;
     TextView txtTDTime, txtTDAmount, txtTDComment, txtTDTo;
+    Button mBackTransaction;
 
     public TransactionDetails() {
         // Required empty public constructor
@@ -79,10 +83,20 @@ public class TransactionDetails extends Fragment {
         txtTDComment = mView.findViewById(R.id.txtTDComment);
         txtTDTime = mView.findViewById(R.id.txtTDTime);
         txtTDTo = mView.findViewById(R.id.txtTDTo);
+        mBackTransaction = mView.findViewById(R.id.backTransaction);
         txtTDComment.setText(txtTDComment.getHint() + sComment);
         txtTDTo.setText(txtTDTo.getHint() + sTo);
         txtTDTime.setText(txtTDTime.getHint() + sTime);
         txtTDAmount.setText(txtTDAmount.getHint() + sAmount);
+        mBackTransaction.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = getFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                TransactionHistoryFragment fragment = new TransactionHistoryFragment();
+                ft.replace(R.id.frame_container, fragment, "TransactionHistory").commit();
+            }
+        });
         return mView;
     }
 
