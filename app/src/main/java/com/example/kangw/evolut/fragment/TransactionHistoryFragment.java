@@ -16,18 +16,31 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.kangw.evolut.FriendTransactionActivity;
 import com.example.kangw.evolut.NewTransactionActivity;
 import com.example.kangw.evolut.R;
+import com.example.kangw.evolut.RecyclerAdapter;
 import com.example.kangw.evolut.models.Transactions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 
 /**
@@ -52,6 +65,7 @@ public class TransactionHistoryFragment extends Fragment {
     Button mTransactionCancel;
     RecyclerView mRecycler;
     LinearLayoutManager mManager;
+    RecyclerAdapter mAdapter;
     Transactions transaction;
     final ArrayList<Transactions> transactionArrayList = new ArrayList<>();
 
@@ -281,14 +295,14 @@ public class TransactionHistoryFragment extends Fragment {
 
     public class RVAdapter extends RecyclerView.Adapter<RVAdapter.TransactionViewHolder>{
 
-        public class TransactionViewHolder extends RecyclerView.ViewHolder{
+        public class TransactionViewHolder extends RecyclerView.ViewHolder {
             CardView cardView;
-           // TextView name;
+            // TextView name;
             TextView time;
             TextView amount;
             TextView comment;
 
-            TransactionViewHolder(View itemView){
+            TransactionViewHolder(View itemView) {
                 super(itemView);
                 cardView = itemView.findViewById(R.id.cardView);
                 time = itemView.findViewById(R.id.txtTime);
@@ -298,17 +312,27 @@ public class TransactionHistoryFragment extends Fragment {
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        int position = getAdapterPosition();
+                        int position = mRecycler.indexOfChild(view);
                         String time = transaction.get(position).getTime();
-                        String year = time.substring(0,4).concat("-");
-                        String month = time.substring(4,6).concat("-");
-                        String hours = time.substring(6,11).concat(":");
-                        String minutes = time.substring(11,13).concat(":");
-                        String seconds = time.substring(13,15);
+                        String year = time.substring(0, 4).concat("-");
+                        String month = time.substring(4, 6).concat("-");
+                        String hours = time.substring(6, 11).concat(":");
+                        String minutes = time.substring(11, 13).concat(":");
+                        String seconds = time.substring(13, 15);
                         String date = " ";
                         date = date.concat(year.concat(month).concat(hours).concat(minutes).concat(seconds));
+                        String strTo = transaction.get(position).getTo();
+                        String name = strTo.substring(31, strTo.length() - 1);
+                        String name1 = name.substring(0, name.indexOf("}"));
+                        String name2 = " ";
+                        for (int i = 0; i < name.length(); i++) {
+                            if (name.charAt(i) == '{') {
+                                name2 = name.substring(i+1, name.length()-1);
+                            }
+                        }
+                        String toName = name1.concat("\n").concat(name2);
                         Bundle bundle = new Bundle();
-                        bundle.putString("To", transaction.get(position).getTo());
+                        bundle.putString("To", toName);
                         bundle.putString("Time", date);
                         bundle.putString("Amount", transaction.get(position).getAmount().toString());
                         bundle.putString("Comments", transaction.get(position).getComments());
@@ -323,6 +347,8 @@ public class TransactionHistoryFragment extends Fragment {
                 });
             }
         }
+
+
 
         List<Transactions> transaction;
         RVAdapter(List<Transactions> transaction){
