@@ -358,9 +358,9 @@ public class TransactionHistoryFragment extends Fragment {
             String date = " ";
             date = date.concat(year.concat(month).concat(hours).concat(minutes).concat(seconds));
            // holder.name.setText(transaction.get(position).getTo().toString());
-            holder.time.setText(date);
-            holder.amount.setText(transaction.get(position).getAmount().toString());
-            holder.comment.setText(transaction.get(position).getComments());
+            holder.time.setText("Date: "+date);
+            holder.amount.setText("Total Amount: "+transaction.get(position).getAmount().toString());
+            holder.comment.setText("Comment: "+transaction.get(position).getComments());
         }
 
         @Override

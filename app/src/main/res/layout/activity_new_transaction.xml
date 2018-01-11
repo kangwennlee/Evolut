@@ -79,7 +79,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
-        android:text="Request or Pay to friend"/>
+        android:text="Pay to friend"/>
 
 
 </LinearLayout>

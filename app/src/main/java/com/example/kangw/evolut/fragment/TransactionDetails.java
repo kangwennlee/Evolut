@@ -84,10 +84,10 @@ public class TransactionDetails extends Fragment {
         txtTDTime = mView.findViewById(R.id.txtTDTime);
         txtTDTo = mView.findViewById(R.id.txtTDTo);
         mBackTransaction = mView.findViewById(R.id.backTransaction);
-        txtTDComment.setText(txtTDComment.getHint() + sComment);
-        txtTDTo.setText(txtTDTo.getHint() + sTo);
-        txtTDTime.setText(txtTDTime.getHint() + sTime);
-        txtTDAmount.setText(txtTDAmount.getHint() + sAmount);
+        txtTDComment.setText(sComment);
+        txtTDTo.setText(sTo);
+        txtTDTime.setText(sTime);
+        txtTDAmount.setText(sAmount);
         mBackTransaction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

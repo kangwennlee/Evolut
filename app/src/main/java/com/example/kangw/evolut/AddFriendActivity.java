@@ -30,7 +30,7 @@ public class AddFriendActivity extends AppCompatActivity {
     private static EditText friend_email;
     private static TextView addFriend_feedback, friend_info;
     private static Button addFriend_button, back_button;
-    private static ImageButton imgButton;
+    private static Button imgButton;
     private static DatabaseReference mDatabase;
     private static FirebaseAuth mAuth;
     private static String friendUserId, friendName;

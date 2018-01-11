@@ -17,27 +17,35 @@
 
         <EditText
             android:id="@+id/txtFriendEmail"
-            android:layout_width="250dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textEmailAddress"
             android:hint="email address"/>
 
-        <ImageButton
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/ic_action_clear"
-            android:layout_toEndOf="@+id/txtFriendEmail"
+        <Button
             android:id="@+id/cancelImgButton"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_alignBaseline="@+id/txtFriendEmail"
+            android:layout_alignBottom="@+id/txtFriendEmail"
+            android:layout_toEndOf="@+id/txtFriendEmail"
             android:contentDescription="Reset"
-            />
+            android:drawableLeft="@drawable/ic_action_clear"
+            android:text="Clear" />
 
         <TextView
             android:id="@+id/txtFriendInfo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:layout_below="@+id/txtFriendEmail"/>
 
+        <TextView
+            android:id="@+id/txtAddFriendFeedBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txtFriendInfo"/>
 
     </RelativeLayout>
 
@@ -61,10 +69,6 @@
         android:text="Back"/>
 
 </LinearLayout>
-    <TextView
-        android:id="@+id/txtAddFriendFeedBack"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="40dp"/>
+
 
 </LinearLayout>
