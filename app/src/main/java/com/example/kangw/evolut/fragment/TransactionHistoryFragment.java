@@ -59,6 +59,7 @@ public class TransactionHistoryFragment extends Fragment {
     private String mParam2;
     private View mView;
     public Button mNewTransactionButton;
+    Button mTransactionCancel;
     RecyclerView mRecycler;
     LinearLayoutManager mManager;
     RecyclerAdapter mAdapter;
@@ -112,7 +113,16 @@ public class TransactionHistoryFragment extends Fragment {
                 startActivity(i);
             }
         });
-
+        mTransactionCancel = mView.findViewById(R.id.newTransactionCancel);
+        mTransactionCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = getFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                Fragment fragment = new HomepageFragment();
+                ft.replace(R.id.frame_container, fragment, "homepage").commit();
+            }
+        });
         Query queryPay = FirebaseDatabase.getInstance().getReference().child("Friend-Transactions").child("Pay").child(FirebaseAuth.getInstance().getUid());
         queryPay.addValueEventListener(new ValueEventListener() {
             @Override

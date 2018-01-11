@@ -208,7 +208,7 @@
             android:orientation="vertical">
 
             <ImageButton
-                android:id="@+id/imageButtonExtra"
+                android:id="@+id/imageButtonFriendList"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:src="@drawable/ic_supervisor_account_black_24dp"

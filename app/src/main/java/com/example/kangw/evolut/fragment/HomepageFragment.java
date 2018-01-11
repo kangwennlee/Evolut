@@ -3,36 +3,28 @@ package com.example.kangw.evolut.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.kangw.evolut.AddFriendActivity;
-import com.example.kangw.evolut.BitmapDownloaderTask;
 import com.example.kangw.evolut.FriendTransactionActivity;
 import com.example.kangw.evolut.NewTransactionActivity;
 import com.example.kangw.evolut.R;
-import com.example.kangw.evolut.RecyclerAdapter;
 
 import com.example.kangw.evolut.TopUpActivity;
 import com.google.firebase.auth.FirebaseAuth;
@@ -41,10 +33,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-
-import okhttp3.Response;
 
 import static android.content.ContentValues.TAG;
 
@@ -74,11 +63,12 @@ public class HomepageFragment extends Fragment {
     ImageView mProfilePic;
     DatabaseReference mDatabase;
     FirebaseUser user;
-    ImageButton mNewTransactionButton;
+    ImageButton mPayMerchant;
     ImageButton mTopUpButton;
     ImageButton mNewFriend;
-    ImageButton mCurrency;
+    ImageButton mPayFriend;
     ImageButton mHistory;
+    ImageButton mFriendList;
 
     public HomepageFragment() {
         // Required empty public constructor
@@ -121,11 +111,12 @@ public class HomepageFragment extends Fragment {
         mBalance = v.findViewById(R.id.textViewAmount);
         mDatabase = FirebaseDatabase.getInstance().getReference();
         user = FirebaseAuth.getInstance().getCurrentUser();
-        mNewTransactionButton = v.findViewById(R.id.imageButtonPayMerchant);
+        mPayMerchant = v.findViewById(R.id.imageButtonPayMerchant);
         mTopUpButton = v.findViewById(R.id.imageButtonTopUp);
         mNewFriend = v.findViewById(R.id.imageButtonNewFriend);
-        mCurrency = v.findViewById(R.id.imageButtonPayFriend);
+        mPayFriend = v.findViewById(R.id.imageButtonPayFriend);
         mHistory = v.findViewById(R.id.imageButtonHistory);
+        mFriendList = v.findViewById(R.id.imageButtonFriendList);
 
         //Initialize name, email and profile picture and homepage fragment
         try {
@@ -179,7 +170,7 @@ public class HomepageFragment extends Fragment {
 
             }
         });
-        mNewTransactionButton.setOnClickListener(new View.OnClickListener() {
+        mPayMerchant.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getContext(), NewTransactionActivity.class);
@@ -209,11 +200,20 @@ public class HomepageFragment extends Fragment {
                 ft.replace(R.id.frame_container, fragment, "TransactionHistory").commit();
             }
         });
-        mCurrency.setOnClickListener(new View.OnClickListener() {
+        mPayFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getContext(), FriendTransactionActivity.class);
                 startActivity(i);
+            }
+        });
+        mFriendList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = getFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                FriendListFragment fragment = new FriendListFragment();
+                ft.replace(R.id.frame_container, fragment, "FriendList").commit();
             }
         });
         return v;
