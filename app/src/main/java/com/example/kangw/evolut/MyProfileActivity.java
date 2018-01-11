@@ -34,7 +34,6 @@ public class MyProfileActivity extends AppCompatActivity {
     private TextView name, email;
     private FirebaseAuth mAuth;
     private String userName, userEmail, userProfilePic;
-    private LinearLayout layout;
 
     private ProgressBar progressBar;
     private StorageReference mStorage;
@@ -49,7 +48,7 @@ public class MyProfileActivity extends AppCompatActivity {
         myProfilePic = findViewById(R.id.myProfilePic);
         name = findViewById(R.id.txtMyProfileName);
         email = findViewById(R.id.txtMyProfileEmail);
-        layout = findViewById(R.id.myProfileLayout);
+        progressBar = findViewById(R.id.myProfileProgressBar);
 
         mAuth = FirebaseAuth.getInstance();
         mStorage = FirebaseStorage.getInstance().getReference();
@@ -95,10 +94,6 @@ public class MyProfileActivity extends AppCompatActivity {
 
         if(requestCode == GALLERY_INTENT && resultCode == RESULT_OK){
             //initialize progress bar
-            progressBar = new ProgressBar(MyProfileActivity.this,null,android.R.attr.progressBarStyleLarge);
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(200,200);
-            params.addRule(RelativeLayout.CENTER_IN_PARENT);
-            layout.addView(progressBar,params);
             progressBar.setVisibility(View.VISIBLE);
             Uri uri = data.getData();
 
