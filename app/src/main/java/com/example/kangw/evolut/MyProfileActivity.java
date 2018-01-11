@@ -56,19 +56,7 @@ public class MyProfileActivity extends AppCompatActivity {
         userEmail = mAuth.getCurrentUser().getEmail();
         name.setText(name.getText() + userName);
         email.setText(email.getText() + userEmail);
-        getProfilePic();
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                //Do something after 100ms
-                BitmapDownloaderTask task = new BitmapDownloaderTask(myProfilePic);
-                task.execute(userProfilePic);
-            }
-        }, 100);
-
-
-
+        setProfilePic();
 
         myProfilePic.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,13 +110,17 @@ public class MyProfileActivity extends AppCompatActivity {
         }
     }
 
-    private void getProfilePic(){
+    private void setProfilePic(){
         final String user_id = mAuth.getCurrentUser().getUid();
-        final DatabaseReference fb = FirebaseDatabase.getInstance().getReference().child("User").child(user_id).child("ProfilePic");
+        final DatabaseReference fb = FirebaseDatabase.getInstance().getReference().child("User").child(user_id);
         fb.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                userProfilePic = dataSnapshot.getValue().toString();
+                if(dataSnapshot.hasChild("ProfilePic")) {
+                    userProfilePic = dataSnapshot.getValue().toString();
+                    BitmapDownloaderTask task = new BitmapDownloaderTask(myProfilePic);
+                    task.execute(userProfilePic);
+                }
             }
 
             @Override

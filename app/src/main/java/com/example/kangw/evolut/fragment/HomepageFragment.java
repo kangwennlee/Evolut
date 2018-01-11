@@ -139,10 +139,12 @@ public class HomepageFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 try{
-                    userProfilePic = dataSnapshot.child("ProfilePic").getValue().toString();
+                    if(dataSnapshot.hasChild("ProfilePic")) {
+                        userProfilePic = dataSnapshot.child("ProfilePic").getValue().toString();
+                        BitmapDownloaderTask task = new BitmapDownloaderTask(mProfilePic);
+                        task.execute(userProfilePic);
+                    }
                     mBalance.setText("RM " + dataSnapshot.child("Balance").getValue());
-                    BitmapDownloaderTask task = new BitmapDownloaderTask(mProfilePic);
-                    task.execute(userProfilePic);
                 }catch (NullPointerException e){
                     Log.e(TAG, "Error retrieving user's detail", e);
                 }

@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -27,6 +28,8 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.cunoraz.tagview.Tag;
 import com.cunoraz.tagview.TagView;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -68,6 +71,7 @@ public class FriendTransactionActivity extends AppCompatActivity {
     private String paymentType;
     DatabaseReference dfTransaction;
     DatabaseReference databaseReference;
+    private boolean deductSuccess;
     Query query;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -295,13 +299,20 @@ public class FriendTransactionActivity extends AppCompatActivity {
         }
         //PAY
         else{
-            deductAmountFromAccount(Double.parseDouble(txt_PaymentAmt.getText().toString()));
-            addAmountFromAccount(sharedAmt);
-            user_comment = "Pay Amount : " + sharedAmt;
-            if(!TextUtils.isEmpty(txt_comments.getText())){
-                user_comment += "\n" + txt_comments.getText();
-            }
-            dfTransaction = transactionDatabaseReference.child("Pay").child(user_id);
+            double totalPayment = Double.parseDouble(txt_PaymentAmt.getText().toString());
+
+                if (deductAmountFromAccount(totalPayment)) {
+                    addAmountFromAccount(sharedAmt);
+                    user_comment = "Pay Amount : " + sharedAmt;
+                    if (!TextUtils.isEmpty(txt_comments.getText())) {
+                        user_comment += "\n" + txt_comments.getText();
+                    }
+                    dfTransaction = transactionDatabaseReference.child("Pay").child(user_id);
+                    Toast.makeText(getApplicationContext(), "Payment Successful" , Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Toast.makeText(getApplicationContext(), "Payment Unsuccessful, Balance Insufficient" , Toast.LENGTH_SHORT).show();
+                }
         }
 
 
@@ -312,31 +323,30 @@ public class FriendTransactionActivity extends AppCompatActivity {
                 sendNotification(user_id, user_name, user_comment, selectedUID.get(i), sharedAmt);
             }
         }
-        else{
-            Toast.makeText(getApplicationContext(), "Payment Successful" , Toast.LENGTH_SHORT).show();
-        }
+
         //record the transaction
-        final String comments = user_comment;
-        dfTransaction.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for(int i=0; i<selectedUID.size();i++){
-                    String currDateTime = getCurrentDataTime();
-                    if(!dataSnapshot.hasChild(currDateTime)){
-                        dfTransaction.child(currDateTime).child("To").child(selectedUID.get(i)).child("Amount").setValue(sharedAmt);
-                        getUsernameByUID(currDateTime,selectedUID.get(i));
-                        dfTransaction.child(currDateTime).child("Amount").setValue(Double.parseDouble(txt_PaymentAmt.getText().toString()));
-                        dfTransaction.child(currDateTime).child("Comments").setValue(comments);
+        if(paymentType.compareTo("Request")==0 || deductSuccess) {
+            final String comments = user_comment;
+            dfTransaction.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (int i = 0; i < selectedUID.size(); i++) {
+                        String currDateTime = getCurrentDataTime();
+                        if (!dataSnapshot.hasChild(currDateTime)) {
+                            dfTransaction.child(currDateTime).child("To").child(selectedUID.get(i)).child("Amount").setValue(sharedAmt);
+                            getUsernameByUID(currDateTime, selectedUID.get(i));
+                            dfTransaction.child(currDateTime).child("Amount").setValue(Double.parseDouble(txt_PaymentAmt.getText().toString()));
+                            dfTransaction.child(currDateTime).child("Comments").setValue(comments);
+                        }
                     }
                 }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
-
+                }
+            });
+        }
     }
 
     public void addAmountFromAccount(final double amount) {
@@ -359,7 +369,8 @@ public class FriendTransactionActivity extends AppCompatActivity {
 
     }
 
-    public void deductAmountFromAccount(final double amount) {
+    public boolean deductAmountFromAccount(final double amount) {
+        deductSuccess = false;
         String user_id = mAuth.getCurrentUser().getUid();
 
         final DatabaseReference mDeduct = FirebaseDatabase.getInstance().getReference().child("User").child(user_id).child("Balance");
@@ -368,8 +379,15 @@ public class FriendTransactionActivity extends AppCompatActivity {
             //deduct from amount
             public void onDataChange(DataSnapshot dataSnapshot) {
                 double currentUserBalance = Double.parseDouble(dataSnapshot.getValue().toString());
-                Double newBalance = currentUserBalance - amount;
-                mDeduct.setValue(newBalance);
+                if(currentUserBalance > amount) {
+                    Double newBalance = currentUserBalance - amount;
+                    mDeduct.setValue(newBalance).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            deductSuccess = true;
+                        }
+                    });
+                }
             }
 
             @Override
@@ -377,6 +395,7 @@ public class FriendTransactionActivity extends AppCompatActivity {
 
             }
         });
+        return deductSuccess;
     }
 
     public void getUsernameByUID(final String currDateTime, final String uid){

@@ -284,20 +284,22 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.FriendViewHolder>{
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        int position = mRecycler.indexOfChild(v);
-                        Bundle bundle=new Bundle();
-                        bundle.putString("UID", friends.get(position).getUid());
-                        bundle.putString("ProfilePic", friends.get(position).getProfilePic());
-                        bundle.putString("Name", friends.get(position).getName());
-                        bundle.putString("Email", friends.get(position).getEmail());
-                        bundle.putString("PhoneNo", friends.get(position).getPhoneNo());
-                        //set Fragmentclass Arguments
-                        Fragment fragment = new FriendProfile();
-                        fragment.setArguments(bundle);
-                        FragmentManager fragmentManager = getFragmentManager();
-                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                        fragmentTransaction.replace(R.id.frame_container, fragment, "homepage").commit();
-                    }
+                        int position = getAdapterPosition();
+                        //if(position != NO_POSITION) {
+                            Bundle bundle = new Bundle();
+                            bundle.putString("UID", friends.get(position).getUid());
+                            bundle.putString("ProfilePic", friends.get(position).getProfilePic());
+                            bundle.putString("Name", friends.get(position).getName());
+                            bundle.putString("Email", friends.get(position).getEmail());
+                            bundle.putString("PhoneNo", friends.get(position).getPhoneNo());
+                            //set Fragmentclass Arguments
+                            Fragment fragment = new FriendProfile();
+                            fragment.setArguments(bundle);
+                            FragmentManager fragmentManager = getFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            fragmentTransaction.replace(R.id.frame_container, fragment, "homepage").commit();
+                        }
+                    //}
                 });
             }
         }
