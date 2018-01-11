@@ -43,6 +43,7 @@ public class AddCard extends AppCompatActivity implements OnCardFormSubmitListen
                 .setup(this);
         cardForm.setOnCardFormSubmitListener(this);
         cardForm.setOnCardTypeChangedListener(this);
+
     }
 
     @Override

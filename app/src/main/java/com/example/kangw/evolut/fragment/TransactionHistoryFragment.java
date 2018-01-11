@@ -310,15 +310,14 @@ public class TransactionHistoryFragment extends Fragment {
                     @Override
                     public void onClick(View view) {
                         int position = mRecycler.indexOfChild(view);
-                        String test = transaction.get(position).getTime();
-                        String year = test.substring(0,4).concat("-");
-                        String month = test.substring(4,6).concat("-");
-                        String hours = test.substring(6,11).concat(":");
-                        String minutes = test.substring(11,13).concat(":");
-                        String seconds = test.substring(13,15);
+                        String time = transaction.get(position).getTime();
+                        String year = time.substring(0,4).concat("-");
+                        String month = time.substring(4,6).concat("-");
+                        String hours = time.substring(6,11).concat(":");
+                        String minutes = time.substring(11,13).concat(":");
+                        String seconds = time.substring(13,15);
                         String date = " ";
                         date = date.concat(year.concat(month).concat(hours).concat(minutes).concat(seconds));
-
                         Bundle bundle = new Bundle();
                         bundle.putString("To", transaction.get(position).getTo());
                         bundle.putString("Time", date);
@@ -350,8 +349,16 @@ public class TransactionHistoryFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(TransactionViewHolder holder, int position) {
+            String time = transaction.get(position).getTime();
+            String year = time.substring(0,4).concat("-");
+            String month = time.substring(4,6).concat("-");
+            String hours = time.substring(6,11).concat(":");
+            String minutes = time.substring(11,13).concat(":");
+            String seconds = time.substring(13,15);
+            String date = " ";
+            date = date.concat(year.concat(month).concat(hours).concat(minutes).concat(seconds));
            // holder.name.setText(transaction.get(position).getTo().toString());
-            holder.time.setText(transaction.get(position).getTime().toString());
+            holder.time.setText(date);
             holder.amount.setText(transaction.get(position).getAmount().toString());
             holder.comment.setText(transaction.get(position).getComments());
         }
