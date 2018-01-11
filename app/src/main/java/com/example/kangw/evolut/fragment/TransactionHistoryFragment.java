@@ -310,22 +310,12 @@ public class TransactionHistoryFragment extends Fragment {
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        int position = mRecycler.indexOfChild(view);
+                        int position = getAdapterPosition();
                         String time = transaction.get(position).getTime();
                         String date = " ";
                         date = date.concat(time.substring(0, 4).concat("-").concat(time.substring(4, 6).concat("-")).concat(time.substring(6, 11).concat(":")).concat(time.substring(11, 13).concat(":")).concat(time.substring(13, 15)));
-                        String strTo = transaction.get(position).getTo();
-                        String name = strTo.substring(31, strTo.length() - 1);
-                        String name1 = name.substring(0, name.indexOf("}"));
-                        String name2 = " ";
-                        for (int i = 0; i < name.length(); i++) {
-                            if (name.charAt(i) == '{') {
-                                name2 = name.substring(i+1, name.length()-1);
-                            }
-                        }
-                        String toName = name1.concat("\n").concat(name2);
                         Bundle bundle = new Bundle();
-                        bundle.putString("To", toName);
+                        bundle.putString("To", transaction.get(position).getTo());
                         bundle.putString("Time", date);
                         bundle.putString("Amount", transaction.get(position).getAmount().toString());
                         bundle.putString("Comments", transaction.get(position).getComments());
