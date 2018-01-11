@@ -16,10 +16,11 @@
 
         <ImageButton
             android:id="@+id/imageViewProfile"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:src="@drawable/com_facebook_profile_picture_blank_square"
-            android:contentDescription="Profile Picture"/>
+            android:contentDescription="Profile Picture"
+            android:adjustViewBounds="true"/>
 
         <TextView
             android:id="@+id/textViewName"

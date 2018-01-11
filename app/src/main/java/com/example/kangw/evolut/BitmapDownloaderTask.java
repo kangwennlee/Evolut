@@ -44,7 +44,14 @@ public class BitmapDownloaderTask extends AsyncTask<String, Void, Bitmap> {
         if (imageViewReference != null) {
             ImageView imageView = imageViewReference.get();
             if (imageView != null) {
-                imageView.setImageBitmap(bitmap);
+                int currentBitmapWidth = bitmap.getWidth();
+                int currentBitmapHeight = bitmap.getHeight();
+                int ivWidth = imageView.getWidth();
+                int ivHeight = imageView.getHeight();
+                int newWidth = ivWidth;
+                int newHeight = (int) Math.floor((double)currentBitmapHeight*((double)newWidth/(double)currentBitmapWidth));
+                Bitmap newBitmap = Bitmap.createScaledBitmap(bitmap,newWidth,newHeight,true);
+                imageView.setImageBitmap(newBitmap);
             }
         }
     }
