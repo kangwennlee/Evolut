@@ -1,5 +1,6 @@
 package com.example.kangw.evolut;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.provider.ContactsContract;
@@ -11,6 +12,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +23,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import org.w3c.dom.Text;
 
@@ -35,6 +39,8 @@ public class NewTransactionActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
     private Drawable backgroundDefault;
+    ImageButton mScanQR;
+    Activity activity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +55,8 @@ public class NewTransactionActivity extends AppCompatActivity {
         txt_payAmount = findViewById(R.id.txtSingleTransactPaymentAmt);
         txt_comments = findViewById(R.id.txtSingleTransactComments);
         txt_feedback = findViewById(R.id.txtSingleTransactFeedback);
+        mScanQR = findViewById(R.id.scanQR);
+        activity = this;
         backgroundDefault = txt_beneficiaryName.getBackground();
 
         mAuth = FirebaseAuth.getInstance();
@@ -73,7 +81,15 @@ public class NewTransactionActivity extends AppCompatActivity {
                 finish();
             }
         });
+        mScanQR.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                IntentIntegrator integrator = new IntentIntegrator(activity);
+                integrator.setOrientationLocked(false);
+                integrator.initiateScan();
 
+            }
+        });
         txt_beneficiaryName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -125,6 +141,20 @@ public class NewTransactionActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if(result != null) {
+            if(result.getContents() == null) {
+                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                txt_beneficiaryName.setText(result.getContents());
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
 
     private void btnConfirmClicked(){
         txt_feedback.setText("");
