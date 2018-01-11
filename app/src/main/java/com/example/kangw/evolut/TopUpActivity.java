@@ -83,7 +83,7 @@ public class TopUpActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String str = spinBankType.getSelectedItem().toString();
                 String amt = txtAmount.getText().toString();
-                if(!Objects.equals(str,"--Select a card--")&&!amt.equals("")){
+                if(!Objects.equals(str,"--Select a card--")&&!amt.equals("")&&!Objects.equals(str,"Add New Card")){
                     btnTopUpClicked();
                 }else{
                     if(amt.equals("")){
