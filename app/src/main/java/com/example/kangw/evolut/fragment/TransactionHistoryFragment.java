@@ -309,7 +309,7 @@ public class TransactionHistoryFragment extends Fragment {
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        int position = mRecycler.indexOfChild(view);
+                        int position = getAdapterPosition();
                         String time = transaction.get(position).getTime();
                         String year = time.substring(0,4).concat("-");
                         String month = time.substring(4,6).concat("-");
