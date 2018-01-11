@@ -91,6 +91,12 @@ public abstract class AppCompatPreferenceActivity extends PreferenceActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         getDelegate().onDestroy();

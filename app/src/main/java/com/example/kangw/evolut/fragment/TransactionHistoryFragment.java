@@ -16,28 +16,18 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.kangw.evolut.FriendTransactionActivity;
 import com.example.kangw.evolut.NewTransactionActivity;
 import com.example.kangw.evolut.R;
-import com.example.kangw.evolut.RecyclerAdapter;
 import com.example.kangw.evolut.models.Transactions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 
 /**
@@ -62,7 +52,6 @@ public class TransactionHistoryFragment extends Fragment {
     Button mTransactionCancel;
     RecyclerView mRecycler;
     LinearLayoutManager mManager;
-    RecyclerAdapter mAdapter;
     Transactions transaction;
     final ArrayList<Transactions> transactionArrayList = new ArrayList<>();
 

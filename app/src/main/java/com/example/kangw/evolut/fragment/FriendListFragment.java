@@ -21,7 +21,6 @@ import android.widget.Toast;
 import com.example.kangw.evolut.AddFriendActivity;
 import com.example.kangw.evolut.BitmapDownloaderTask;
 import com.example.kangw.evolut.R;
-import com.example.kangw.evolut.RecyclerAdapter;
 import com.example.kangw.evolut.models.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -59,7 +58,6 @@ public class FriendListFragment extends Fragment {
     private FirebaseAuth mAuth;
     RecyclerView mRecycler;
     LinearLayoutManager mManager;
-    RecyclerAdapter mAdapter;
     DatabaseReference mDatabase;
     ArrayList<User> friendList;
     //User
