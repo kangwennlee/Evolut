@@ -85,7 +85,8 @@
         <activity android:name=".ConfirmTransactionActivity" />
         <activity android:name=".AddCard" />
         <activity android:name=".NewTransactionActivity" />
-        <activity android:name=".FriendTransactionActivity"></activity>
+        <activity android:name=".FriendTransactionActivity" />
+        <activity android:name=".MyProfileActivity"></activity>
     </application>
 
 </manifest>

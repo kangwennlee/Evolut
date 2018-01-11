@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -22,7 +23,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.kangw.evolut.AddFriendActivity;
+import com.example.kangw.evolut.BitmapDownloaderTask;
 import com.example.kangw.evolut.FriendTransactionActivity;
+import com.example.kangw.evolut.MyProfileActivity;
 import com.example.kangw.evolut.NewTransactionActivity;
 import com.example.kangw.evolut.R;
 
@@ -60,7 +63,7 @@ public class HomepageFragment extends Fragment {
 
     TextView mUserName;
     TextView mBalance;
-    ImageView mProfilePic;
+    ImageButton mProfilePic;
     DatabaseReference mDatabase;
     FirebaseUser user;
     ImageButton mPayMerchant;
@@ -69,6 +72,7 @@ public class HomepageFragment extends Fragment {
     ImageButton mPayFriend;
     ImageButton mHistory;
     ImageButton mFriendList;
+    String userProfilePic;
 
     public HomepageFragment() {
         // Required empty public constructor
@@ -125,35 +129,7 @@ public class HomepageFragment extends Fragment {
                 userName = user.getPhoneNumber();
             }
             mUserName.setText(userName);
-            String profilePic = user.getPhotoUrl().toString();
-            //Use volley to retrieve bitmap
-            RequestQueue requestQueue = Volley.newRequestQueue(getContext());
-//            StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
-//                @Override
-//                public void onResponse(String response) {
-//
-//                }
-//            }, new com.android.volley.Response.ErrorListener() {
-//                @Override
-//                public void onErrorResponse(VolleyError error) {
-//
-//                }
-//            });
-            ImageRequest imageRequest = new ImageRequest(profilePic, new com.android.volley.Response.Listener<Bitmap>() {
-                @Override
-                public void onResponse(Bitmap response) {
-                    mProfilePic.setImageBitmap(response);
-                }
-            }, 0, 0, ImageView.ScaleType.CENTER_CROP, null, new com.android.volley.Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(getContext(),"Error retrieving user's profile picture",Toast.LENGTH_LONG).show();
-                }
-            });
-            //requestQueue.add(stringRequest);
-            requestQueue.add(imageRequest);
-            //BitmapDownloaderTask task = new BitmapDownloaderTask(mProfilePic);
-            //task.execute(profilePic);
+
         } catch (NullPointerException e) {
             Log.e(TAG, "Error retrieving user's detail", e);
         }
@@ -162,7 +138,10 @@ public class HomepageFragment extends Fragment {
         balanceRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                userProfilePic = dataSnapshot.child("ProfilePic").getValue().toString();
                 mBalance.setText("RM " + dataSnapshot.child("Balance").getValue());
+                BitmapDownloaderTask task = new BitmapDownloaderTask(mProfilePic);
+                task.execute(userProfilePic);
             }
 
             @Override
@@ -207,6 +186,14 @@ public class HomepageFragment extends Fragment {
                 startActivity(i);
             }
         });
+        mProfilePic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), MyProfileActivity.class);
+                startActivity(intent);
+            }
+        });
+
         mFriendList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -218,7 +205,6 @@ public class HomepageFragment extends Fragment {
         });
         return v;
     }
-
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
