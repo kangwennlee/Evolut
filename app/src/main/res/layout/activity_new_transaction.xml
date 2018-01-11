@@ -5,31 +5,32 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.kangw.evolut.NewTransactionActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="10dp">
 
-    <EditText
-        android:id="@+id/txtBeneficiaryName"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:layout_margin="10dp"
-        android:hint="Beneficiary Name" />
-
-    <EditText
-        android:id="@+id/txtBankAccNo"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_margin="10dp"
-        android:ems="10"
-        android:inputType="number"
-        android:hint="Bank Account No" />
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <EditText
+            android:id="@+id/txtBeneficiaryName"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:ems="14"
+            android:inputType="textPersonName"
+            android:hint="Merchant Name" />
+        <ImageButton
+            android:id="@+id/scanQR"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/bt_ic_camera"
+            />
+    </LinearLayout>
 
     <EditText
         android:id="@+id/txtSingleTransactPaymentAmt"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_margin="10dp"
+        android:layout_height="50dp"
         android:ems="10"
         android:inputType="numberDecimal"
         android:hint="Payment Amount"
@@ -38,8 +39,7 @@
     <EditText
         android:id="@+id/txtSingleTransactComments"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_margin="10dp"
+        android:layout_height="50dp"
         android:ems="10"
         android:hint="Comments"/>
 
@@ -80,15 +80,6 @@
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
         android:text="Request or Pay to friend"/>
-
-    <ImageButton
-        android:id="@+id/scanQR"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="10dp"
-        android:src="@drawable/bt_ic_camera"
-        />
 
 
 </LinearLayout>

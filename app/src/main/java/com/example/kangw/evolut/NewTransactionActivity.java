@@ -34,7 +34,7 @@ import java.util.Date;
 public class NewTransactionActivity extends AppCompatActivity {
 
     private Button friendTransactionButton, confirm_button, cancel_button;
-    private EditText txt_beneficiaryName, txt_bankAcc, txt_payAmount, txt_comments;
+    private EditText txt_beneficiaryName, txt_payAmount, txt_comments;
     private TextView txt_feedback;
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
@@ -51,7 +51,6 @@ public class NewTransactionActivity extends AppCompatActivity {
         confirm_button = findViewById(R.id.btnSingleTransactConfirm);
         cancel_button = findViewById(R.id.btnSingleTransactCancel);
         txt_beneficiaryName = findViewById(R.id.txtBeneficiaryName);
-        txt_bankAcc = findViewById(R.id.txtBankAccNo);
         txt_payAmount = findViewById(R.id.txtSingleTransactPaymentAmt);
         txt_comments = findViewById(R.id.txtSingleTransactComments);
         txt_feedback = findViewById(R.id.txtSingleTransactFeedback);
@@ -106,22 +105,6 @@ public class NewTransactionActivity extends AppCompatActivity {
 
             }
         });
-        txt_bankAcc.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                txt_bankAcc.setBackgroundDrawable(backgroundDefault);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
         txt_payAmount.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -166,17 +149,6 @@ public class NewTransactionActivity extends AppCompatActivity {
             txt_payAmount.requestFocus();
         }
 
-        if(TextUtils.isEmpty(txt_bankAcc.getText())){
-            txt_bankAcc.setBackgroundResource(R.drawable.border);
-            txt_feedback.setText("*Bank Account No cannot be empty\n" + txt_feedback.getText());
-            txt_bankAcc.requestFocus();
-        }
-        else if (txt_bankAcc.getText().toString().length() < 12 || txt_bankAcc.getText().toString().length() > 16 ) {
-            txt_bankAcc.setBackgroundResource(R.drawable.border);
-            txt_feedback.setText("*Bank Account No must be between 12 to 16 digits\n" + txt_feedback.getText());
-            txt_bankAcc.requestFocus();
-        }
-
         if(TextUtils.isEmpty(txt_beneficiaryName.getText())){
             txt_beneficiaryName.setBackgroundResource(R.drawable.border);
             txt_feedback.setText("*Beneficiary Name cannot be empty\n" + txt_feedback.getText());
@@ -187,7 +159,7 @@ public class NewTransactionActivity extends AppCompatActivity {
         }
 
         //if all information gathered, begin transaction
-        if(!TextUtils.isEmpty(txt_beneficiaryName.getText()) && !TextUtils.isEmpty(txt_bankAcc.getText()) && !TextUtils.isEmpty(txt_payAmount.getText())){
+        if(!TextUtils.isEmpty(txt_beneficiaryName.getText()) && !TextUtils.isEmpty(txt_payAmount.getText())){
             String comments;
             if(TextUtils.isEmpty(txt_comments.getText())){
                 comments = "Payment from " + user_name + " to " + txt_beneficiaryName.getText();
@@ -204,7 +176,6 @@ public class NewTransactionActivity extends AppCompatActivity {
                         String currDateTime = getCurrentDataTime();
                         if(!dataSnapshot.hasChild(currDateTime)){
                             dfTransaction.child(currDateTime).child("To").setValue(txt_beneficiaryName.getText().toString());
-                            dfTransaction.child(currDateTime).child("BankAccNo").setValue(txt_bankAcc.getText().toString());
                             dfTransaction.child(currDateTime).child("Amount").setValue(Double.parseDouble(txt_payAmount.getText().toString()));
                             dfTransaction.child(currDateTime).child("Comments").setValue(finalComments);
                         }
@@ -242,13 +213,11 @@ public class NewTransactionActivity extends AppCompatActivity {
 
     private void resetView() {
         txt_beneficiaryName.setText("");
-        txt_bankAcc.setText("");
         txt_payAmount.setText("");
         txt_comments.setText("");
         txt_feedback.setText("");
 
         txt_beneficiaryName.setBackgroundDrawable(backgroundDefault);
-        txt_bankAcc.setBackgroundDrawable(backgroundDefault);
         txt_payAmount.setBackgroundDrawable(backgroundDefault);
     }
 
