@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.kangw.evolut.fragment.FriendListFragment;
 import com.example.kangw.evolut.fragment.HomepageFragment;
@@ -157,7 +158,8 @@ public class AddFriendActivity extends AppCompatActivity {
                 }
                 if(!dataSnapshot.hasChild(friendUserId) && counter==1){
                     friend_reference.child(friendUserId).child("Name").setValue(friendName);
-                    addFriend_feedback.setText("Successfully added " + friendName + " in your friend list");
+                    Toast.makeText(getApplicationContext(), "Successfully added " + friendName + " in your friend list", Toast.LENGTH_SHORT).show();
+                    finish();
                 }
 
             }

@@ -200,6 +200,7 @@ public class NewTransactionActivity extends AppCompatActivity {
                 else{
                     dfAccount.setValue(current_balance - paymentAmt);
                     Toast.makeText(getApplicationContext(), "Payment successful" , Toast.LENGTH_SHORT).show();
+                    finish();
                 }
             }
 

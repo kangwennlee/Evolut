@@ -122,7 +122,7 @@ public class FriendListFragment extends Fragment {
     public void prepareDataset() {
         friendList = new ArrayList<>();
         Query query = mDatabase.child("UID").orderByValue();
-        query.addValueEventListener(new ValueEventListener() {
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot userSnapshot: dataSnapshot.getChildren()) {
@@ -197,7 +197,6 @@ public class FriendListFragment extends Fragment {
             public void onClick(View v) {
                 Intent i = new Intent(getContext(),AddFriendActivity.class);
                 startActivity(i);
-
             }
         });
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -210,7 +209,6 @@ public class FriendListFragment extends Fragment {
             }
         });
     }
-
 
     @Override
     public void onAttach(Context context) {
@@ -233,6 +231,7 @@ public class FriendListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+
         prepareDataset();
     }
 

@@ -336,6 +336,7 @@ public class FriendTransactionActivity extends AppCompatActivity {
                     dfTransaction = transactionDatabaseReference.child("Pay").child(user_id);
                     recordTransaction(user_comment, sharedAmt);
                     Toast.makeText(getApplicationContext(), "Payment Successful" , Toast.LENGTH_SHORT).show();
+                    finish();
                 }
                 else{
                     Toast.makeText(getApplicationContext(), "Payment Unsuccessful, Balance Insufficient" , Toast.LENGTH_SHORT).show();
@@ -479,6 +480,7 @@ public class FriendTransactionActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         Toast.makeText(getApplicationContext(), "Request Successful" , Toast.LENGTH_SHORT).show();
+                        finish();
                     }
                 }, new com.android.volley.Response.ErrorListener() {
                     @Override
