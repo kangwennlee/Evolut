@@ -3,7 +3,6 @@ package com.example.kangw.evolut;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -21,12 +20,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-
-import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -209,23 +205,11 @@ public class NewTransactionActivity extends AppCompatActivity {
 
             }
         });
-
-    }
-
-    private void resetView() {
-        txt_beneficiaryName.setText("");
-        txt_payAmount.setText("");
-        txt_comments.setText("");
-        txt_feedback.setText("");
-
-        txt_beneficiaryName.setBackgroundDrawable(backgroundDefault);
-        txt_payAmount.setBackgroundDrawable(backgroundDefault);
     }
 
     private String getCurrentDataTime(){
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
-        String currentDateandTime = sdf.format(new Date());
-        return currentDateandTime;
+        return sdf.format(new Date());
     }
 }
 

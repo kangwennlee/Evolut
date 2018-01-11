@@ -1,29 +1,21 @@
 package com.example.kangw.evolut;
 
-import android.content.DialogInterface;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Handler;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.*;
-import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.cunoraz.tagview.Tag;
@@ -38,11 +30,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -95,7 +85,7 @@ public class FriendTransactionActivity extends AppCompatActivity {
         confirm_button.setEnabled(false);
         tagGroup = (TagView)findViewById(R.id.tag_group);
         databaseReference = FirebaseDatabase.getInstance().getReference().child("FCM");
-        selectedTags = new ArrayList<>();;
+        selectedTags = new ArrayList<>();
 
 
         txt_PaymentAmt.addTextChangedListener(new TextWatcher() {
@@ -207,8 +197,7 @@ public class FriendTransactionActivity extends AppCompatActivity {
 
     private String getCurrentDataTime(){
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
-        String currentDateandTime = sdf.format(new Date());
-        return currentDateandTime;
+        return sdf.format(new Date());
     }
 
     private void updateSubtotal(){
@@ -240,9 +229,7 @@ public class FriendTransactionActivity extends AppCompatActivity {
 
         String text = cs.toString();
         ArrayList<Tag> tags = new ArrayList<>();
-        for (int i = 0; i < selectedTags.size(); i++) {
-            tags.add(selectedTags.get(i));
-        }
+        tags.addAll(selectedTags);
         Tag tag;
 
 
@@ -280,7 +267,7 @@ public class FriendTransactionActivity extends AppCompatActivity {
                 for(DataSnapshot userSnapshot : dataSnapshot.getChildren()){
                     if(userSnapshot.child("Name").getValue().toString().compareTo(name)==0) {
                         //txt_comments.setText(txt_comments.getText() + userSnapshot.getKey().toString() + " " + userSnapshot.child("Name").getValue());
-                        selectedUID.add(userSnapshot.getKey().toString());
+                        selectedUID.add(userSnapshot.getKey());
                     }
                 }
             }

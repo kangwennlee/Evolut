@@ -1,6 +1,5 @@
 package com.example.kangw.evolut;
 
-import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -29,7 +28,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ConfirmTransactionActivity extends AppCompatActivity {
-    String user_token;
     Button mAcceptButton;
     Button mRejectButton;
     TextView mTransactionFrom;
@@ -44,7 +42,6 @@ public class ConfirmTransactionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirm_transaction);
-        user_token = new String();
         mAcceptButton = findViewById(R.id.buttonAcceptTransaction);
         mRejectButton = findViewById(R.id.buttonRejectTransaction);
         mTransactionFrom = findViewById(R.id.textViewTransactionFrom);
@@ -143,60 +140,7 @@ public class ConfirmTransactionActivity extends AppCompatActivity {
 
     private String getCurrentDataTime(){
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
-        String currentDateandTime = sdf.format(new Date());
-        return currentDateandTime;
-    }
-
-    public void sendNotification(final String userName, final String body, String user_uid,Double amount){
-
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("FCM").child(user_uid);
-        Query query = databaseReference;
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                user_token = dataSnapshot.getValue().toString();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-        JSONObject root = new JSONObject();
-        try {
-            JSONObject notification = new JSONObject();
-            JSONObject data = new JSONObject();
-            notification.put("body", body);
-            notification.put("title", "Request from "+userName);
-            data.put("Amount",amount);
-            data.put("Username",userName);
-            root.put("notification",notification);
-            root.put("data",data);
-            root.put("to", user_token);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(com.android.volley.Request.Method.POST,"https://fcm.googleapis.com/fcm/send", root, new com.android.volley.Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                Toast.makeText(getApplicationContext(), "Message Success" , Toast.LENGTH_SHORT).show();
-            }
-        }, new com.android.volley.Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), "Message Failed" , Toast.LENGTH_SHORT).show();
-            }
-        }){
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Authorization", "key=AIzaSyBfnbpacwG0MD8nVHB84I60DuomRSx4DbY");
-                headers.put("Content-Type", "application/json");
-                return headers;
-            }
-        };
-        requestQueue.add(jsonObjectRequest);
+        return sdf.format(new Date());
     }
 
     @Override

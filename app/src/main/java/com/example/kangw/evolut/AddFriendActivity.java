@@ -1,9 +1,5 @@
 package com.example.kangw.evolut;
 
-import android.content.Intent;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -11,12 +7,8 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.example.kangw.evolut.fragment.FriendListFragment;
-import com.example.kangw.evolut.fragment.HomepageFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -25,15 +17,17 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Objects;
+
 public class AddFriendActivity extends AppCompatActivity {
 
-    private static EditText friend_email;
-    private static TextView addFriend_feedback, friend_info;
-    private static Button addFriend_button, back_button;
-    private static Button imgButton;
-    private static DatabaseReference mDatabase;
-    private static FirebaseAuth mAuth;
-    private static String friendUserId, friendName;
+    private EditText friend_email;
+    private TextView addFriend_feedback, friend_info;
+    private Button addFriend_button, back_button;
+    private Button imgButton;
+    private DatabaseReference mDatabase;
+    private FirebaseAuth mAuth;
+    private String friendUserId, friendName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,11 +37,11 @@ public class AddFriendActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         friendUserId = "";
         friendName = "";
-        friend_email = (EditText) findViewById(R.id.txtFriendEmail);
-        addFriend_feedback = (TextView)findViewById(R.id.txtAddFriendFeedBack);
-        friend_info = (TextView)findViewById(R.id.txtFriendInfo);
-        addFriend_button = (Button)findViewById(R.id.btnAddFriend);
-        back_button = (Button)findViewById(R.id.btnAddFriendBack);
+        friend_email = findViewById(R.id.txtFriendEmail);
+        addFriend_feedback = findViewById(R.id.txtAddFriendFeedBack);
+        friend_info = findViewById(R.id.txtFriendInfo);
+        addFriend_button = findViewById(R.id.btnAddFriend);
+        back_button = findViewById(R.id.btnAddFriendBack);
         imgButton = findViewById(R.id.cancelImgButton);
         addFriend_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,9 +107,9 @@ public class AddFriendActivity extends AppCompatActivity {
                         friendName = userSnapshot.child("Name").getValue().toString();
                     }
                     friend_info.setText(userInfo);
-                    if (friendUserId.toString().compareTo(mAuth.getCurrentUser().getUid().toString()) == 0) {
+                    if (friendUserId.compareTo(mAuth.getCurrentUser().getUid()) == 0) {
                         friend_info.setText("This is your email address, you cannot add yourself as friend");
-                    } else if (friendUserId != "") {
+                    } else if (!Objects.equals(friendUserId, "")) {
                         addFriend_button.setEnabled(true);
                     } else {
                         friend_info.setText("Invalid User");
