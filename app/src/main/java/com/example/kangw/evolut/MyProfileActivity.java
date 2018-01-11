@@ -117,7 +117,7 @@ public class MyProfileActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.hasChild("ProfilePic")) {
-                    userProfilePic = dataSnapshot.getValue().toString();
+                    userProfilePic = dataSnapshot.child("ProfilePic").getValue().toString();
                     BitmapDownloaderTask task = new BitmapDownloaderTask(myProfilePic);
                     task.execute(userProfilePic);
                 }
