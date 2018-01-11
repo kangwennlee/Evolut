@@ -19,7 +19,6 @@ import android.widget.TextView;
 import com.example.kangw.evolut.FriendTransactionActivity;
 import com.example.kangw.evolut.NewTransactionActivity;
 import com.example.kangw.evolut.R;
-import com.example.kangw.evolut.RecyclerAdapter;
 import com.example.kangw.evolut.models.Transactions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -65,7 +64,6 @@ public class TransactionHistoryFragment extends Fragment {
     Button mTransactionCancel;
     RecyclerView mRecycler;
     LinearLayoutManager mManager;
-    RecyclerAdapter mAdapter;
     Transactions transaction;
     final ArrayList<Transactions> transactionArrayList = new ArrayList<>();
 
@@ -314,13 +312,8 @@ public class TransactionHistoryFragment extends Fragment {
                     public void onClick(View view) {
                         int position = mRecycler.indexOfChild(view);
                         String time = transaction.get(position).getTime();
-                        String year = time.substring(0, 4).concat("-");
-                        String month = time.substring(4, 6).concat("-");
-                        String hours = time.substring(6, 11).concat(":");
-                        String minutes = time.substring(11, 13).concat(":");
-                        String seconds = time.substring(13, 15);
                         String date = " ";
-                        date = date.concat(year.concat(month).concat(hours).concat(minutes).concat(seconds));
+                        date = date.concat(time.substring(0, 4).concat("-").concat(time.substring(4, 6).concat("-")).concat(time.substring(6, 11).concat(":")).concat(time.substring(11, 13).concat(":")).concat(time.substring(13, 15)));
                         String strTo = transaction.get(position).getTo();
                         String name = strTo.substring(31, strTo.length() - 1);
                         String name1 = name.substring(0, name.indexOf("}"));
@@ -365,15 +358,11 @@ public class TransactionHistoryFragment extends Fragment {
         @Override
         public void onBindViewHolder(TransactionViewHolder holder, int position) {
             String time = transaction.get(position).getTime();
-            String year = time.substring(0,4).concat("-");
-            String month = time.substring(4,6).concat("-");
-            String hours = time.substring(6,11).concat(":");
-            String minutes = time.substring(11,13).concat(":");
-            String seconds = time.substring(13,15);
             String date = " ";
-            date = date.concat(year.concat(month).concat(hours).concat(minutes).concat(seconds));
-           // holder.name.setText(transaction.get(position).getTo().toString());
-            holder.time.setText("Date: "+date);
+            date = date.concat(time.substring(0, 4).concat("-").concat(time.substring(4, 6).concat("-")).concat(time.substring(6, 11).concat(":")).concat(time.substring(11, 13).concat(":")).concat(time.substring(13, 15)));
+
+            // holder.name.setText(transaction.get(position).getTo().toString());
+            holder.time.setText("Date: "+ date);
             holder.amount.setText("Total Amount: "+transaction.get(position).getAmount().toString());
             holder.comment.setText("Comment: "+transaction.get(position).getComments());
         }
