@@ -34,6 +34,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -144,6 +145,22 @@ public class TransactionHistoryFragment extends Fragment {
             }
         });
 
+        Query queryMerchant = FirebaseDatabase.getInstance().getReference().child("Merchant-Transactions").child(FirebaseAuth.getInstance().getUid());
+        queryMerchant.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                    String timeStamp = userSnapshot.getKey().toString();
+                    getMerchantTransactionByTimeStamp(timeStamp);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         return mView;
     }
 
@@ -171,6 +188,27 @@ public class TransactionHistoryFragment extends Fragment {
 
     private void getRequestTransactionByTimeStamp(String timeStamp) {
         Query query = FirebaseDatabase.getInstance().getReference().child("Friend-Transactions").child("Request").child(FirebaseAuth.getInstance().getUid()).child(timeStamp).orderByValue();
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String to = dataSnapshot.child("To").getValue().toString();
+                String timeStamp = dataSnapshot.getKey().toString();
+                Double amount = Double.parseDouble(dataSnapshot.child("Amount").getValue().toString());
+                String comments = dataSnapshot.child("Comments").getValue().toString();
+                transaction = new Transactions(to, timeStamp, amount, comments);
+                transactionArrayList.add(transaction);
+                initializeRVAdapter();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void getMerchantTransactionByTimeStamp(String timeStamp) {
+        Query query = FirebaseDatabase.getInstance().getReference().child("Merchant-Transactions").child(FirebaseAuth.getInstance().getUid()).child(timeStamp).orderByValue();
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -262,9 +300,18 @@ public class TransactionHistoryFragment extends Fragment {
                     @Override
                     public void onClick(View view) {
                         int position = mRecycler.indexOfChild(view);
+                        String test = transaction.get(position).getTime();
+                        String year = test.substring(0,4).concat("-");
+                        String month = test.substring(4,6).concat("-");
+                        String hours = test.substring(6,11).concat(":");
+                        String minutes = test.substring(11,13).concat(":");
+                        String seconds = test.substring(13,15);
+                        String date = " ";
+                        date = date.concat(year.concat(month).concat(hours).concat(minutes).concat(seconds));
+
                         Bundle bundle = new Bundle();
                         bundle.putString("To", transaction.get(position).getTo());
-                        bundle.putString("Time", transaction.get(position).getTime());
+                        bundle.putString("Time", date);
                         bundle.putString("Amount", transaction.get(position).getAmount().toString());
                         bundle.putString("Comments", transaction.get(position).getComments());
 
