@@ -131,17 +131,22 @@ public class HomepageFragment extends Fragment {
             mUserName.setText(userName);
 
         } catch (NullPointerException e) {
-            Log.e(TAG, "Error retrieving user's detail", e);
+            Log.e(TAG, "Error setting user's name", e);
         }
         //Insert your get Amount code here
         DatabaseReference balanceRef = mDatabase.child("User").child(user.getUid());
         balanceRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                userProfilePic = dataSnapshot.child("ProfilePic").getValue().toString();
-                mBalance.setText("RM " + dataSnapshot.child("Balance").getValue());
-                BitmapDownloaderTask task = new BitmapDownloaderTask(mProfilePic);
-                task.execute(userProfilePic);
+                try{
+                    userProfilePic = dataSnapshot.child("ProfilePic").getValue().toString();
+                    mBalance.setText("RM " + dataSnapshot.child("Balance").getValue());
+                    BitmapDownloaderTask task = new BitmapDownloaderTask(mProfilePic);
+                    task.execute(userProfilePic);
+                }catch (NullPointerException e){
+                    Log.e(TAG, "Error retrieving user's detail", e);
+                }
+
             }
 
             @Override

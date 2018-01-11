@@ -1,6 +1,7 @@
 package com.example.kangw.evolut;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.support.annotation.MainThread;
 import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
@@ -102,9 +103,6 @@ public class LauncherActivity extends AppCompatActivity {
             // Successfully signed in
             if (resultCode == RESULT_OK) {
                 createUserAccount();
-                Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(i);
-                finish();
                 return;
             } else {
                 // Sign in failed
@@ -169,7 +167,6 @@ public class LauncherActivity extends AppCompatActivity {
 
             }
         });
-
     }
 
 
