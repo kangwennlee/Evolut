@@ -114,7 +114,7 @@ public class TransactionHistoryFragment extends Fragment {
             }
         });
         Query queryPay = FirebaseDatabase.getInstance().getReference().child("Friend-Transactions").child("Pay").child(FirebaseAuth.getInstance().getUid());
-        queryPay.addValueEventListener(new ValueEventListener() {
+        queryPay.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
@@ -130,7 +130,7 @@ public class TransactionHistoryFragment extends Fragment {
         });
 
         Query queryRequest = FirebaseDatabase.getInstance().getReference().child("Friend-Transactions").child("Request").child(FirebaseAuth.getInstance().getUid());
-        queryRequest.addValueEventListener(new ValueEventListener() {
+        queryRequest.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
@@ -146,7 +146,7 @@ public class TransactionHistoryFragment extends Fragment {
         });
 
         Query queryMerchant = FirebaseDatabase.getInstance().getReference().child("Merchant-Transactions").child(FirebaseAuth.getInstance().getUid());
-        queryMerchant.addValueEventListener(new ValueEventListener() {
+        queryMerchant.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
