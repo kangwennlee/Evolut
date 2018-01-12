@@ -7,6 +7,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,7 +25,7 @@ public class AddFriendActivity extends AppCompatActivity {
     private EditText friend_email;
     private TextView addFriend_feedback, friend_info;
     private Button addFriend_button, back_button;
-    private Button imgButton;
+    private ImageButton imgButton;
     private DatabaseReference mDatabase;
     private FirebaseAuth mAuth;
     private String friendUserId, friendName;

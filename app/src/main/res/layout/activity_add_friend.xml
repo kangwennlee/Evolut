@@ -19,20 +19,19 @@
             android:id="@+id/txtFriendEmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ems="10"
+            android:ems="12"
             android:inputType="textEmailAddress"
             android:hint="email address"/>
 
-        <Button
+        <ImageButton
             android:id="@+id/cancelImgButton"
-            android:layout_width="wrap_content"
+            android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_alignBaseline="@+id/txtFriendEmail"
             android:layout_alignBottom="@+id/txtFriendEmail"
             android:layout_toEndOf="@+id/txtFriendEmail"
+            android:src="@drawable/ic_clear_black_24dp"
             android:contentDescription="Reset"
-            android:drawableLeft="@drawable/ic_action_clear"
-            android:text="Clear" />
+            android:background="@color/zxing_transparent"/>
 
         <TextView
             android:id="@+id/txtFriendInfo"
@@ -66,7 +65,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:text="Back"/>
+        android:text="Cancel"/>
 
 </LinearLayout>
 
