@@ -165,17 +165,21 @@ public class TransactionHistoryFragment extends Fragment {
     }
 
     private void getPayTransactionByTimeStamp(String timeStamp) {
-        Query query = FirebaseDatabase.getInstance().getReference().child("Friend-Transactions").child("Pay").child(FirebaseAuth.getInstance().getUid()).child(timeStamp).orderByValue();
+        Query query = FirebaseDatabase.getInstance().getReference().child("Friend-Transactions").child("Pay").child(FirebaseAuth.getInstance().getUid()).child(timeStamp).orderByKey();
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String to = dataSnapshot.child("To").getValue().toString();
-                String timeStamp = dataSnapshot.getKey().toString();
-                Double amount = Double.parseDouble(dataSnapshot.child("Amount").getValue().toString());
-                String comments = dataSnapshot.child("Comments").getValue().toString();
-                transaction = new Transactions(to, timeStamp, amount, comments);
-                transactionArrayList.add(transaction);
-                initializeRVAdapter();
+                String to = "";
+                for(DataSnapshot userSnapshot : dataSnapshot.child("To").getChildren()) {
+                    to += userSnapshot.child("Name").getValue().toString() + ", RM "+ userSnapshot.child("Amount").getValue().toString() + "\n";
+                }
+                    String timeStamp = dataSnapshot.getKey().toString();
+                    Double amount = Double.parseDouble(dataSnapshot.child("Amount").getValue().toString());
+                    String comments = dataSnapshot.child("Comments").getValue().toString();
+                    transaction = new Transactions(to, timeStamp, amount, comments);
+                    transactionArrayList.add(transaction);
+                    initializeRVAdapter();
+
             }
 
             @Override
@@ -187,11 +191,13 @@ public class TransactionHistoryFragment extends Fragment {
     }
 
     private void getRequestTransactionByTimeStamp(String timeStamp) {
-        Query query = FirebaseDatabase.getInstance().getReference().child("Friend-Transactions").child("Request").child(FirebaseAuth.getInstance().getUid()).child(timeStamp).orderByValue();
+        Query query = FirebaseDatabase.getInstance().getReference().child("Friend-Transactions").child("Request").child(FirebaseAuth.getInstance().getUid()).child(timeStamp).orderByKey();
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String to = dataSnapshot.child("To").getValue().toString();
+            public void onDataChange(DataSnapshot dataSnapshot) {String to = "";
+                for(DataSnapshot userSnapshot : dataSnapshot.child("To").getChildren()) {
+                    to += userSnapshot.child("Name").getValue().toString() + ", RM "+ userSnapshot.child("Amount").getValue().toString() + "\n";
+                }
                 String timeStamp = dataSnapshot.getKey().toString();
                 Double amount = Double.parseDouble(dataSnapshot.child("Amount").getValue().toString());
                 String comments = dataSnapshot.child("Comments").getValue().toString();
@@ -208,12 +214,14 @@ public class TransactionHistoryFragment extends Fragment {
     }
 
     private void getMerchantTransactionByTimeStamp(String timeStamp) {
-        Query query = FirebaseDatabase.getInstance().getReference().child("Merchant-Transactions").child(FirebaseAuth.getInstance().getUid()).child(timeStamp).orderByValue();
+        Query query = FirebaseDatabase.getInstance().getReference().child("Merchant-Transactions").child(FirebaseAuth.getInstance().getUid()).child(timeStamp).orderByKey();
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String to = dataSnapshot.child("To").getValue().toString();
-                String timeStamp = dataSnapshot.getKey().toString();
+                String time = dataSnapshot.getKey().toString();
+                String date = " ";
+                String timeStamp = date.concat(time.substring(0, 4).concat("-").concat(time.substring(4, 6).concat("-")).concat(time.substring(6, 11).concat(":")).concat(time.substring(11, 13).concat(":")).concat(time.substring(13, 15)));
                 Double amount = Double.parseDouble(dataSnapshot.child("Amount").getValue().toString());
                 String comments = dataSnapshot.child("Comments").getValue().toString();
                 transaction = new Transactions(to, timeStamp, amount, comments);
