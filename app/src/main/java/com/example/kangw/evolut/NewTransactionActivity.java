@@ -29,7 +29,7 @@ import java.util.Date;
 
 public class NewTransactionActivity extends AppCompatActivity {
 
-    private Button friendTransactionButton, confirm_button, cancel_button;
+    private Button confirm_button, cancel_button;
     private EditText txt_beneficiaryName, txt_payAmount, txt_comments;
     private TextView txt_feedback;
     private FirebaseAuth mAuth;
@@ -43,7 +43,6 @@ public class NewTransactionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_transaction);
 
-        friendTransactionButton = findViewById(R.id.btnFriendTransaction);
         confirm_button = findViewById(R.id.btnSingleTransactConfirm);
         cancel_button = findViewById(R.id.btnSingleTransactCancel);
         txt_beneficiaryName = findViewById(R.id.txtBeneficiaryName);
@@ -56,14 +55,6 @@ public class NewTransactionActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Merchant-Transactions");
-
-        friendTransactionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(NewTransactionActivity.this, FriendTransactionActivity.class);
-                startActivity(intent);
-            }
-        });
         confirm_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

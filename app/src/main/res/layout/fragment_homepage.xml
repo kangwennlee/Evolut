@@ -75,7 +75,7 @@
                 android:id="@+id/textView4"
                 android:layout_width="wrap_content"
                 android:layout_height="19dp"
-                android:text="Pay to Merchant"
+                android:text="Merchant Transaction"
                 tools:layout_editor_absoluteX="55dp"
                 android:textStyle="bold"/>
         </LinearLayout>
@@ -95,15 +95,15 @@
                 android:id="@+id/imageButtonPayFriend"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:src="@drawable/ic_mail_black_24dp"
-                android:contentDescription="Currency"
+                android:src="@drawable/ic_attach_money_black_24dp"
+                android:contentDescription="Friend Transaction"
                 android:background="@color/zxing_transparent"/>
 
             <TextView
                 android:id="@+id/textView7"
                 android:layout_width="wrap_content"
                 android:layout_height="19dp"
-                android:text="Request From Friend"
+                android:text="Friend Transaction"
                 tools:layout_editor_absoluteX="55dp"
                 android:textStyle="bold"/>
         </LinearLayout>
