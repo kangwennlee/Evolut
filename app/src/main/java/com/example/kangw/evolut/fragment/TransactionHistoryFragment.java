@@ -54,7 +54,7 @@ public class TransactionHistoryFragment extends Fragment {
     RecyclerView mRecycler;
     LinearLayoutManager mManager;
     Transactions transaction;
-    final ArrayList<Transactions> transactionArrayList = new ArrayList<>();
+    ArrayList<Transactions> transactionArrayList;
 
     private OnFragmentInteractionListener mListener;
 
@@ -113,6 +113,14 @@ public class TransactionHistoryFragment extends Fragment {
                 ft.replace(R.id.frame_container, fragment, "homepage").commit();
             }
         });
+
+        return mView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        transactionArrayList = new ArrayList<>();
         Query queryPay = FirebaseDatabase.getInstance().getReference().child("Friend-Transactions").child("Pay").child(FirebaseAuth.getInstance().getUid());
         queryPay.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -160,8 +168,6 @@ public class TransactionHistoryFragment extends Fragment {
 
             }
         });
-
-        return mView;
     }
 
     private void getPayTransactionByTimeStamp(String timeStamp) {
